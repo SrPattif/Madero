@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Formatar Valores Monetários</title>
+</head>
+<body>
+  <input type="text" id="valor" oninput="formatarValor()">
+  <script>
+    function formatarValor() {
+      let input = document.getElementById('valor');
+      let valor = input.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+
+      // Formata o valor de acordo com a moeda BRL
+      valor = (parseFloat(valor) / 100).toFixed(2).toString().replace('.', ',');
+      valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+
+      input.value = 'R$ ' + valor;
+    }
+  </script>
+</body>
+</html>

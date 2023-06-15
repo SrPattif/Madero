@@ -1,0 +1,69 @@
+.card {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+  border: 2px solid #d3d3d3;
+  border-radius: 23px;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+table {
+  border: 2px solid #D3D3D3;
+  width: 100%;
+  text-align: left;
+  border-radius: 12px;
+  overflow: hidden;
+}
+table td {
+  font-size: 13px;
+  padding: 0.2em 0;
+}
+table th {
+  background: #DDDDDD;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: left;
+  text-align: center;
+}
+
+.status {
+  font-size: 0.9em;
+  width: 80%;
+  box-sizing: border-box;
+  border-radius: 20px;
+  text-align: center;
+  padding: 0.1em 0;
+  margin: 0 auto;
+}
+
+.status-blue {
+  background-color: rgba(0, 111, 195, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}
+
+.status-green {
+  background-color: rgba(3, 157, 0, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}
+
+.status-gray {
+  background-color: rgba(61, 61, 61, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}
+
+.status-orange {
+  background-color: rgba(255, 179, 3, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}
+
+.status-red {
+  background-color: rgba(255, 3, 3, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}/*# sourceMappingURL=index.css.map */

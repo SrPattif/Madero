@@ -1,0 +1,81 @@
+<?php
+    $redirectUrl = "/";
+    if (isset($_GET['redirect'])) {
+        $redirectUrl = $_GET['redirect'];
+    }
+
+    if (!isset($_SESSION)) {
+        session_start();
+    }
+
+    if(!isset($_POST['username']) || !isset($_POST['password'])) {
+        $_SESSION['MESSAGES_LOGIN_ERROR'] = true;
+
+        header('location: /login/?redirect=' . $redirectUrl);
+        exit();
+    }
+
+    if(!isset($_POST['g-recaptcha-response'])) {
+        $_SESSION['MESSAGES_LOGIN_ERROR'] = null;
+        $_SESSION['MESSAGES_LOGIN_ERROR_RECAPTCHA'] = true;
+
+        header('location: /login/?redirect=' . $redirectUrl);
+        exit();
+    }
+
+    include('../libs/databaseConnection.php');
+    require($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
+
+    $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
+    $dotenv->load();
+
+    $recaptchaResponse = $_POST['g-recaptcha-response'];
+
+    $verify_captcha = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $_ENV['GOOGLE_RECAPTCHA_SECRET_KEY'] . '&response=' . $recaptchaResponse); 
+             
+    $verify_response = json_decode($verify_captcha); 
+        
+    if($verify_response->success) {
+
+        $username = mysqli_real_escape_string($mysqli, $_POST['username']);
+        $password = mysqli_real_escape_string($mysqli, $_POST['password']);
+
+        $query = "SELECT * FROM usuarios WHERE username='{$username}' AND password=md5('{$password}');";
+        $result = mysqli_query($mysqli, $query);
+        $row = mysqli_num_rows($result);
+
+        if ($row == 1) {
+            $userIp = $_SERVER['REMOTE_ADDR'];
+            $userData = mysqli_fetch_assoc($result);
+            
+            $query = "UPDATE `usuarios` SET first_login_ip = COALESCE(first_login_ip, '{$userIp}'), last_login_ip='{$userIp}', last_login_at=now(), first_login_at = COALESCE(first_login_at, now()) WHERE  `id`={$userData['id']};";
+            $resultUpdate = mysqli_query($mysqli, $query);
+            
+            if($resultUpdate) {
+                $_SESSION['USER_ID'] = $userData['id'];
+                $_SESSION['USER_USERNAME'] = $userData['username'];
+
+                $_SESSION['MESSAGES_LOGIN_ERROR'] = null;
+
+                header('location: ' . $redirectUrl);
+
+            } else {
+                $_SESSION['MESSAGES_LOGIN_ERROR'] = true;
+                header('location: /login/?redirect=' . $redirectUrl);
+                exit();
+            }
+            exit();
+
+        } else {
+            $_SESSION['MESSAGES_LOGIN_ERROR'] = true;
+            header('location: /login/?redirect=' . $redirectUrl);
+            exit();
+        }
+    } else {
+        $_SESSION['MESSAGES_LOGIN_ERROR'] = null;
+        $_SESSION['MESSAGES_LOGIN_ERROR_RECAPTCHA'] = true;
+
+        header('location: /login/?redirect=' . $redirectUrl);
+        exit();
+    }
+?>

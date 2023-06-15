@@ -1,0 +1,36 @@
+.double-cards {
+    display: flex;
+    gap: 2em;
+
+    .card {
+        width: 50%;
+        max-height: 200px;
+        overflow: auto;
+        box-sizing: border-box;
+
+        border: 2px solid #d3d3d3;
+        border-radius: 23px;
+        padding: 1em;
+        margin-bottom: 1em;
+    }
+}
+
+table {
+    border: 2px solid #D3D3D3;
+    width: 100%;
+    text-align: left;
+    border-radius: 12px;
+    overflow: hidden;
+
+    td {
+        font-size: 13px;
+        padding: .2em 0;
+    }
+
+    th {
+        background: #DDDDDD;
+        font-size: 15px;
+        font-weight: bold;
+        text-align: left;
+    }
+}
