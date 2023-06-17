@@ -208,7 +208,7 @@
                 <div class="card">
                     <div class="card-header">
                         <?php
-                            $query = "SELECT SUM(avr.valor_taxa) AS soma_valores FROM tipos_taxas tt JOIN alojamentos_valores_reembolso avr ON tt.id = avr.id_taxa WHERE tt.refundable = 0 AND avr.mes=5 AND avr.ano=2023;";
+                            $query = "SELECT SUM(avr.valor_taxa) AS soma_valores FROM tipos_taxas tt JOIN alojamentos_valores_reembolso avr ON tt.id = avr.id_taxa WHERE tt.refundable = 0 AND avr.mes={$month} AND avr.ano={$year};";
                             $result = mysqli_query($mysqli, $query);
                             $row = mysqli_num_rows($result);
 

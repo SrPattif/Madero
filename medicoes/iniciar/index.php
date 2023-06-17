@@ -76,7 +76,7 @@
             let year = $( "#select-year").val();
             let month = $( "#select-month" ).val();
 
-            window.location.href = `../fill/?year=${year}&month=${month}`;
+            window.location.href = `../medir/?year=${year}&month=${month}`;
         })
     </script>
 

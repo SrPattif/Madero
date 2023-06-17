@@ -35,10 +35,11 @@ if(isset($_SESSION['month'])) {
         </div>
 
         <ul class="nav-list">
-            <li><a href="/"><i class='bx bxs-tachometer'></i> Visão Geral</a></li>
-            <li><a href="/habitations/"><i class='bx bxs-home'></i> Moradias</a></li>
-            <li><a href="/"><i class='bx bxs-report'></i> Extrair Relatório</a></li>
-            <li><a href="/form/start/" class="special-btn"><i class='bx bx-clipboard'></i> MEDIR</a></li>
+            <li><a href="/"><i class='bx bxs-tachometer'></i> Início</a></li>
+            <li><a href="/alojamentos/"><i class='bx bxs-home'></i> Moradias</a></li>
+            <li><a href="/"><i class='bx bxs-report'></i> Relatórios</a></li>
+            <li><a href="/arquivos/"><i class='bx bxs-file-blank'></i> Arquivos</a></li>
+            <li><a href="/medicoes/iniciar/" class="special-btn"><i class='bx bx-clipboard'></i> MEDIR</a></li>
             <li><a href="/requests/" class="special-btn"><i class='bx bx-envelope'></i> SOLICITAÇÕES</a></li>
         </ul>
     </nav>

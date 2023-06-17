@@ -96,6 +96,7 @@
     </main>
 
     <script src="/libs/tatatoast/dist/tata.js"></script>
+    <script src="/mobile-navbar.js"></script>
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script>
         $("#export-table-btn").click(function() {

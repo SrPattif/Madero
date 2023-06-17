@@ -124,7 +124,8 @@ button {
     margin-top: .8em;
     cursor: pointer;
     transition: all .3s;
-    width: 30%;
+    width: 100%;
+    text-align: center;
 }
 
 button:hover {
@@ -169,5 +170,9 @@ button:hover {
         width: 50%;
 
         display: block;
+    }
+
+    button {
+        width: 35%;
     }
 }

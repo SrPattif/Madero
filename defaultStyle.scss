@@ -274,3 +274,17 @@ nav {
     width: 20%;
     gap: 2em;
 }
+
+@media (max-width: 1200px) {
+    .date-selectors {
+        display: block;
+
+        .select {
+            margin-bottom: 1em;
+        }
+
+        .select:last-child {
+            margin-bottom: 0;
+        }
+    }
+}

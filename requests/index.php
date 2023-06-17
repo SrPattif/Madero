@@ -57,7 +57,7 @@ if (isset($_SESSION['month'])) {
                         <th>Status</th>
                     </tr>
                     <?php
-                    $query = "SELECT a.*, COALESCE(SUM(CASE WHEN tt.refundable = 1 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_reembolsavel, COALESCE(SUM(CASE WHEN tt.refundable = 0 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_nao_reembolsavel, avr.status  FROM alojamentos a  LEFT JOIN alojamentos_valores_reembolso avr ON a.id = avr.id_alojamento AND avr.mes = {$month} AND avr.ano = {$year}  LEFT JOIN tipos_taxas tt ON avr.id_taxa = tt.id  GROUP BY a.id  HAVING valor_reembolsavel > 0;";
+                    $query = "SELECT a.*, COALESCE(SUM(CASE WHEN tt.refundable = 1 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_reembolsavel, COALESCE(SUM(CASE WHEN tt.refundable = 0 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_nao_reembolsavel, avr.status, b.id AS id_boleto, b.codigo_interno AS arquivo_boleto, b.arquivo_comprovante AS arquivo_comprovante  FROM alojamentos a  LEFT JOIN alojamentos_valores_reembolso avr ON a.id = avr.id_alojamento AND avr.mes = {$month} AND avr.ano = {$year} LEFT JOIN boletos b ON a.id = b.id_alojamento AND MONTH(b.data_vencimento) = {$month} AND YEAR(b.data_vencimento) = {$year} LEFT JOIN tipos_taxas tt ON avr.id_taxa = tt.id  GROUP BY a.id  HAVING valor_reembolsavel > 0;";
                     $result = mysqli_query($mysqli, $query);
                     $rows = array();
                     while ($row = mysqli_fetch_array($result)) {
@@ -65,6 +65,18 @@ if (isset($_SESSION['month'])) {
                     }
                     foreach ($rows as $row) {
                         $status = $row['status'];
+
+                        if(empty($status)) {
+                            if(empty($row['id_boleto'])) {
+                                $status = "aguardando_boleto";
+
+                            } else if(empty($row['arquivo_comprovante'])) {
+                                $status = "aguardando_comprovante";
+
+                            } else {
+                                $status = "pronto";
+                            }
+                        }
                     ?>
 
                     <tr>
@@ -76,20 +88,24 @@ if (isset($_SESSION['month'])) {
                         <td style="text-align: center;">
                             <?php
                                 switch ($status) {
-                                    case 'sent':
+                                    case 'enviado':
                                         echo ('<div class="status status-blue"><i class="bx bx-envelope"></i> Enviado</div>');
                                         break;
 
-                                    case 'refunded':
+                                    case 'reembolsado':
                                         echo ('<div class="status status-green"><i class="bx bx-check"></i> Reembolsado</div>');
                                         break;
 
-                                    case 'ready':
+                                    case 'pronto':
                                         echo ('<div class="status status-orange"><i class="bx bx-envelope-open"></i> Pronto para Envio</div>');
                                         break;
 
-                                    case 'waiting_taxes':
-                                        echo ('<div class="status status-red"><i class="bx bx-time"></i> Sem Boletos</div>');
+                                    case 'aguardando_boleto':
+                                        echo ('<div class="status status-red"><i class="bx bx-file-blank" ></i> Sem Boletos</div>');
+                                        break;
+                                    
+                                    case 'aguardando_comprovante':
+                                        echo ('<div class="status status-red"><i class="bx bx-time"></i> Sem Comprovantes</div>');
                                         break;
 
                                     default:
@@ -110,6 +126,7 @@ if (isset($_SESSION['month'])) {
     </main>
 
     <script src="/libs/tatatoast/dist/tata.js"></script>
+    <script src="/mobile-navbar.js"></script>
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script>
     $("#export-table-btn").click(function() {

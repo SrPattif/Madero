@@ -13,6 +13,15 @@
   margin-bottom: 1em;
 }
 
+@media (max-width: 1200px) {
+  .double-cards {
+    display: block;
+    width: 100%;
+  }
+  .double-cards .card {
+    width: 100%;
+  }
+}
 table {
   border: 2px solid #D3D3D3;
   width: 100%;

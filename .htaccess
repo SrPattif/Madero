@@ -1,0 +1,15 @@
+RewriteEngine on
+
+RewriteRule ^vendor/(.*)?$ / [F,L]
+RewriteRule ^composer\.(lock|json)$ / [F,L]
+RewriteRule ^composer\.(lock|json)$ / [F,L]
+
+ErrorDocument 404 /error/
+ErrorDocument 403 /error/
+
+Options -Indexes
+
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>

@@ -1,0 +1,136 @@
+.card {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+  border: 2px solid #d3d3d3;
+  border-radius: 23px;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+.card .card-header {
+  display: flex;
+  margin-bottom: 1em;
+}
+.card .card-header h3 {
+  width: 70%;
+}
+
+table {
+  border: 2px solid #D3D3D3;
+  width: 100%;
+  text-align: left;
+  border-radius: 12px;
+}
+table td {
+  font-size: 13px;
+  padding: 0.2em 0;
+}
+table th {
+  background: #DDDDDD;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: left;
+  text-align: center;
+}
+
+.drop-files {
+  border: 2px dotted #3e3e3e;
+  border-radius: 23px;
+  padding: 2em 0;
+  height: 30% !important;
+}
+.drop-files .center {
+  text-align: center;
+  color: #3e3e3e;
+  width: 100%;
+  height: 100%;
+}
+.drop-files .center p {
+  font-size: 0.8em;
+  transition: all 1s;
+}
+.drop-files .center i {
+  font-size: 4em;
+}
+
+.fixed-top {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+.progress-container {
+  width: 100%;
+  background-color: transparent;
+  height: 5px;
+  display: block;
+}
+
+progress {
+  background-color: red;
+  width: 100%;
+  display: block;
+  height: inherit;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #e2e2e2;
+}
+
+progress::-webkit-progress-value {
+  background-color: #3e3e3e;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.highlight {
+  border: 2px solid #3e3e3e;
+}
+
+.status {
+  font-size: 0.9em;
+  width: 80%;
+  box-sizing: border-box;
+  border-radius: 50%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px; /* Defina o tamanho desejado para a div */
+  height: 16px; /* Defina o tamanho desejado para a div */
+  border-radius: 50%; /* Torna a div completamente circular */
+  padding: 0.1em 0;
+  margin: 0 auto;
+}
+
+.status-blue {
+  background-color: rgba(0, 111, 195, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}
+
+.status-green {
+  background-color: rgba(3, 157, 0, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}
+
+.status-gray {
+  background-color: rgba(61, 61, 61, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}
+
+.status-orange {
+  background-color: rgba(255, 179, 3, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}
+
+.status-red {
+  background-color: rgba(255, 3, 3, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}/*# sourceMappingURL=index.css.map */
