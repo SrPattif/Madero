@@ -6,7 +6,7 @@ if (!isset($_SESSION)) {
 if (!isset($_SESSION['USER_ID'])) {
     http_response_code(401);
     header("Content-Type: application/json");
-    echo json_encode(array("salvo" => false, "tipo_arquivo" => "comprovante", "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Usuário não autorizado."));
+    echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Usuário não autorizado."));
     exit();
 }
 
@@ -30,7 +30,7 @@ if(isset($_FILES['file'])) {
     
     if($fileExtension != "pdf") {
         header("Content-Type: application/json");
-        echo json_encode(array("salvo" => false, "tipo_arquivo" => "comprovante", "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Apenas arquivos .pdf são permitidos."));
+        echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Apenas arquivos .pdf são permitidos."));
         http_response_code(400);
         exit();
     }
@@ -128,7 +128,7 @@ if(isset($_FILES['file'])) {
 
     if($fileType != "comprovante" && $fileType != "boleto") {
         header("Content-Type: application/json");
-        echo json_encode(array("salvo" => false, "tipo_arquivo" => "comprovante", "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Erro ao identificar o arquivo."));
+        echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Erro ao identificar o arquivo."));
         http_response_code(400);
         exit();
     }
@@ -140,7 +140,7 @@ if(isset($_FILES['file'])) {
 
         if(!isset($day) || !isset($month) || !isset($year)) {
             header("Content-Type: application/json");
-            echo json_encode(array("salvo" => false, "tipo_arquivo" => "comprovante", "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Erro ao verificar o comprovante."));
+            echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Erro ao verificar o comprovante."));
             http_response_code(400);
             exit();
         }
@@ -149,7 +149,7 @@ if(isset($_FILES['file'])) {
         $resultCheck = mysqli_query($mysqli, $queryCheck);
         if(mysqli_num_rows($resultCheck) > 0) {
             header("Content-Type: application/json");
-            echo json_encode(array("salvo" => false, "tipo_arquivo" => "comprovante", "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Comprovante duplicado."));
+            echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Comprovante duplicado."));
             http_response_code(400);
             exit();
         }
@@ -162,7 +162,7 @@ if(isset($_FILES['file'])) {
             move_uploaded_file($fileTmpName, $destination);
 
             header("Content-Type: application/json");
-            echo json_encode(array("salvo" => true, "tipo_arquivo" => "comprovante", "id_moradia" => $houseId, "endereco_moradia" => $houseData['endereco'], "arquivo_nome_original" => $originalFileName));
+            echo json_encode(array("salvo" => true, "tipo_arquivo" => "comprovante", "arquivo_nome_original" => $originalFileName, "arquivo_codigo_interno" => $fileNewId, "arquivo_nome_interno" => $fileName, "competencia" => $day . "/" . $month . "/" . $year));
             http_response_code(200);
             exit();
 
@@ -219,7 +219,7 @@ if(isset($_FILES['file'])) {
 
         if(!isset($diaVencimento) || !isset($mesVencimento)  || !isset($vencimentoString) || !isset($endereco) || !isset($fornecedor) || !isset($loja)  || !isset($lancamento)) {
             header("Content-Type: application/json");
-            echo json_encode(array("salvo" => false, "tipo_arquivo" => "comprovante", "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Falha ao verificar o comprovante."));
+            echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Falha ao verificar o boleto."));
             http_response_code(400);
             exit();
         }
@@ -228,7 +228,7 @@ if(isset($_FILES['file'])) {
         $resultClassification = mysqli_query($mysqli, $queryClassification);
         if(mysqli_num_rows($resultClassification) != 1) {
             header("Content-Type: application/json");
-            echo json_encode(array("salvo" => false, "tipo_arquivo" => "comprovante", "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Moradia não encontrada."));
+            echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Moradia não encontrada."));
             http_response_code(400);
             exit();
         }
@@ -240,7 +240,7 @@ if(isset($_FILES['file'])) {
         $resultCheck = mysqli_query($mysqli, $queryCheck);
         if(mysqli_num_rows($resultCheck) > 0) {
             header("Content-Type: application/json");
-            echo json_encode(array("salvo" => false, "tipo_arquivo" => "comprovante", "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Boleto duplicado."));
+            echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Boleto duplicado."));
             http_response_code(400);
             exit();
         }
@@ -254,20 +254,20 @@ if(isset($_FILES['file'])) {
             move_uploaded_file($fileTmpName, $destination);
 
             header("Content-Type: application/json");
-            echo json_encode(array("salvo" => true, "tipo_arquivo" => "boleto", "id_moradia" => $houseId, "endereco_moradia" => $houseData['endereco'], "arquivo_nome_original" => $originalFileName));
+            echo json_encode(array("salvo" => true, "tipo_arquivo" => "boleto", "id_moradia" => $houseId, "endereco_moradia" => $houseData['endereco'], "arquivo_nome_original" => $originalFileName, "arquivo_codigo_interno" => $fileNewId, "arquivo_nome_interno" => $fileName, "vencimento" => $expireDateFormatted, "titulo" => $lancamento));
             http_response_code(200);
             exit();
 
         } else {
             header("Content-Type: application/json");
-            echo json_encode(array("salvo" => false, "tipo_arquivo" => "comprovante", "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Erro de servidor."));
+            echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Erro de servidor."));
             http_response_code(500);
             exit();
         }
 
     } else {
         header("Content-Type: application/json");
-        echo json_encode(array("salvo" => false, "tipo_arquivo" => "comprovante", "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Erro ao identificar o arquivo."));
+        echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Erro ao identificar o arquivo."));
         http_response_code(400);
         exit();
     }

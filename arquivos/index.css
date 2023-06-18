@@ -89,8 +89,33 @@ progress::-webkit-progress-value {
   border: 2px solid #3e3e3e;
 }
 
-.status {
-  font-size: 0.9em;
+.file-details {
+  width: 100%;
+  background-color: #d3d3d3;
+  display: flex;
+  border-radius: 23px;
+  box-sizing: border-box;
+  padding: 0.5em 1em;
+  margin-bottom: 1em;
+  justify-items: left;
+  justify-content: left;
+}
+.file-details .file-icon {
+  font-size: 4em;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+.file-details .file-info {
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.file-details:last-child {
+  margin-bottom: 0;
+}
+
+.badge {
+  font-size: 0.8em;
   width: 80%;
   box-sizing: border-box;
   border-radius: 50%;
@@ -98,38 +123,49 @@ progress::-webkit-progress-value {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px; /* Defina o tamanho desejado para a div */
-  height: 16px; /* Defina o tamanho desejado para a div */
-  border-radius: 50%; /* Torna a div completamente circular */
-  padding: 0.1em 0;
-  margin: 0 auto;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 20px;
+  border-radius: 23px;
+  padding: 0.1em 1em;
+}
+.badge i {
+  color: black;
+  font-weight: bold;
+  margin-right: 0.5em;
 }
 
-.status-blue {
+.badge-blue {
   background-color: rgba(0, 111, 195, 0.317);
   border: 1px solid #000000;
   color: #000000;
 }
 
-.status-green {
+.badge-green {
   background-color: rgba(3, 157, 0, 0.317);
   border: 1px solid #000000;
   color: #000000;
 }
 
-.status-gray {
+.badge-gray {
   background-color: rgba(61, 61, 61, 0.317);
   border: 1px solid #000000;
   color: #000000;
 }
 
-.status-orange {
-  background-color: rgba(255, 179, 3, 0.317);
+.badge-orange {
+  background-color: rgba(206, 144, 0, 0.38);
   border: 1px solid #000000;
   color: #000000;
 }
 
-.status-red {
+.badge-yellow {
+  background-color: rgba(255, 228, 120, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}
+
+.badge-red {
   background-color: rgba(255, 3, 3, 0.317);
   border: 1px solid #000000;
   color: #000000;

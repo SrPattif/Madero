@@ -81,6 +81,17 @@
                     </form>
                 </div>
             </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Envio atual</h3>
+                </div>
+
+                <div class="file-list" id="file-list">
+                </div>
+
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <h3>Lista de Comprovantes</h3>
@@ -369,6 +380,8 @@
 
             formData.append('file', file)
 
+            insertFileDiv(fileName, "identificando");
+
             $.ajax({
                 url: 'uploadFile.php',
                 type: 'POST',
@@ -384,21 +397,158 @@
                             });
                     }
 
+                    insertFileDiv(fileName, response.tipo_arquivo, response);
+
                     progressDone();
                 },
                 error: function(response) {
                     console.log(response)
-                    tata.error('Erro ao processar arquivo', 'Ocorreu um erro ao processar ' + fileName + '. (' + response.responseJSON.descricao_erro + ')', {
-                            duration: 6000
-                        });
+                    if (!response || !response.responseJSON || !response.responseJSON.salvo) {
+                        tata.error('Erro ao processar arquivo', 'Ocorreu um erro ao processar ' + fileName +
+                            '. (' + response.responseJSON.descricao_erro + ')', {
+                                duration: 6000
+                            });
+
+                        insertFileDiv(response.responseJSON.arquivo_nome_original, "erro", response.responseJSON);
+                    }
                 }
             });
 
         }
     }
 
+    var filesIds = {};
+
+    function insertFileDiv(nomeOriginal, tipo, dados) {
+        var id = generateRandomString(5);
+
+        switch (tipo) {
+            case "identificando":
+                var arquivoIdentificandoDiv = `<div class="file-details" id="fileDetails_${id}">
+                        <div class="file-icon"><i class="bx bxs-file-pdf"></i></div>
+                        <div class="file-info">
+                            <div class="badge badge-gray"><i class="bx bx-loader-alt bx-spin"></i> Identificando...</div>
+                            <span><b>${nomeOriginal}</b></span>
+                        </div>
+                    </div>`;
+
+                $('#file-list').append(arquivoIdentificandoDiv);
+                filesIds[nomeOriginal] = id;
+                break;
+
+            case "comprovante":
+                var arquivoComprovanteDiv = `<div class="file-details" id="fileDetails_${id}">
+                        <div class="file-icon"><i class="bx bxs-file-pdf"></i></div>
+                        <div class="file-info">
+                            <div class="badge badge-blue"><i class="bx bx-receipt"></i> Grupo de Comprovantes</div>
+                            <span><b>${nomeOriginal}</b></span>
+                            <br>
+                            <span>Codigo interno: <b>${dados.arquivo_codigo_interno}</b></span>
+                            <br>
+                            <span>Competência: <b>${dados.competencia}</b></span>
+                        </div>
+                    </div>`;
+
+                var nomeOriginal = dados.arquivo_nome_original;
+                if (filesIds[nomeOriginal]) {
+                    $('#fileDetails_' + filesIds[nomeOriginal]).html(arquivoComprovanteDiv);
+                    filesIds[nomeOriginal] = id;
+
+                } else {
+                    $('#file-list').append(arquivoComprovanteDiv);
+                    filesIds[nomeOriginal] = id;
+                }
+                break;
+
+            case "boleto":
+                var arquivoBoletoDiv = `<div class="file-details" id="fileDetails_${id}">
+                        <div class="file-icon"><i class="bx bxs-file-pdf"></i></div>
+                        <div class="file-info">
+                            <div class="badge badge-yellow"><i class="bx bx-barcode"></i> Boleto de Condomínio</div>
+                            <span><b>${nomeOriginal}</b></span>
+                            <br>
+                            <span>Codigo interno: <b>${dados.arquivo_codigo_interno}</b></span>
+                            <br>
+                            <span>Alojamento: <b>${dados.id_moradia} : ${dados.endereco_moradia}</b></span>
+                            <br>
+                            <span>Vencimento: <b>${formatarData(dados.vencimento)}</b></span>
+                            <br>
+                            <span>Número do lançamento: <b>${dados.titulo}</b></span>
+                        </div>
+                    </div>`;
+
+                var nomeOriginal = dados.arquivo_nome_original;
+                if (filesIds[nomeOriginal]) {
+                    $('#fileDetails_' + filesIds[nomeOriginal]).html(arquivoBoletoDiv);
+                    filesIds[nomeOriginal] = id;
+
+                } else {
+                    $('#file-list').append(arquivoBoletoDiv);
+                    filesIds[nomeOriginal] = id;
+                }
+                break;
+
+
+            case "erro":
+                var arquivoErroDiv = `<div class="file-details" id="fileDetails_${id}">
+                        <div class="file-icon"><i class="bx bxs-file-pdf"></i></div>
+                        <div class="file-info">
+                            <div class="badge badge-red"><i class="bx bx-x"></i> Erro ao Identificar</div>
+                            <span><b>${nomeOriginal}</b></span>
+                            <br>
+                            <span>Não foi possível identificar o tipo do arquivo. Verifique se o nome do arquivo está correto, ou importe manualmente.<br>Retorno do servidor: ${dados.descricao_erro}</span>
+                        </div>
+                    </div>`;
+
+                var nomeOriginal = dados.arquivo_nome_original;
+                if (filesIds[nomeOriginal]) {
+                    $('#fileDetails_' + filesIds[nomeOriginal]).html(arquivoErroDiv);
+                    filesIds[nomeOriginal] = id;
+
+                } else {
+                    $('#file-list').append(arquivoErroDiv);
+                    filesIds[nomeOriginal] = id;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        var arquivoErroTipoDiv = `<div class="file-details" id="fileDetails_${id}">
+                        <div class="file-icon"><i class="bx bxs-file-find"></i></div>
+                        <div class="file-info">
+                            <div class="badge badge-red"><i class="bx bx-x"></i> Tipo de arquivo inválido</div>
+                            <span><b>chrome.exe</b></span>
+                            <br>
+                            <span>Apenas documentos com extensão .pdf são permitidos para envio.</span>
+                        </div>
+                    </div>`;
+    }
+
     function isNumeric(value) {
         return /^\d+$/.test(value);
+    }
+
+    function generateRandomString(length) {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters.charAt(randomIndex);
+        }
+
+        return result;
+    }
+
+    function formatarData(data) {
+        const partes = data.split('-');
+        const ano = partes[0];
+        const mes = partes[1];
+        const dia = partes[2];
+
+        return `${dia}/${mes}/${ano}`;
     }
     </script>
 </body>
