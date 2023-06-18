@@ -24,7 +24,7 @@
         }
     }
 
-    $query = "SELECT a.*, b.id AS id_boleto, b.codigo_interno, b.nome_original AS nome_boleto, b.arquivo_comprovante, b.data_vencimento, r.data_baixa, r.valor_total FROM alojamentos a LEFT JOIN boletos b ON b.id_alojamento=a.id AND MONTH(data_vencimento) = {$month} AND YEAR(data_vencimento) = {$year} LEFT JOIN razao r ON r.documento=b.lancamento WHERE a.id = {$houseId};";
+    $query = "SELECT a.*, b.id AS id_boleto, b.codigo_interno, b.nome_interno AS arquivo_boleto, b.nome_original AS nome_boleto, b.arquivo_comprovante, b.data_vencimento, r.data_baixa, r.valor_total FROM alojamentos a LEFT JOIN boletos b ON b.id_alojamento=a.id AND MONTH(data_vencimento) = {$month} AND YEAR(data_vencimento) = {$year} LEFT JOIN razao r ON r.documento=b.lancamento WHERE a.id = {$houseId};";
     $result = mysqli_query($mysqli, $query);
     if(mysqli_num_rows($result) != 1) {
         header('location: ../');
@@ -129,6 +129,8 @@
                     <div class="file-details" onclick="abrirModal('modal_boleto')">
                         <div class="file-icon"><i class='bx bxs-file-pdf'></i></div>
                         <div class="file-information">
+                            <span><b><?php echo($houseData['nome_boleto']); ?></b></span>
+                            <br>
                             <span>Valor: <b><?php echo($amount); ?></b></span>
                             <br>
                             <span>Data de vencimento: <b><?php echo($expiresDate); ?></b></span>
@@ -141,13 +143,15 @@
                         ?>
                     <div class="comprovante">
                         <span class="no-file">Comprovante de pagamento não encontrado.</span>
-                        <div class="button" style="width: 45%; margin: 1em auto 0 auto;">APURAR COMPROVANTE</div>
+                        <div class="button" style="width: 45%; margin: 1em auto 0 auto;"
+                            onclick="apurarComprovante(<?php echo($houseData['id_boleto']); ?>)">APURAR COMPROVANTE
+                        </div>
                     </div>
                     <?php
                             } else {
                         ?>
-                    <div class="comprovante">
-                        <a href=""><b><i class='bx bxs-file-pdf'></i> Comprovante de Pagamento</b></a>
+                    <div class="comprovante" onclick="abrirModal('modal_comprovante')">
+                        <b><i class='bx bxs-file-pdf'></i> Comprovante de Pagamento</b>
                     </div>
                     <?php
                                 }
@@ -212,7 +216,14 @@
 
                 <div id="modal_boleto" class="modal">
                     <div class="modal-content">
-                        <embed src="/uploads/648e230f6cdf5.pdf">
+                        <embed src="/uploads/<?php echo($houseData['arquivo_boleto']); ?>">
+                        <div class="button" onclick="closeModal('modal_boleto')" style="width: 100%;">FECHAR</div>
+                    </div>
+                </div>
+
+                <div id="modal_comprovante" class="modal">
+                    <div class="modal-content">
+                        <embed src="/uploads/<?php echo($houseData['arquivo_comprovante']); ?>">
                         <div class="button" onclick="closeModal('modal_boleto')" style="width: 100%;">FECHAR</div>
                     </div>
 
@@ -251,6 +262,7 @@
     }
 
     function closeModal(modalId) {
+        console.log('close');
         $("#" + modalId).removeClass("show");
 
         setTimeout(function() {
@@ -259,18 +271,36 @@
     }
 
     $(document).ready(function() {
-  // Fecha o modal ao pressionar a tecla "ESC"
-  $(document).on("keyup", function(event) {
-    if (event.keyCode === 27) {
-      $('[id^="modal_"]').removeClass("show"); // Remove a classe show para a transição suave
+        $(document).on("keyup", function(event) {
+            if (event.keyCode === 27) {
+                $('[id^="modal_"]').removeClass("show");
 
-      setTimeout(function() {
-        $('[id^="modal_"]').css("display", "none");
-      }, 300);
+                setTimeout(function() {
+                    $('[id^="modal_"]').css("display", "none");
+                }, 300);
+            }
+        });
+    });
+
+    function apurarComprovante(idBoleto) {
+        $.ajax({
+            type: "POST",
+            url: "/rotinas/apurarComprovante.php",
+            data: {
+                id_boleto: idBoleto,
+            },
+            success: function(result) {
+                console.log(result);
+                return;
+            },
+            error: function(result) {
+                tata.error('Um erro ocorreu',
+                    'Ocorreu um erro ao tentar apurar o comprovante de pagamento.', {
+                        duration: 6000
+                    });
+            }
+        });
     }
-  });
-});
-
     </script>
 </body>
 

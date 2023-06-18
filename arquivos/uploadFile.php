@@ -230,7 +230,7 @@ if(isset($_FILES['file'])) {
             exit();
         }
 
-        $query = "INSERT INTO boletos (`codigo_interno`, `nome_interno`, `nome_original`, `tipo_arquivo`, `endereco`, `id_alojamento`, `fornecedor`, `loja`, `lancamento`, `data_vencimento`, `data_inclusao`, `id_autor_inclusao`) VALUES ('{$fileName}', '{$fileNewId}', '{$originalFileName}', '{$fileExtension}', '{$endereco}', '{$houseId}', '{$fornecedor}', '{$loja}', '{$lancamento}', '{$expireDateFormatted}', current_timestamp(), '{$_SESSION['USER_ID']}');";
+        $query = "INSERT INTO boletos (`codigo_interno`, `nome_interno`, `nome_original`, `tipo_arquivo`, `endereco`, `id_alojamento`, `fornecedor`, `loja`, `lancamento`, `data_vencimento`, `data_inclusao`, `id_autor_inclusao`) VALUES ('{$fileNewId}', '{$fileName}', '{$originalFileName}', '{$fileExtension}', '{$endereco}', '{$houseId}', '{$fornecedor}', '{$loja}', '{$lancamento}', '{$expireDateFormatted}', current_timestamp(), '{$_SESSION['USER_ID']}');";
         $result = mysqli_query($mysqli, $query);
         
 

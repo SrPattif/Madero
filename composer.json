@@ -3,7 +3,10 @@
     "type": "project",
     "require": {
         "vlucas/phpdotenv": "^5.5",
-        "phpoffice/phpspreadsheet": "^1.28"
+        "phpoffice/phpspreadsheet": "^1.28",
+        "smalot/pdfparser": "^2.5",
+        "setasign/fpdi": "^2.3",
+        "setasign/fpdf": "^1.8"
     },
     "authors": [
         {

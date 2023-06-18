@@ -25,7 +25,6 @@
     }
 
     $queryBoletos = "SELECT b.*, r.data_baixa, r.valor_total, a.endereco AS endereco_contratual, a.id AS id_alojamento FROM boletos b INNER JOIN razao r ON b.lancamento=r.documento INNER JOIN alojamentos a ON b.id_alojamento=a.id WHERE MONTH(data_vencimento) = {$month} AND YEAR(data_vencimento) = {$year};";
-    error_log($queryBoletos);
     $rowsBoletos = array();
     $resultBoletos = mysqli_query($mysqli, $queryBoletos);
     while($row = mysqli_fetch_array($resultBoletos)){
