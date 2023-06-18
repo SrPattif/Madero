@@ -25,7 +25,7 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2F2Z7S0VR0"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
+    window.dataLayer = window.dataLayer || [];
     </script>
 
     <meta charset="UTF-8">
@@ -123,14 +123,15 @@
                 <div class="card">
                     <h3>Ranking de Taxas Extras</h3>
 
-                    <table class="ranking-table">
-                        <tr>
-                            <th>#</th>
-                            <th>Descrição</th>
-                            <th>Valor Total</th>
-                        </tr>
-                        
-                        <?php
+                    <div class="custom-scroll">
+                        <table class="ranking-table">
+                            <tr>
+                                <th>#</th>
+                                <th>Descrição</th>
+                                <th>Valor Total</th>
+                            </tr>
+
+                            <?php
                             $query = "SELECT tt.id, tt.description, SUM(avr.valor_taxa) AS maior_valor FROM tipos_taxas tt JOIN alojamentos_valores_reembolso avr ON tt.id = avr.id_taxa WHERE tt.refundable=1 AND avr.mes={$month} AND avr.ano={$year} GROUP BY tt.id, tt.description ORDER BY maior_valor DESC LIMIT 5";
                             $result = mysqli_query($mysqli, $query);
                             $rows = array();
@@ -142,16 +143,17 @@
                             foreach($rows as $row) {
                         ?>
 
-                        <tr>
-                            <td><?php echo($index); ?></td>
-                            <td><?php echo($row['description']); ?></td>
-                            <td>R$ <?php echo(number_format($row['maior_valor'], 2, ",", ".")); ?></td>
-                        </tr>
-                        <?php 
+                            <tr>
+                                <td><?php echo($index); ?></td>
+                                <td><?php echo($row['description']); ?></td>
+                                <td>R$ <?php echo(number_format($row['maior_valor'], 2, ",", ".")); ?></td>
+                            </tr>
+                            <?php 
                                 $index++;
                             }
                         ?>
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
 

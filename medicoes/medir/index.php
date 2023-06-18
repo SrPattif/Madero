@@ -7,7 +7,7 @@ $year = $_GET['year'];
 $month = $_GET['month'];
 
 if (!is_numeric($year) || !is_numeric($month)) {
-    header('location: ../start/');
+    header('location: ../iniciar/');
     exit();
 }
 
@@ -15,12 +15,12 @@ $year = (int) $year;
 $month = (int) $month;
 
 if ($year < 2023 || $year > 2024) {
-    header('location: ../start/');
+    header('location: ../iniciar/');
     exit();
 }
 
 if ($month <= 0 || $month > 12) {
-    header('location: ../start/');
+    header('location: ../iniciar/');
     exit();
 }
 

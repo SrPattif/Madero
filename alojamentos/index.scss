@@ -37,15 +37,75 @@
                 font-size: .7em;
                 transition: all .3s;
             }
+
             .option:hover {
                 letter-spacing: .4px;
                 font-weight: bold;
             }
+
             .option:last-child {
                 border: none;
             }
         }
     }
+}
+
+.status {
+    //font-weight: bold;
+    font-size: 1em;
+    width: 80%;
+    box-sizing: border-box;
+    border-radius: 50%;
+    text-align: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    /* Defina o tamanho desejado para a div */
+    height: 20px;
+    /* Defina o tamanho desejado para a div */
+    border-radius: 23px;
+    /* Torna a div completamente circular */
+
+    padding: .1em 0;
+    margin: 0 auto;
+}
+
+.status-blue {
+    background-color: rgba(0, 111, 195, 0.317);
+    border: 1px solid #000000;
+    color: #000000;
+}
+
+.status-green {
+    background-color: rgba(3, 157, 0, 0.317);
+    border: 1px solid #000000;
+    color: #000000;
+}
+
+.status-gray {
+    background-color: rgba(61, 61, 61, 0.317);
+    border: 1px solid #000000;
+    color: #000000;
+}
+
+.status-orange {
+    background-color: rgba(206, 144, 0, 0.38);
+    border: 1px solid #000000;
+    color: #000000;
+}
+
+.status-yellow {
+    background-color: rgba(255, 228, 120, 0.317);
+    border: 1px solid #000000;
+    color: #000000;
+}
+
+.status-red {
+    background-color: rgba(255, 3, 3, 0.317);
+    border: 1px solid #000000;
+    color: #000000;
 }
 
 table {
@@ -64,5 +124,32 @@ table {
         font-weight: bold;
         text-align: left;
         text-align: center;
+    }
+}
+
+.house-options {
+    background-color: rgb(246, 246, 246);
+    border: 1px solid rgba(0, 0, 0, 0.446);
+    border-radius: 23px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .option {
+        a {
+            color: #000000;
+            text-decoration: none;
+        }
+        
+        padding: 0 .3em;
+
+        text-align: center;
+        width: 100%;
+        border-right: 1px solid #000000;
+        cursor: pointer;
+    }
+    .option:last-child {
+        border: none;
     }
 }

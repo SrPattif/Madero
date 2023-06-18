@@ -16,6 +16,13 @@
             $month = mysqli_real_escape_string($mysqli, $_SESSION['month']);
         }
     }
+
+    $query = "SELECT a.*, COALESCE(SUM(CASE WHEN tt.refundable = 1 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_reembolsavel, COALESCE(SUM(CASE WHEN tt.refundable = 0 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_nao_reembolsavel, b.id AS id_boleto, b.codigo_interno AS arquivo_boleto, b.arquivo_comprovante AS comprovante_boleto, r.documento AS titulo_razao, r.data_baixa, avr.`status` AS status_solicitacao FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso avr ON a.id = avr.id_alojamento AND avr.mes = {$month} AND avr.ano = {$year} LEFT JOIN boletos b ON b.id_alojamento = a.id LEFT JOIN razao r ON b.lancamento=r.documento LEFT JOIN tipos_taxas tt ON avr.id_taxa = tt.id GROUP BY a.id;";
+    $result = mysqli_query($mysqli, $query);
+    $rows = array();
+    while($row = mysqli_fetch_array($result)){
+        array_push($rows, $row);
+    }
 ?>
 
 <!DOCTYPE html>
@@ -67,23 +74,88 @@
                         <th>Endereço</th>
                         <th>Valor Condomínio</th>
                         <th>Valor Reembolsável</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     <?php
-                        $query = "SELECT a.*, COALESCE(SUM(CASE WHEN tt.refundable = 1 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_reembolsavel, COALESCE(SUM(CASE WHEN tt.refundable = 0 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_nao_reembolsavel FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso avr ON a.id = avr.id_alojamento AND avr.mes = {$month} AND avr.ano = {$year} LEFT JOIN tipos_taxas tt ON avr.id_taxa = tt.id GROUP BY a.id;";
-                        $result = mysqli_query($mysqli, $query);
-                        $rows = array();
-                        while($row = mysqli_fetch_array($result)){
-                            array_push($rows, $row);
-                        }
                         foreach($rows as $row) {
+                            $statusColor = "status-gray";
+                            $statusCode = "?";
+                            $statusDatabase = $row['status_solicitacao'];
+
+                            $valorReembolsavel = $row['valor_reembolsavel'];
+                            $valorNaoReembolsavel = $row['valor_nao_reembolsavel'];
+
+                            if(empty($statusDatabase)) {
+                                if(empty($valorNaoReembolsavel) || $valorNaoReembolsavel == 0) {
+                                    $statusColor = "status-red";
+                                    $statusCode = "SM";
+                                    $statusCode = "Sem medição";
+    
+                                } elseif(!empty($valorNaoReembolsavel) && $valorNaoReembolsavel > 0 && empty($valorReembolsavel) || $valorReembolsavel == 0) {
+                                    $statusColor = "status-green";
+                                    $statusCode = "OK";
+    
+                                } elseif(empty($row['id_boleto']) || empty($row['arquivo_boleto'])) {
+                                    $statusColor = "status-orange";
+                                    $statusCode = "SB";
+                                    $statusCode = "Sem boleto";
+    
+                                } elseif(empty($row['titulo_razao']) || empty($row['data_baixa'])) {
+                                    $statusColor = "status-orange";
+                                    $statusCode = "SR";
+                                    $statusCode = "Sem razão";
+    
+                                } elseif(empty($row['comprovante_boleto'])) {
+                                    $statusColor = "status-orange";
+                                    $statusCode = "SC";
+                                    $statusCode = "Sem comprovante";
+    
+                                } else {
+                                    $statusColor = "status-yellow";
+                                    $statusCode = "PE";
+                                    $statusCode = "Pronto para envio";
+                                }
+                            } else {
+                                switch ($statusDatabase) {
+                                    case 'enviado':
+                                        $statusColor = "status-blue";
+                                        $statusCode = "EV";
+                                        $statusCode = "Solicitação enviada";
+                                        break;
+
+                                    case 'reembolsado':
+                                        $statusColor = "status-green";
+                                        $statusCode = "Reembolsado";
+                                        break;
+
+                                    case 'pronto':
+                                        $statusColor = "status-yellow";
+                                        $statusCode = "PE";
+                                        $statusCode = "Pronto para envio";
+                                        break;
+
+                                    default:
+                                        $statusColor = "status-gray";
+                                        $statusCode = "?";
+                                        break;
+                                }
+                            }
                     ?>
 
                     <tr>
                         <td><?php echo((int) $row['id']); ?></td>
                         <td style="text-align: center;"><?php echo($row['contrato_totvs']); ?></td>
                         <td><?php echo($row['endereco']); ?></td>
-                        <td style="text-align: center;">R$ <?php echo(number_format($row['valor_nao_reembolsavel'], 2, ",", ".")); ?></td>
-                        <td style="text-align: center;">R$ <?php echo(number_format($row['valor_reembolsavel'], 2, ",", ".")); ?></td>
+                        <td style="text-align: center;">R$ <?php echo(number_format($valorNaoReembolsavel, 2, ",", ".")); ?></td>
+                        <td style="text-align: center;">R$ <?php echo(number_format($valorReembolsavel, 2, ",", ".")); ?></td>
+                        <td><div class="status <?php echo($statusColor); ?>"><?php echo($statusCode); ?></div></td>
+                        <td>
+                            <div class="house-options">
+                                <div class="option"><a href="./detalhes/?id_alojamento=<?php echo($row['id']); ?>"><i class='bx bx-detail'></i></a></div>
+                                <div class="option"><a href="./editar/?id_alojamento=<?php echo($row['id']); ?>"><i class='bx bxs-edit-alt'></i></a></div>
+                            </div>
+                        </td>
                     </tr>
 
                     <?php   

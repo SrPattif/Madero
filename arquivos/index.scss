@@ -77,14 +77,14 @@ table {
 }
 
 progress {
-    background-color: red;
+    background: none;
     width: 100%;
     display: block;
     height: inherit;
 }
 
 progress::-webkit-progress-bar {
-    background-color: #e2e2e2;
+    background: none;
 }
 
 progress::-webkit-progress-value {
