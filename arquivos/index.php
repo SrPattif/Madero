@@ -365,29 +365,35 @@
             }
 
 
-            console.log(fileData.type);
-
             let formData = new FormData()
 
             formData.append('file', file)
 
-            fetch('uploadFile.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then((response) => {
-                    console.log(response);
-
-                    if (response.status != 200) {
-                        tata.error('Erro ao processar arquivo', 'Ocorreu um erro ao processar ' + fileName + '. (' +
+            $.ajax({
+                url: 'uploadFile.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (!response.salvo) {
+                        tata.error('Erro ao processar arquivo', 'Ocorreu um erro ao processar ' + fileName +
+                            '. (' +
                             response.status + ')', {
                                 duration: 6000
                             });
                     }
 
                     progressDone();
-                })
-                .catch((response) => {})
+                },
+                error: function(response) {
+                    console.log(response)
+                    tata.error('Erro ao processar arquivo', 'Ocorreu um erro ao processar ' + fileName + '. (' + response.responseJSON.descricao_erro + ')', {
+                            duration: 6000
+                        });
+                }
+            });
+
         }
     }
 
