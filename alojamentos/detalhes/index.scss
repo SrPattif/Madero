@@ -196,6 +196,8 @@ input:focus {
     display: flex;
     gap: 2em;
     margin-bottom: 1.5rem;
+    justify-content: space-between;
+    box-sizing: border-box;
 }
 
 @media (max-width: 850px) {

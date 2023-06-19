@@ -79,33 +79,37 @@
                 </div>
                 <form action="">
                     <div class="double-inputs">
-                        <div class="input-group" style="width: 50%;">
+                        <div class="input-group" style="width: fit-content;">
+                            <label for="input_endereco">Identificador</label>
+                            <input type="text" id="input_endereco" value="<?php echo((int) $houseData['id']); ?>"
+                                style="text-align: center;" readonly>
+                        </div>
+                        <div class="input-group" style="width: 100%;">
                             <label for="input_endereco">Endereço da Moradia</label>
                             <input type="text" id="input_endereco" value="<?php echo($houseData['endereco']); ?>">
                         </div>
-                        <div class="input-group" style="width: 25%;">
+                        <div class="input-group" style="width: fit-content%;">
                             <label for="input_contrato">Contrato</label>
                             <input type="text" id="input_contrato" value="<?php echo($houseData['contrato_totvs']); ?>">
                         </div>
+                    </div>
 
+                    <div class="double-inputs">
                         <div class="input-group" style="width: 25%;">
                             <label for="input_digFinanceiro">Digito Financeiro</label>
                             <input type="text" id="input_digFinanceiro"
                                 value="<?php echo($houseData['digito_financeiro']); ?>">
                         </div>
-                    </div>
-
-                    <div class="double-inputs">
-                        <div class="input-group" style="width: 50%;">
+                        <div class="input-group" style="width: 25%;">
                             <label for="input_status">Status</label>
                             <input type="text" id="input_status" value="<?php echo($houseData['status']); ?>">
                         </div>
-                        <div class="input-group" style="width: 50%;">
+                        <div class="input-group" style="width: 25%;">
                             <label for="input_centroCusto">Centro de Custo</label>
                             <input type="text" id="input_centroCusto"
                                 value="<?php echo($houseData['centro_custo']); ?>">
                         </div>
-                        <div class="input-group" style="width: 50%;">
+                        <div class="input-group" style="width: 25%;">
                             <label for="input_operacao">Operação</label>
                             <input type="text" id="input_operacao" value="<?php echo($houseData['operacao']); ?>">
                         </div>
@@ -234,7 +238,8 @@
                         onclick="window.location.href='/medicoes/medir/?year=<?php echo($year); ?>&month=<?php echo($month); ?>&addressId=<?php echo($houseData['id']); ?>'">
                         INICIAR MEDIÇÃO</div>
 
-                    <div class="status <?php echo($statusColor); ?>" style="width: fit-content; margin-bottom: 1em;"><?php echo($statusCode); ?></div>
+                    <div class="status <?php echo($statusColor); ?>" style="width: fit-content; margin-bottom: 1em;">
+                        <?php echo($statusCode); ?></div>
 
                     <table>
                         <tr>
