@@ -88,7 +88,7 @@
                             <label for="input_endereco">Endereço da Moradia</label>
                             <input type="text" id="input_endereco" value="<?php echo($houseData['endereco']); ?>">
                         </div>
-                        <div class="input-group" style="width: fit-content%;">
+                        <div class="input-group" style="width: fit-content;">
                             <label for="input_contrato">Contrato</label>
                             <input type="text" id="input_contrato" value="<?php echo($houseData['contrato_totvs']); ?>">
                         </div>
