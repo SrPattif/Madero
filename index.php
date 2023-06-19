@@ -192,9 +192,6 @@
                         <span>Total Reembolsado</span>
                     </div>
                 </div>
-            </div>
-
-            <div class="double-cards">
                 <div class="card">
                     <div class="card-header">
                         <?php
@@ -205,6 +202,26 @@
                         ?>
                         <h1><?php echo(number_format($percentage, 1, ",", ".")); ?>%</h1>
                         <span>Índice de Valores Reembolsados</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="double-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <?php
+                            $query = "SELECT SUM(r.valor_total) AS soma_valores FROM alojamentos a LEFT JOIN boletos b ON b.id=a.id LEFT JOIN razao r ON r.documento=b.lancamento AND MONTH(b.data_vencimento)={$month} AND YEAR(b.data_vencimento)={$year};";
+                            $result = mysqli_query($mysqli, $query);
+                            $row = mysqli_num_rows($result);
+
+                            $totalAmount = 0.0;
+                            if ($row == 1) {
+                                $totalAmountObject = mysqli_fetch_assoc($result);
+                                $totalAmount = $totalAmountObject['soma_valores'];
+                            }
+                        ?>
+                        <h1>R$ <?php echo(number_format($totalAmount, 2, ",", ".")); ?></h1>
+                        <span>Valor Total Pago</span>
                     </div>
                 </div>
                 <div class="card">
@@ -221,7 +238,7 @@
                             }
                         ?>
                         <h1>R$ <?php echo(number_format($refundableValue, 2, ",", ".")); ?></h1>
-                        <span>Total em Condomínios</span>
+                        <span>Valor Total em Taxas de Condomínio</span>
                     </div>
                 </div>
             </div>

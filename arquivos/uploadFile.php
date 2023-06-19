@@ -154,7 +154,9 @@ if(isset($_FILES['file'])) {
             exit();
         }
 
-        $query = "INSERT INTO comprovantes (`nome_interno`, `codigo_interno`, `nome_original`, `tipo_arquivo`, `dia`, `mes`, `ano`) VALUES ('{$fileName}', '{$fileNewId}', '{$originalFileName}', '{$fileExtension}', '{$day}', '{$month}', '{$year}');";
+        $referencia = date_create("$year-$month-$day")->format('Y-m-d');
+
+        $query = "INSERT INTO comprovantes (`nome_interno`, `codigo_interno`, `nome_original`, `tipo_arquivo`, `dia`, `mes`, `ano`, `referencia`) VALUES ('{$fileName}', '{$fileNewId}', '{$originalFileName}', '{$fileExtension}', '{$day}', '{$month}', '{$year}', '{$referencia}');";
         $result = mysqli_query($mysqli, $query);
 
         if ($result) {

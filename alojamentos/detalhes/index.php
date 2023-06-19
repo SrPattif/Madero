@@ -38,6 +38,13 @@
         array_push($rowsMedicoes, $row);
     }
 
+    $queryValores = "SELECT a.*, COALESCE(SUM(CASE WHEN tt.refundable = 1 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_reembolsavel, COALESCE(SUM(CASE WHEN tt.refundable = 0 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_nao_reembolsavel, b.id AS id_boleto, b.codigo_interno AS arquivo_boleto, b.arquivo_comprovante AS comprovante_boleto, r.documento AS titulo_razao, r.data_baixa, avr.`status` AS status_solicitacao FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso avr ON a.id = avr.id_alojamento AND avr.mes = {$month} AND avr.ano = {$year} LEFT JOIN boletos b ON b.id_alojamento = a.id LEFT JOIN razao r ON b.lancamento=r.documento LEFT JOIN tipos_taxas tt ON avr.id_taxa = tt.id WHERE a.id={$houseId} GROUP BY a.id;";
+    $resultValores = mysqli_query($mysqli, $queryValores);
+    $rowsValores = array();
+    while($row = mysqli_fetch_array($resultValores)){
+        array_push($rowsValores, $row);
+    }
+
     $houseData = mysqli_fetch_assoc($result);
 
     
@@ -157,9 +164,77 @@
                     <div class="card-header">
                         <h3>Medições</h3>
                     </div>
+                    <?php
+
+                        $statusColor = "status-gray";
+                        $statusCode = "?";
+                        $statusDatabase = $rowsValores[0]['status_solicitacao'];
+
+                        $valorReembolsavel = $rowsValores[0]['valor_reembolsavel'];
+                        $valorNaoReembolsavel = $rowsValores[0]['valor_nao_reembolsavel'];
+
+                        if(empty($statusDatabase)) {
+                            if(empty($valorNaoReembolsavel) || $valorNaoReembolsavel == 0) {
+                                $statusColor = "status-red";
+                                $statusCode = "SM";
+                                $statusCode = "Medição pendente";
+
+                            } elseif(!empty($valorNaoReembolsavel) && $valorNaoReembolsavel > 0 && empty($valorReembolsavel) || $valorReembolsavel == 0) {
+                                $statusColor = "status-green";
+                                $statusCode = "Sem valores reembolsáveis";
+
+                            } elseif(empty($rowsValores[0]['id_boleto']) || empty($rowsValores[0]['arquivo_boleto'])) {
+                                $statusColor = "status-orange";
+                                $statusCode = "SB";
+                                $statusCode = "Envio do boleto pendente";
+
+                            } elseif(empty($rowsValores[0]['titulo_razao']) || empty($rowsValores[0]['data_baixa'])) {
+                                $statusColor = "status-orange";
+                                $statusCode = "SR";
+                                $statusCode = "Não encontrado na razão";
+
+                            } elseif(empty($rowsValores[0]['comprovante_boleto'])) {
+                                $statusColor = "status-orange";
+                                $statusCode = "SC";
+                                $statusCode = "Apuração do comprovante de pagamento pendente";
+
+                            } else {
+                                $statusColor = "status-yellow";
+                                $statusCode = "PE";
+                                $statusCode = "Pronto para envio";
+                            }
+                        } else {
+                            switch ($statusDatabase) {
+                                case 'enviado':
+                                    $statusColor = "status-blue";
+                                    $statusCode = "EV";
+                                    $statusCode = "Solicitação de reembolso enviada";
+                                    break;
+
+                                case 'reembolsado':
+                                    $statusColor = "status-green";
+                                    $statusCode = "Reembolsado";
+                                    break;
+
+                                case 'pronto':
+                                    $statusColor = "status-yellow";
+                                    $statusCode = "PE";
+                                    $statusCode = "Pronto para envio";
+                                    break;
+
+                                default:
+                                    $statusColor = "status-gray";
+                                    $statusCode = "?";
+                                    break;
+                            }
+                        }
+
+                    ?>
                     <div class="button" style="width: 45%; margin: 0 auto 1em auto;"
                         onclick="window.location.href='/medicoes/medir/?year=<?php echo($year); ?>&month=<?php echo($month); ?>&addressId=<?php echo($houseData['id']); ?>'">
                         INICIAR MEDIÇÃO</div>
+
+                    <div class="status <?php echo($statusColor); ?>" style="width: fit-content; margin-bottom: 1em;"><?php echo($statusCode); ?></div>
 
                     <table>
                         <tr>
@@ -171,7 +246,7 @@
                         <?php 
                             foreach($rowsMedicoes as $row) {
                                 $refundableText = boolval($row['reembolsavel']) ? "Reembolsável" : "Não Reembolsável";
-                                $refundableColor = boolval($row['reembolsavel']) ? "green" : "red";
+                                $refundableColor = boolval($row['reembolsavel']) ? "green" : "yellow";
                         ?>
                         <tr>
                             <td><?php echo($row['mes'] . '/' . $row['ano']); ?></td>

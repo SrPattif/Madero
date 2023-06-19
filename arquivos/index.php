@@ -395,20 +395,17 @@
                             response.status + ')', {
                                 duration: 6000
                             });
+                        
+                            insertFileDiv(fileName, "erro", response);
+                    } else {
+                        insertFileDiv(fileName, response.tipo_arquivo, response);
                     }
-
-                    insertFileDiv(fileName, response.tipo_arquivo, response);
 
                     progressDone();
                 },
                 error: function(response) {
-                    console.log(response)
+                    progressDone();
                     if (!response || !response.responseJSON || !response.responseJSON.salvo) {
-                        tata.error('Erro ao processar arquivo', 'Ocorreu um erro ao processar ' + fileName +
-                            '. (' + response.responseJSON.descricao_erro + ')', {
-                                duration: 6000
-                            });
-
                         insertFileDiv(response.responseJSON.arquivo_nome_original, "erro", response.responseJSON);
                     }
                 }
@@ -493,7 +490,7 @@
                 var arquivoErroDiv = `<div class="file-details" id="fileDetails_${id}">
                         <div class="file-icon"><i class="bx bxs-file-pdf"></i></div>
                         <div class="file-info">
-                            <div class="badge badge-red"><i class="bx bx-x"></i> Erro ao Identificar</div>
+                            <div class="badge badge-red"><i class="bx bx-x"></i> Erro ao Processar</div>
                             <span><b>${nomeOriginal}</b></span>
                             <br>
                             <span>Não foi possível identificar o tipo do arquivo. Verifique se o nome do arquivo está correto, ou importe manualmente.<br>Retorno do servidor: ${dados.descricao_erro}</span>
@@ -514,16 +511,6 @@
             default:
                 break;
         }
-
-        var arquivoErroTipoDiv = `<div class="file-details" id="fileDetails_${id}">
-                        <div class="file-icon"><i class="bx bxs-file-find"></i></div>
-                        <div class="file-info">
-                            <div class="badge badge-red"><i class="bx bx-x"></i> Tipo de arquivo inválido</div>
-                            <span><b>chrome.exe</b></span>
-                            <br>
-                            <span>Apenas documentos com extensão .pdf são permitidos para envio.</span>
-                        </div>
-                    </div>`;
     }
 
     function isNumeric(value) {

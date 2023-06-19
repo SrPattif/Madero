@@ -27,12 +27,9 @@
   align-items: center;
   justify-content: center;
   width: 90%;
-  /* Defina o tamanho desejado para a div */
   height: 20px;
-  /* Defina o tamanho desejado para a div */
   border-radius: 23px;
-  /* Torna a div completamente circular */
-  padding: 0.1em 0;
+  padding: 0.1em 0.5em;
   margin: 0 auto;
 }
 
@@ -254,6 +251,12 @@ input:focus {
 
 .badge-red {
   background-color: rgba(255, 3, 3, 0.317);
+  border: 1px solid #000000;
+  color: #000000;
+}
+
+.badge-yellow {
+  background-color: rgba(255, 228, 120, 0.317);
   border: 1px solid #000000;
   color: #000000;
 }

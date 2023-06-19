@@ -1,5 +1,8 @@
 <?php
     include($_SERVER['DOCUMENT_ROOT'] . '/login_checker.php');
+
+    $month = date('n');
+    $year = date('Y');
 ?>
 
 <!DOCTYPE html>
@@ -31,8 +34,8 @@
             <div class="select">
                 <select id="select-year">
                     <option value="reject">Ano</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
+                    <option value="2023" <?php if($year == 2023) echo('selected'); ?>>2023</option>
+                    <option value="2024" <?php if($year == 2024) echo('selected'); ?>>2024</option>
                 </select>
                 <div class="select_arrow">
                 </div>
@@ -41,18 +44,18 @@
             <div class="select">
                 <select id="select-month">
                     <option value="reject">Mês</option>
-                    <option value="1">Janeiro</option>
-                    <option value="2">Fevereiro</option>
-                    <option value="3">Março</option>
-                    <option value="4">Abril</option>
-                    <option value="5">Maio</option>
-                    <option value="6">Junho</option>
-                    <option value="7">Julho</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Setembro</option>
-                    <option value="10">Outubro</option>
-                    <option value="11">Novembro</option>
-                    <option value="12">Dezembro</option>
+                    <option value="1" <?php if($month == 1) echo('selected'); ?>>Janeiro</option>
+                    <option value="2" <?php if($month == 2) echo('selected'); ?>>Fevereiro</option>
+                    <option value="3" <?php if($month == 3) echo('selected'); ?>>Março</option>
+                    <option value="4" <?php if($month == 4) echo('selected'); ?>>Abril</option>
+                    <option value="5" <?php if($month == 5) echo('selected'); ?>>Maio</option>
+                    <option value="6" <?php if($month == 6) echo('selected'); ?>>Junho</option>
+                    <option value="7" <?php if($month == 7) echo('selected'); ?>>Julho</option>
+                    <option value="8" <?php if($month == 8) echo('selected'); ?>>Agosto</option>
+                    <option value="9" <?php if($month == 9) echo('selected'); ?>>Setembro</option>
+                    <option value="10" <?php if($month == 10) echo('selected'); ?>>Outubro</option>
+                    <option value="11" <?php if($month == 11) echo('selected'); ?>>Novembro</option>
+                    <option value="12" <?php if($month == 12) echo('selected'); ?>>Dezembro</option>
                 </select>
                 <div class="select_arrow">
                 </div>

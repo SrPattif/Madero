@@ -15,9 +15,9 @@ include('../libs/databaseConnection.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
 
 if(!isset($_POST['id_boleto'])) {
+    header("Content-Type: application/json");
+    echo json_encode(array("apurado" => false, "descricao_erro" => "Arquivo não especificado"));
     http_response_code(400);
-    echo "Arquivo desconhecido";
-    var_dump($_POST);
     exit();
 }
 
@@ -27,15 +27,23 @@ $queryBoleto = "SELECT b.*, r.data_baixa, r.valor_total, c.nome_interno AS arqui
 $rowsBoleto = array();
 $resultBoletos = mysqli_query($mysqli, $queryBoleto);
 if(mysqli_num_rows($resultBoletos) != 1) {
-    http_response_code(401);
-    echo "Boleto duplicado";
+    header("Content-Type: application/json");
+    echo json_encode(array("apurado" => false, "descricao_erro" => "Múltiplos boletos encontrados."));
+    http_response_code(400);
     exit();
 }
 $dadosBoleto = mysqli_fetch_assoc($resultBoletos);
 
-$arquivoPDF = $_SERVER['DOCUMENT_ROOT'] . 'uploads/' . $dadosBoleto['arquivo_comprovante_bruto'];
+if(!isset($dadosBoleto['arquivo_comprovante_bruto']) || empty($dadosBoleto['arquivo_comprovante_bruto'])) {
+    header("Content-Type: application/json");
+    echo json_encode(array("apurado" => false, "descricao_erro" => "Grupo de comprovantes de pagamento faltante."));
+    http_response_code(400);
+    exit();
+}
+
+$arquivoPDF = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $dadosBoleto['arquivo_comprovante_bruto'];
 $textoProcurado = strval('R$' . number_format($dadosBoleto['valor_total'], 2, ",", "."));
-$paginaEncontrada = -1;
+$paginasEncontradas = array();
 
 $parser = new \Smalot\PdfParser\Parser();
 $pdf = $parser->parseFile($arquivoPDF);
@@ -46,32 +54,40 @@ for ($i=0; $i < sizeof($pdf->getPages()); $i++) {
     $cleanText = preg_replace('/\s+/', '', $cleanText);
 
     if (strpos($cleanText, $textoProcurado) !== false) {
-        $paginaEncontrada = $i + 1;
+        array_push($paginasEncontradas, $i + 1);
         break;
     }
 }
 
-if ($paginaEncontrada > -1) {
+if (sizeof($paginasEncontradas) == 1) {
+    $paginaEncontrada = $paginasEncontradas[0];
     $newFileCode = uniqid();
-    $newFilePath = $_SERVER['DOCUMENT_ROOT'] . 'uploads/' . $newFileCode . '.pdf';
+    $newFilePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $newFileCode . '.pdf';
 
     saveSpecificPage($arquivoPDF, $paginaEncontrada, $newFilePath);
 
     $updateQuery = "UPDATE boletos SET arquivo_comprovante='{$newFileCode}.pdf' WHERE `id`={$idBoleto};";
     $result = mysqli_query($mysqli, $updateQuery);
     if ($result) {
-        echo('Arquivo salvo como ' . $newFileCode . '.pdf');
+        header("Content-Type: application/json");
+        echo json_encode(array("apurado" => true, "nome_arquivo" =>  $newFileCode . ".pdf"));
         http_response_code(200);
+    exit();
         exit();
 
     } else {
-        echo('Erro de servidor');
-        http_response_code(500);
+        header("Content-Type: application/json");
+        echo json_encode(array("apurado" => false, "descricao_erro" => "Erro ao executar query."));
+        http_response_code(400);
         exit();
     }
     
 } else {
     echo '<br> O texto procurado (' . $textoProcurado . ') não foi encontrado no PDF ' . $arquivoPDF . '.';
+    header("Content-Type: application/json");
+    echo json_encode(array("apurado" => false, "descricao_erro" => "Comprovante não encontrado."));
+    http_response_code(400);
+    exit();
 }
 
 
