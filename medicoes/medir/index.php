@@ -1,7 +1,7 @@
 <?php
+include($_SERVER['DOCUMENT_ROOT'] . '/login_checker.php');
 include('../../libs/databaseConnection.php');
 include('../../libs/utils.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/login_checker.php');
 
 $year = $_GET['year'];
 $month = $_GET['month'];

@@ -221,10 +221,10 @@
                             }
                         ?>
                         <h1>R$ <?php echo(number_format($totalAmount, 2, ",", ".")); ?></h1>
-                        <span>Valor Total Pago</span>
+                        <span>Valor Total Pago (razão)</span>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" style="max-height: fit-content !important;">
                     <div class="card-header">
                         <?php
                             $query = "SELECT SUM(avr.valor_taxa) AS soma_valores FROM tipos_taxas tt JOIN alojamentos_valores_reembolso avr ON tt.id = avr.id_taxa WHERE tt.refundable = 0 AND avr.mes={$month} AND avr.ano={$year};";
@@ -238,8 +238,18 @@
                             }
                         ?>
                         <h1>R$ <?php echo(number_format($refundableValue, 2, ",", ".")); ?></h1>
-                        <span>Valor Total em Taxas de Condomínio</span>
+                        <span>Valor Total em Taxas de Condomínio (medições)</span>
                     </div>
+                </div>
+            </div>
+
+            <div class="double-cards">
+                <div class="card">
+                    <div>
+                        <canvas id="chart_taxasMensais"></canvas>
+                    </div>
+                </div>
+                <div class="card">
                 </div>
             </div>
         </div>
@@ -252,6 +262,119 @@
     <script src="mobile-navbar.js"></script>
     <script src="/libs/tatatoast/dist/tata.js"></script>
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    $.ajax({
+        type: "GET",
+        url: "/index_analiseTaxas.php",
+        success: function(result) {
+            loadGraph(result);
+            return;
+        },
+        error: function(result) {
+            console.log(result);
+        }
+    });
+
+    function loadGraph(requestData) {
+        console.log(requestData)
+        // Preparar os dados para o gráfico
+        var labels = [];
+        var datasets = [];
+
+        for (var year in requestData) {
+            for (var month in requestData[year]) {
+                var dataPoints = requestData[year][month];
+
+                if (dataPoints.length === 0) {
+                    continue; // Ignorar meses sem dados
+                }
+
+                dataPoints.forEach(dp => {
+                    var dataset = datasets.find(function(dataset) {
+                        return dataset.label === dp.name;
+                    });
+
+                    if (!dataset) {
+                        var color = getRandomColor();
+                        dataset = {
+                            label: dp.name,
+                            data: [],
+                            borderColor: color,
+                            backgroundColor: getDarkerColor(color, 1),
+                            tension: 0.0
+                        };
+                        datasets.push(dataset);
+                    }
+
+                    dataset.data.push(dp.totalAmount);
+                });
+
+                labels.push(month + '/' + year);
+            }
+        }
+
+        // Configurações do gráfico
+        var options = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Gráfico de Taxas Mensais'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+
+        // Criação do gráfico de linha
+        var ctx = document.getElementById('chart_taxasMensais').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: options
+        });
+
+    }
+
+    // Função auxiliar para gerar cores aleatórias
+    function getRandomColor() {
+        var color = 'hsl(' + Math.floor(Math.random() * 360) + ', 70%, 50%)';
+        return color;
+    }
+
+    function getDarkerColor(color, percent) {
+        console.log(color)
+        var hslRegex = /^hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)$/i;
+        var match = color.match(hslRegex);
+
+        if (!match) {
+            return color;
+        }
+
+        var h = parseInt(match[1]);
+        var s = parseInt(match[2]);
+        var l = parseInt(match[3]);
+
+        var darkenAmount = Math.round((100 - percent) / 100 * l) * 0.4;
+
+        l = Math.max(0, l - darkenAmount);
+
+        var darkColor = "hsl(" + h + ", " + s + "%, " + l + "%)";
+
+        return darkColor;
+    }
+    </script>
+
 </body>
 
 </html>
