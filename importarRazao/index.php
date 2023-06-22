@@ -50,7 +50,7 @@
 
         dbColumnSelects.forEach(function(selectElement) {
             const csvColumnName = selectElement.parentNode.previousSibling.textContent.toLocaleLowerCase()
-                .replace(' ', '_');
+                .replaceAll('"', '').replace(' ', '_');
             const options = selectElement.options;
 
             for (let i = 0; i < options.length; i++) {
@@ -120,6 +120,7 @@
 
     // Função para analisar o CSV em matriz de dados
     function parseCSV(csv) {
+        const delimiter = detectDelimiter(csv);
         const rows = csv.split('\n');
         const data = [];
 
@@ -127,7 +128,7 @@
             const row = rows[i].trim();
 
             if (row !== '') {
-                const columns = row.split(',');
+                const columns = row.split(delimiter);
                 data.push(columns);
             }
         }
@@ -177,7 +178,7 @@
 
             if (notSelectedDbColumns.length > 0) {
                 alert('As seguintes colunas estão faltando seleção: ' + notSelectedDbColumns.join(', '));
-                
+
             } else {
                 sendJsonToBackend();
             }
@@ -211,7 +212,7 @@
         formData.append('csv', file);
 
         $.ajax({
-            url: 'seu_backend.php', // Substitua pelo URL do seu backend
+            url: 'uploadData.php', // Substitua pelo URL do seu backend
             type: 'POST',
             data: formData,
             processData: false,
@@ -225,6 +226,35 @@
         });
 
         console.log(jsonData)
+    }
+
+
+    function detectDelimiter(csvData) {
+        const delimiters = [',', ';', '\t', ':']; // Adicione outros possíveis delimitadores aqui
+
+        const delimiterCount = {};
+
+        delimiters.forEach(delimiter => {
+            const lines = csvData.split('\n');
+            let count = 0;
+
+            lines.forEach(line => {
+                const fields = line.split(delimiter);
+
+                if (fields.length > 1) {
+                    count++;
+                }
+            });
+
+            delimiterCount[delimiter] = count;
+        });
+
+        // Encontre o delimitador com maior contagem
+        const maxCount = Math.max(...Object.values(delimiterCount));
+        const bestDelimiters = Object.keys(delimiterCount).filter(delimiter => delimiterCount[delimiter] === maxCount);
+
+        // Retorne o primeiro delimitador com a maior contagem
+        return bestDelimiters[0];
     }
     </script>
 </body>

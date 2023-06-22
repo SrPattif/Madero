@@ -164,82 +164,92 @@
                         ?>
                 </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Medições</h3>
-                    </div>
-                    <?php
+                <?php
 
                         $statusColor = "status-gray";
-                        $statusCode = "?";
+                        $statusCode = "Desconhecido";
                         $statusDatabase = $rowsValores[0]['status_solicitacao'];
+                        $statusDescription = "Não há informações à respeito da situação da solicitação de reembolso.";
 
                         $valorReembolsavel = $rowsValores[0]['valor_reembolsavel'];
                         $valorNaoReembolsavel = $rowsValores[0]['valor_nao_reembolsavel'];
 
                         if(empty($statusDatabase)) {
                             if(empty($valorNaoReembolsavel) || $valorNaoReembolsavel == 0) {
-                                $statusColor = "status-red";
-                                $statusCode = "SM";
+                                $statusColor = "red";
                                 $statusCode = "Medição pendente";
+                                $statusDescription = "A moradia ainda não teve os valores reembolsáveis informados.<br>Realize a medição <a href='/medicoes/iniciar/'>aqui</a>.";
 
                             } elseif(!empty($valorNaoReembolsavel) && $valorNaoReembolsavel > 0 && empty($valorReembolsavel) || $valorReembolsavel == 0) {
-                                $statusColor = "status-green";
+                                $statusColor = "green";
                                 $statusCode = "Sem valores reembolsáveis";
+                                $statusDescription = "A moradia não possui valores que possam ser reembolsáveis.";
 
                             } elseif(empty($rowsValores[0]['id_boleto']) || empty($rowsValores[0]['arquivo_boleto'])) {
-                                $statusColor = "status-orange";
-                                $statusCode = "SB";
+                                $statusColor = "orange";
                                 $statusCode = "Envio do boleto pendente";
+                                $statusDescription = "O boleto de condomínio ainda não foi enviado.<br>Realize o envio <a href='/arquivos/'>clicando aqui</a>.";
 
                             } elseif(empty($rowsValores[0]['titulo_razao']) || empty($rowsValores[0]['data_baixa'])) {
-                                $statusColor = "status-orange";
-                                $statusCode = "SR";
+                                $statusColor = "orange";
                                 $statusCode = "Não encontrado na razão";
+                                $statusDescription = "O número do título do boleto de condomínio não foi encontrado na razão atual.<br>Realize a atualização da razão para apurar a situação do processamento desse boleto.";
 
                             } elseif(empty($rowsValores[0]['comprovante_boleto'])) {
-                                $statusColor = "status-orange";
-                                $statusCode = "SC";
+                                $statusColor = "orange";
                                 $statusCode = "Apuração do comprovante de pagamento pendente";
+                                $statusDescription = "A razão e o boleto de condomínio já estão reunidos, mas o comprovante de pagamento ainda não foi apurado.<br>Realize a apuração automática ou envie o comprovante de pagamento manualmente.";
 
                             } else {
-                                $statusColor = "status-yellow";
-                                $statusCode = "PE";
+                                $statusColor = "yellow";
                                 $statusCode = "Pronto para envio";
+                                $statusDescription = "A razão, o boleto de condomínio e o comprovante de pagamento já estão reunidos e a solicitação de reembolso já pode ser enviada.";
                             }
                         } else {
                             switch ($statusDatabase) {
                                 case 'enviado':
-                                    $statusColor = "status-blue";
-                                    $statusCode = "EV";
+                                    $statusColor = "blue";
                                     $statusCode = "Solicitação de reembolso enviada";
+                                    $statusDescription = "A solicitação de reembolso foi enviada.";
                                     break;
 
                                 case 'reembolsado':
-                                    $statusColor = "status-green";
+                                    $statusColor = "green";
                                     $statusCode = "Reembolsado";
+                                    $statusDescription = "Os valores de taxa extra foram reembolsados.";
                                     break;
 
                                 case 'pronto':
-                                    $statusColor = "status-yellow";
-                                    $statusCode = "PE";
+                                    $statusColor = "yellow";
                                     $statusCode = "Pronto para envio";
+                                    $statusDescription = "A razão, o boleto de condomínio e o comprovante de pagamento já estão reunidos e a solicitação de reembolso já pode ser enviada.";
                                     break;
 
                                 default:
-                                    $statusColor = "status-gray";
-                                    $statusCode = "?";
+                                    $statusColor = "gray";
+                                    $statusCode = "Desconhecido";
+                                    $statusDescription = "Não há informações à respeito da situação da solicitação de reembolso.";
                                     break;
                             }
                         }
 
                     ?>
+
+                <div class="card card-<?php echo($statusColor); ?>">
+                    <div class="card-header" style="margin: 0;">
+                        <div class="status status-<?php echo($statusColor); ?>"style="width: fit-content; margin-bottom: 1em;">
+                            <?php echo($statusCode); ?></div>
+                    </div>
+                    <div class="status-desc"><?php echo($statusDescription); ?></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Medições</h3>
+                    </div>
                     <div class="button" style="width: 45%; margin: 0 auto 1em auto;"
                         onclick="window.location.href='/medicoes/medir/?year=<?php echo($year); ?>&month=<?php echo($month); ?>&addressId=<?php echo($houseData['id']); ?>'">
                         INICIAR MEDIÇÃO</div>
-
-                    <div class="status <?php echo($statusColor); ?>" style="width: fit-content; margin-bottom: 1em;">
-                        <?php echo($statusCode); ?></div>
 
                     <table>
                         <tr>

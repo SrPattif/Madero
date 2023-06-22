@@ -29,44 +29,85 @@
   width: 90%;
   height: 20px;
   border-radius: 23px;
-  padding: 0.1em 0.5em;
-  margin: 0 auto;
+  padding: 0.2em 0.7em;
 }
 
 .status-blue {
   background-color: rgba(0, 111, 195, 0.317);
-  border: 1px solid #000000;
   color: #000000;
 }
 
 .status-green {
   background-color: rgba(3, 157, 0, 0.317);
-  border: 1px solid #000000;
   color: #000000;
 }
 
 .status-gray {
   background-color: rgba(61, 61, 61, 0.317);
-  border: 1px solid #000000;
   color: #000000;
 }
 
 .status-orange {
   background-color: rgba(206, 144, 0, 0.38);
-  border: 1px solid #000000;
   color: #000000;
 }
 
 .status-yellow {
   background-color: rgba(255, 228, 120, 0.317);
-  border: 1px solid #000000;
   color: #000000;
 }
 
 .status-red {
   background-color: rgba(255, 3, 3, 0.317);
-  border: 1px solid #000000;
   color: #000000;
+}
+
+.card-blue {
+  border-color: rgba(0, 111, 195, 0.317);
+}
+.card-blue a {
+  color: rgb(0, 111, 195);
+  font-weight: bold;
+}
+
+.card-green {
+  border-color: rgba(3, 157, 0, 0.317);
+}
+.card-green a {
+  color: rgb(3, 157, 0);
+  font-weight: bold;
+}
+
+.card-gray {
+  border-color: rgba(61, 61, 61, 0.317);
+}
+.card-gray a {
+  color: rgb(61, 61, 61);
+  font-weight: bold;
+}
+
+.card-orange {
+  border-color: rgba(206, 144, 0, 0.38);
+}
+.card-orange a {
+  color: rgb(206, 144, 0);
+  font-weight: bold;
+}
+
+.card-yellow {
+  border-color: rgba(255, 228, 120, 0.317);
+}
+.card-yellow a {
+  color: rgb(255, 228, 120);
+  font-weight: bold;
+}
+
+.card-red {
+  border-color: rgba(255, 3, 3, 0.317);
+}
+.card-red a {
+  color: rgba(255, 3, 3, 0.6);
+  font-weight: bold;
 }
 
 table {
@@ -304,6 +345,10 @@ embed {
   box-sizing: border-box;
   border-radius: 23px;
   flex-grow: 1;
+}
+
+.status-desc {
+  font-size: 1rem;
 }
 
 @keyframes fade {

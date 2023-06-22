@@ -17,14 +17,14 @@
         }
     }
 
-    $queryComprovantes = "SELECT * FROM comprovantes WHERE mes={$month} AND ano={$year};";
+    $queryComprovantes = "SELECT * FROM comprovantes WHERE mes={$month} AND ano={$year} ORDER BY referencia ASC;";
     $rowsComprovantes = array();
     $resultComprovantes = mysqli_query($mysqli, $queryComprovantes);
     while($row = mysqli_fetch_array($resultComprovantes)){
         array_push($rowsComprovantes, $row);
     }
 
-    $queryBoletos = "SELECT b.*, r.data_baixa, r.valor_total, a.endereco AS endereco_contratual, a.id AS id_alojamento FROM boletos b INNER JOIN razao r ON b.lancamento=r.documento INNER JOIN alojamentos a ON b.id_alojamento=a.id WHERE MONTH(data_vencimento) = {$month} AND YEAR(data_vencimento) = {$year};";
+    $queryBoletos = "SELECT b.*, r.data_baixa, r.valor_total, a.endereco AS endereco_contratual, a.id AS id_alojamento FROM boletos b LEFT JOIN razao r ON b.lancamento=r.documento INNER JOIN alojamentos a ON b.id_alojamento=a.id WHERE MONTH(data_vencimento) = {$month} AND YEAR(data_vencimento) = {$year} ORDER BY b.data_vencimento ASC;";
     $rowsBoletos = array();
     $resultBoletos = mysqli_query($mysqli, $queryBoletos);
     while($row = mysqli_fetch_array($resultBoletos)){
@@ -82,7 +82,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" id="card_upload">
                 <div class="card-header">
                     <h3>Envio atual</h3>
                 </div>
@@ -210,6 +210,10 @@
     });
     </script>
     <script>
+    $(document).ready(function() {
+        $('#card_upload').hide();
+    });
+
     let dropArea = document.getElementById('drop-files-area')
     let dropInstruictions = document.getElementById('drop-description');
     let filesDone = 0
@@ -289,6 +293,8 @@
             });
 
         } else {
+            $('#card_upload').show();
+
             let fileName = file.name;
             let fileNameExact = fileName.replace('.pdf', '');
 
@@ -395,8 +401,8 @@
                             response.status + ')', {
                                 duration: 6000
                             });
-                        
-                            insertFileDiv(fileName, "erro", response);
+
+                        insertFileDiv(fileName, "erro", response);
                     } else {
                         insertFileDiv(fileName, response.tipo_arquivo, response);
                     }
@@ -406,7 +412,8 @@
                 error: function(response) {
                     progressDone();
                     if (!response || !response.responseJSON || !response.responseJSON.salvo) {
-                        insertFileDiv(response.responseJSON.arquivo_nome_original, "erro", response.responseJSON);
+                        insertFileDiv(response.responseJSON.arquivo_nome_original, "erro", response
+                            .responseJSON);
                     }
                 }
             });
