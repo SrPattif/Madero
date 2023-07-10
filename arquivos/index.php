@@ -24,7 +24,7 @@
         array_push($rowsComprovantes, $row);
     }
 
-    $queryBoletos = "SELECT b.*, r.data_baixa, r.valor_total, a.endereco AS endereco_contratual, a.id AS id_alojamento FROM boletos b LEFT JOIN razao r ON b.lancamento=r.documento INNER JOIN alojamentos a ON b.id_alojamento=a.id WHERE MONTH(data_vencimento) = {$month} AND YEAR(data_vencimento) = {$year} ORDER BY b.data_vencimento ASC;";
+    $queryBoletos = "SELECT b.*, r.data_baixa, r.valor_baixa AS valor_total, a.endereco AS endereco_contratual, a.id AS id_alojamento FROM boletos b LEFT JOIN razao r ON b.lancamento=r.documento INNER JOIN alojamentos a ON b.id_alojamento=a.id WHERE MONTH(b.data_vencimento) = {$month} AND YEAR(b.data_vencimento) = {$year} ORDER BY b.data_vencimento ASC;";
     $rowsBoletos = array();
     $resultBoletos = mysqli_query($mysqli, $queryBoletos);
     while($row = mysqli_fetch_array($resultBoletos)){
@@ -170,14 +170,14 @@
                             }
 
                             $originalName = $row['nome_original'];
-                            $maxLength = 55;
+                            $maxLength = 40;
                             if (strlen($originalName) > $maxLength) {
                                 $originalName = substr($originalName, 0, $maxLength) . "...";
                             }
 
                             
                         ?>
-                    <tr>
+                    <tr onclick="window.open('/uploads/<?php echo($row['nome_interno']); ?>', '_blank').focus();">
                         <td style="text-align: center;"><?php echo($index); ?></td>
                         <td style="text-align: center;">
                             <div class="status <?php echo($statusColor); ?>"></div>

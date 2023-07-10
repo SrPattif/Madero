@@ -112,9 +112,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $value = 0;
                 }
 
+                if(str_starts_with($value, "NF")) {
+                    $value = trim(str_replace("NF", "", $value));
+                }
+
                 if($databaseColumnsType[$key] == "number") {
                     if(is_numeric($value)) {
                         $query .= (int) trim($value);
+
                     } else {
                         $query .= (int) 0;
                     }
@@ -123,16 +128,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $date = date_create_from_format("d/m/Y", $value);
                     if ($date !== false) {
                         $value = date_format($date, "Y-m-d");
+
                     }
                     $query .= "'" . trim($value) . "'";
 
                 } else if($databaseColumnsType[$key] == "double") {
-                    $isFloat = isStringFloat($value);
+                    $tempVal = str_replace(".", "", $value);
+                    $tempVal = str_replace(",", ".", $tempVal);
+                    var_dump($tempVal);
+
+                    $isFloat = isStringFloat($tempVal);
                     if ($isFloat == false) {
-                        $query .= "'" . (float) floatval(trim($value)) . "'";
+                        $query .= "'" . (float) floatval(trim($tempVal)) . "'";
 
                     } else {
-                        $query .= "'" . trim($value) . "'";
+                        $query .= "'" . trim($tempVal) . "'";
                     }
                 }
                 $amount ++;
@@ -147,7 +157,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $resultDuplicated = $mysqli->query("DELETE FROM razao WHERE documento IN (SELECT documento FROM razao GROUP BY documento HAVING COUNT(*) > 1) AND id NOT IN (SELECT MAX(id) FROM razao GROUP BY documento HAVING COUNT(*) > 1);");
         
             if($resultDuplicated) {
-                echo "Dados inseridos e duplicatas removidas.";
+                //echo "Banco de dados atualizado.";
+                echo $query;
 
             } else {
                 echo "Erro na execução da query de remoção de duplicatas.";

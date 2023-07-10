@@ -137,7 +137,7 @@
                             }
                     ?>
 
-                    <tr>
+                    <tr onclick="window.open('./detalhes/?id_alojamento=<?php echo($row['id']); ?>', '_blank').focus();">
                         <td><?php echo((int) $row['id']); ?></td>
                         <td style="text-align: center;"><?php echo($row['contrato_totvs']); ?></td>
                         <td><?php echo($row['endereco']); ?></td>
