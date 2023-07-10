@@ -210,7 +210,7 @@
                 <div class="card">
                     <div class="card-header">
                         <?php
-                            $query = "SELECT SUM(r.valor_total) AS soma_valores FROM alojamentos a LEFT JOIN boletos b ON b.id=a.id LEFT JOIN razao r ON r.documento=b.lancamento AND MONTH(b.data_vencimento)={$month} AND YEAR(b.data_vencimento)={$year};";
+                            $query = "SELECT SUM(r.valor_baixa) AS soma_valores FROM alojamentos a LEFT JOIN boletos b ON b.id=a.id LEFT JOIN razao r ON r.documento=b.lancamento AND MONTH(b.data_vencimento)={$month} AND YEAR(b.data_vencimento)={$year};";
                             $result = mysqli_query($mysqli, $query);
                             $row = mysqli_num_rows($result);
 

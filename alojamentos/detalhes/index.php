@@ -128,8 +128,19 @@
                     <?php
                             } else {
                                 $amount = "R$ " . number_format($houseData['valor_total'], 2, ",", ".");
-                                $expiresDate = date_format(date_create($houseData['data_vencimento']), "d/m/Y");
-                                $datePaid = date_format(date_create($houseData['data_baixa']), "d/m/Y");;
+                                $expiresDateObj = date_create($houseData['data_vencimento']);
+                                $expiresDate = date_format($expiresDateObj, "d/m/Y");
+                                $paidDateObj = date_create($houseData['data_baixa']);
+                                $datePaid = date_format($paidDateObj, "d/m/Y");
+
+                                $daysDifference = $paidDateObj->diff($expiresDateObj)->format("%a");
+                                $differenceStatus = "";
+                                if($expiresDateObj < $paidDateObj) {
+                                    $differenceStatus = "(" . $daysDifference . " dias depois)";
+
+                                } else if($paidDateObj < $expiresDateObj) {
+                                    $differenceStatus = "(" . $daysDifference . " dias antes)";
+                                }
                         ?>
                     <div class="file-details" onclick="abrirModal('modal_boleto')">
                         <div class="file-icon"><i class='bx bxs-file-pdf'></i></div>
@@ -140,7 +151,7 @@
                             <br>
                             <span>Data de vencimento: <b><?php echo($expiresDate); ?></b></span>
                             <br>
-                            <span>Data de baixa: <b><?php echo($datePaid); ?></b> (0 dias depois)</span>
+                            <span>Data de baixa: <b><?php echo($datePaid); ?></b> <?php echo($differenceStatus); ?></span>
                         </div>
                     </div>
                     <?php

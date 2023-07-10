@@ -226,17 +226,23 @@ if(isset($_FILES['file'])) {
             exit();
         }
         
-        $queryClassification = "SELECT * FROM alojamentos WHERE endereco='{$endereco}' OR contrato_totvs='{$endereco}';";
+        $queryClassification = "SELECT r.documento, r.contrato AS contrato_razao, a.operacao, a.id, a.contrato_totvs, a.endereco  FROM razao r LEFT JOIN alojamentos a ON r.contrato=a.contrato_totvs WHERE r.documento = {$lancamento};";
         $resultClassification = mysqli_query($mysqli, $queryClassification);
         if(mysqli_num_rows($resultClassification) != 1) {
             header("Content-Type: application/json");
-            echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Moradia não encontrada."));
+            echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "A razão atual não contém o lançamento."));
             http_response_code(400);
             exit();
         }
 
-        $houseData = mysqli_fetch_assoc($resultClassification);
-        $houseId = $houseData['id'];
+        $razaoData = mysqli_fetch_assoc($resultClassification);
+        if(!isset($razaoData) || !isset($razaoData['id']) || !isset($razaoData['endereco'])) {
+            header("Content-Type: application/json");
+            echo json_encode(array("salvo" => false, "arquivo_nome_original" => $originalFileName, "descricao_erro" => "Moradia não encontrada á partir do numero de lançamento."));
+            http_response_code(400);
+            exit();
+        }
+        $houseId = $razaoData['id'];
 
         $queryCheck = "SELECT * FROM boletos WHERE id_alojamento='{$houseId}' AND DAY(data_vencimento) = $diaVencimento AND MONTH(data_vencimento) = $mesVencimento;";
         $resultCheck = mysqli_query($mysqli, $queryCheck);
@@ -256,7 +262,7 @@ if(isset($_FILES['file'])) {
             move_uploaded_file($fileTmpName, $destination);
 
             header("Content-Type: application/json");
-            echo json_encode(array("salvo" => true, "tipo_arquivo" => "boleto", "id_moradia" => $houseId, "endereco_moradia" => $houseData['endereco'], "arquivo_nome_original" => $originalFileName, "arquivo_codigo_interno" => $fileNewId, "arquivo_nome_interno" => $fileName, "vencimento" => $expireDateFormatted, "titulo" => $lancamento));
+            echo json_encode(array("salvo" => true, "tipo_arquivo" => "boleto", "id_moradia" => $houseId, "endereco_moradia" => $razaoData['endereco'], "arquivo_nome_original" => $originalFileName, "arquivo_codigo_interno" => $fileNewId, "arquivo_nome_interno" => $fileName, "vencimento" => $expireDateFormatted, "titulo" => $lancamento));
             http_response_code(200);
             exit();
 
