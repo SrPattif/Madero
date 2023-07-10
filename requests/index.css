@@ -27,6 +27,13 @@ table th {
   text-align: left;
   text-align: center;
 }
+table tr {
+  transition: all 0.2s;
+  cursor: pointer;
+}
+table tr:hover {
+  background-color: #D3D3D3;
+}
 
 .status {
   font-size: 0.9em;

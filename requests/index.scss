@@ -29,6 +29,15 @@ table {
         text-align: left;
         text-align: center;
     }
+
+    tr {
+        transition: all .2s;
+        cursor: pointer;
+    }
+
+    tr:hover {
+        background-color: #D3D3D3;
+    }
 }
 
 .status {

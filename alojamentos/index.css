@@ -102,6 +102,8 @@ table {
   border: 2px solid #D3D3D3;
   width: 100%;
   text-align: left;
+  border-radius: 12px;
+  overflow: hidden;
 }
 table td {
   font-size: 13px;
@@ -113,6 +115,13 @@ table th {
   font-weight: bold;
   text-align: left;
   text-align: center;
+}
+table tr {
+  transition: all 0.2s;
+  cursor: pointer;
+}
+table tr:hover {
+  background-color: #D3D3D3;
 }
 
 .house-options {
