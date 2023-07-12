@@ -23,7 +23,7 @@ if(!isset($_POST['id_boleto'])) {
 
 $idBoleto = mysqli_real_escape_string($mysqli, $_POST['id_boleto']);
 
-$queryBoleto = "SELECT b.*, r.data_baixa, r.valor_total, c.nome_interno AS arquivo_comprovante_bruto FROM boletos b INNER JOIN razao r ON r.documento=b.lancamento LEFT JOIN comprovantes c ON r.data_baixa=c.referencia WHERE b.id={$idBoleto};";
+$queryBoleto = "SELECT b.*, b.id AS id_boleto, r.data_baixa, r.valor_baixa AS valor_total, c.nome_interno AS arquivo_comprovante_bruto FROM boletos b INNER JOIN razao r ON r.documento=b.lancamento LEFT JOIN comprovantes c ON r.data_baixa=c.referencia WHERE b.id={$idBoleto};";
 $rowsBoleto = array();
 $resultBoletos = mysqli_query($mysqli, $queryBoleto);
 if(mysqli_num_rows($resultBoletos) != 1) {
@@ -33,6 +33,7 @@ if(mysqli_num_rows($resultBoletos) != 1) {
     exit();
 }
 $dadosBoleto = mysqli_fetch_assoc($resultBoletos);
+$idBoleto = $dadosBoleto['id_boleto'];
 
 if(!isset($dadosBoleto['arquivo_comprovante_bruto']) || empty($dadosBoleto['arquivo_comprovante_bruto'])) {
     header("Content-Type: application/json");

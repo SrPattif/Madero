@@ -112,7 +112,7 @@
                             $reference = str_pad($row['dia'], 2, "0", STR_PAD_LEFT) . '/' . str_pad($row['mes'], 2, "0", STR_PAD_LEFT) . '/' . $row['ano'];
                             $dateCreated = date_format(date_create($row['data_inclusao']), "d/m/Y H:i");
                         ?>
-                    <tr>
+                    <tr onclick="window.open('/uploads/<?php echo($row['nome_interno']); ?>', '_blank').focus();">
                         <td style="text-align: center;"><?php echo($index); ?></td>
                         <td style="text-align: center;"><?php echo($row['nome_interno']); ?></td>
                         <td style="text-align: center;"><?php echo($row['nome_original']); ?></td>

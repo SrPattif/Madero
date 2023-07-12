@@ -151,7 +151,8 @@
                             <br>
                             <span>Data de vencimento: <b><?php echo($expiresDate); ?></b></span>
                             <br>
-                            <span>Data de baixa: <b><?php echo($datePaid); ?></b> <?php echo($differenceStatus); ?></span>
+                            <span>Data de baixa: <b><?php echo($datePaid); ?></b>
+                                <?php echo($differenceStatus); ?></span>
                         </div>
                     </div>
                     <?php
@@ -159,8 +160,8 @@
                         ?>
                     <div class="comprovante">
                         <span class="no-file">Comprovante de pagamento não encontrado.</span>
-                        <div class="button" style="width: 45%; margin: 1em auto 0 auto;"
-                            onclick="apurarComprovante(<?php echo($houseData['id_boleto']); ?>)">APURAR COMPROVANTE
+                        <div class="button" style="width: 45%; margin: 1em auto 0 auto;" onclick="apurarComprovante()">
+                            APURAR COMPROVANTE
                         </div>
                     </div>
                     <?php
@@ -248,7 +249,8 @@
 
                 <div class="card card-<?php echo($statusColor); ?>">
                     <div class="card-header" style="margin: 0;">
-                        <div class="status status-<?php echo($statusColor); ?>"style="width: fit-content; margin-bottom: 1em;">
+                        <div class="status status-<?php echo($statusColor); ?>"
+                            style="width: fit-content; margin-bottom: 1em;">
                             <?php echo($statusCode); ?></div>
                     </div>
                     <div class="status-desc"><?php echo($statusDescription); ?></div>
@@ -377,12 +379,13 @@
         });
     });
 
-    function apurarComprovante(idBoleto) {
+    function apurarComprovante() {
+        console.log(<?php echo((int) $houseData['id_boleto']); ?>)
         $.ajax({
             type: "POST",
             url: "/rotinas/apurarComprovante.php",
             data: {
-                id_boleto: idBoleto,
+                id_boleto: <?php echo((int) $houseData['id_boleto']); ?>,
             },
             success: function(result) {
                 console.log(result);

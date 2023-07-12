@@ -226,7 +226,7 @@ if(isset($_FILES['file'])) {
             exit();
         }
         
-        $queryClassification = "SELECT r.documento, r.contrato AS contrato_razao, a.operacao, a.id, a.contrato_totvs, a.endereco  FROM razao r LEFT JOIN alojamentos a ON r.contrato=a.contrato_totvs WHERE r.documento = {$lancamento};";
+        $queryClassification = "SELECT r.documento, r.contrato AS contrato_razao, a.operacao, a.id, a.contrato_totvs, a.endereco FROM razao r LEFT JOIN alojamentos a ON CAST(TRIM(LEADING '0' FROM r.contrato) AS UNSIGNED) = CAST(TRIM(LEADING '0' FROM a.contrato_totvs) AS UNSIGNED) WHERE r.documento = {$lancamento}; ";
         $resultClassification = mysqli_query($mysqli, $queryClassification);
         if(mysqli_num_rows($resultClassification) != 1) {
             header("Content-Type: application/json");
