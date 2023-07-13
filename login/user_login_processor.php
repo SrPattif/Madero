@@ -4,9 +4,12 @@
         $redirectUrl = $_GET['redirect'];
     }
 
-    if (!isset($_SESSION)) {
-        session_start();
+
+    if (isset($_SESSION)) {
+        unset($_SESSION);
     }
+
+    session_start();
 
     if(!isset($_POST['username']) || !isset($_POST['password'])) {
         $_SESSION['MESSAGES_LOGIN_ERROR'] = true;
@@ -47,25 +50,41 @@
         if ($row == 1) {
             $userIp = $_SERVER['REMOTE_ADDR'];
             $userData = mysqli_fetch_assoc($result);
+            $userId = $userData['id'];
+
+            if(boolval($userData['bloqueado']) == true) {
+                $tokenMudarSenha = getRandomStringRandomInt(60);
+                $tokenQuery = "INSERT INTO tokens_senha (`token`, `id_usuario`, `valido_ate`) VALUES ('{$tokenMudarSenha}', '{$userId}', DATE_ADD(NOW(), INTERVAL 10 MINUTE));";
+                $resultToken = mysqli_query($mysqli, $tokenQuery);
             
-            $query = "UPDATE `usuarios` SET first_login_ip = COALESCE(first_login_ip, '{$userIp}'), last_login_ip='{$userIp}', last_login_at=now(), first_login_at = COALESCE(first_login_at, now()) WHERE  `id`={$userData['id']};";
-            $resultUpdate = mysqli_query($mysqli, $query);
-            
-            if($resultUpdate) {
-                $_SESSION['USER_ID'] = $userData['id'];
-                $_SESSION['USER_USERNAME'] = $userData['username'];
+                if($resultToken) {
+                    header('location: /login/mudarSenha?token=' . $tokenMudarSenha . '&motivo=contaBloqueada');
+                    exit();
 
-                $_SESSION['MESSAGES_LOGIN_ERROR'] = null;
-
-                header('location: ' . $redirectUrl);
-
+                } else {
+                    $_SESSION['MESSAGES_LOGIN_ERROR'] = true;
+                    header('location: /login/?redirect=' . $redirectUrl);
+                    exit();
+                }
             } else {
-                $_SESSION['MESSAGES_LOGIN_ERROR'] = true;
-                header('location: /login/?redirect=' . $redirectUrl);
+                $query = "UPDATE `usuarios` SET first_login_ip = COALESCE(first_login_ip, '{$userIp}'), last_login_ip='{$userIp}', last_login_at=now(), first_login_at = COALESCE(first_login_at, now()) WHERE  `id`={$userId};";
+                $resultUpdate = mysqli_query($mysqli, $query);
+                
+                if($resultUpdate) {
+                    $_SESSION['USER_ID'] = $userData['id'];
+                    $_SESSION['USER_USERNAME'] = $userData['username'];
+    
+                    $_SESSION['MESSAGES_LOGIN_ERROR'] = null;
+    
+                    header('location: ' . $redirectUrl);
+    
+                } else {
+                    $_SESSION['MESSAGES_LOGIN_ERROR'] = true;
+                    header('location: /login/?redirect=' . $redirectUrl);
+                    exit();
+                }
                 exit();
             }
-            exit();
-
         } else {
             $_SESSION['MESSAGES_LOGIN_ERROR'] = true;
             header('location: /login/?redirect=' . $redirectUrl);
@@ -77,5 +96,15 @@
 
         header('location: /login/?redirect=' . $redirectUrl);
         exit();
+    }
+
+    function getRandomStringRandomInt($length = 16) {
+        $stringSpace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $pieces = [];
+        $max = mb_strlen($stringSpace, '8bit') - 1;
+        for ($i = 0; $i < $length; ++ $i) {
+            $pieces[] = $stringSpace[random_int(0, $max)];
+        }
+        return implode('', $pieces);
     }
 ?>

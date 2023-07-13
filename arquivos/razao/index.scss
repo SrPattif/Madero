@@ -112,6 +112,11 @@ table {
         i {
             font-size: 4em;
         }
+
+        .info {
+            margin-bottom: 2em;
+            font-size: .9em;
+        }
     }
 }
 
@@ -209,7 +214,7 @@ progress::-webkit-progress-value {
     color: #000000;
 }
 
-select {
+.dbColumnSelect {
     width: 80%;
 
     outline: none;

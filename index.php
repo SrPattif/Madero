@@ -1,6 +1,11 @@
 <?php
-    include('./libs/databaseConnection.php');
+    if(!isset($_SESSION)) {
+        session_start();
+    }
+
     include($_SERVER['DOCUMENT_ROOT'] . '/login_checker.php');
+
+    include('./libs/databaseConnection.php');
 
     $month = date('n');
     $year = date('Y');

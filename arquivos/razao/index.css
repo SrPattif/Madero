@@ -97,6 +97,10 @@ table tr:hover {
 .drop-files .center i {
   font-size: 4em;
 }
+.drop-files .center .info {
+  margin-bottom: 2em;
+  font-size: 0.9em;
+}
 
 .fixed-top {
   position: fixed;
@@ -190,7 +194,7 @@ progress::-webkit-progress-value {
   color: #000000;
 }
 
-select {
+.dbColumnSelect {
   width: 80%;
   outline: none;
   border: none;

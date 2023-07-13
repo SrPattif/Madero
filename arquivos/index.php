@@ -91,6 +91,8 @@
                             de cada arquivo.</p>
                     </form>
                 </div>
+
+                <div class="simple-button" id="btn_importarComprovante"><a href="./razao/">ATUALIZAR RAZÃO</a></div>
             </div>
 
             <div class="card" id="card_upload">
@@ -580,7 +582,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/rotinas/apurarComprovanteLote.php",
+            url: "/backend/apurarComprovanteLote.php",
             success: function(result) {
                 $("#overlay").hide();
 

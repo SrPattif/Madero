@@ -49,10 +49,16 @@
             <div class="card" id="card_inputUpload">
                 <div class="card-header">
                     <h3>Enviar Arquivos</h3>
+                    <br>
                 </div>
 
                 <div class="drop-files" id="drop-files-area">
                     <div class="center">
+                        <div class="info">
+                            <span>Ainda não é possível detectar automaticamente as colunas do razão. <br>Envie o arquivo no
+                                formato CSV e selecione as colunas e seus representantes na base de dados.</span>
+                        </div>
+
                         <input type="file" id="csvFileInput">
                     </div>
                 </div>

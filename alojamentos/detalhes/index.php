@@ -77,46 +77,43 @@
                 <div class="card-header">
                     <h3>Detalhes da Moradia</h3>
                 </div>
-                <form action="">
-                    <div class="double-inputs">
-                        <div class="input-group" style="width: fit-content;">
-                            <label for="input_endereco">Identificador</label>
-                            <input type="text" id="input_endereco" value="<?php echo((int) $houseData['id']); ?>"
-                                style="text-align: center;" readonly>
-                        </div>
-                        <div class="input-group" style="width: 100%;">
-                            <label for="input_endereco">Endereço da Moradia</label>
-                            <input type="text" id="input_endereco" value="<?php echo($houseData['endereco']); ?>">
-                        </div>
-                        <div class="input-group" style="width: fit-content;">
-                            <label for="input_contrato">Contrato</label>
-                            <input type="text" id="input_contrato" value="<?php echo($houseData['contrato_totvs']); ?>">
-                        </div>
+                <div class="double-inputs">
+                    <div class="input-group" style="width: fit-content;">
+                        <label for="input_id">Identificador</label>
+                        <input type="text" id="input_id" value="<?php echo((int) $houseData['id']); ?>"
+                            style="text-align: center;" readonly>
                     </div>
-
-                    <div class="double-inputs">
-                        <div class="input-group" style="width: 25%;">
-                            <label for="input_digFinanceiro">Digito Financeiro</label>
-                            <input type="text" id="input_digFinanceiro"
-                                value="<?php echo($houseData['digito_financeiro']); ?>">
-                        </div>
-                        <div class="input-group" style="width: 25%;">
-                            <label for="input_status">Status</label>
-                            <input type="text" id="input_status" value="<?php echo($houseData['status']); ?>">
-                        </div>
-                        <div class="input-group" style="width: 25%;">
-                            <label for="input_centroCusto">Centro de Custo</label>
-                            <input type="text" id="input_centroCusto"
-                                value="<?php echo($houseData['centro_custo']); ?>">
-                        </div>
-                        <div class="input-group" style="width: 25%;">
-                            <label for="input_operacao">Operação</label>
-                            <input type="text" id="input_operacao" value="<?php echo($houseData['operacao']); ?>">
-                        </div>
+                    <div class="input-group" style="width: 100%;">
+                        <label for="input_endereco">Endereço da Moradia</label>
+                        <input type="text" id="input_endereco" value="<?php echo($houseData['endereco']); ?>">
                     </div>
+                    <div class="input-group" style="width: fit-content;">
+                        <label for="input_contrato">Contrato</label>
+                        <input type="text" id="input_contrato" value="<?php echo($houseData['contrato_totvs']); ?>">
+                    </div>
+                </div>
 
-                    <button class="button" style="margin-bottom: 2em;">SALVAR</button>
-                </form>
+                <div class="double-inputs">
+                    <div class="input-group" style="width: 25%;">
+                        <label for="input_digFinanceiro">Digito Financeiro</label>
+                        <input type="text" id="input_digFinanceiro"
+                            value="<?php echo($houseData['digito_financeiro']); ?>">
+                    </div>
+                    <div class="input-group" style="width: 25%;">
+                        <label for="input_status">Status</label>
+                        <input type="text" id="input_status" value="<?php echo($houseData['status']); ?>">
+                    </div>
+                    <div class="input-group" style="width: 25%;">
+                        <label for="input_centroCusto">Centro de Custo</label>
+                        <input type="text" id="input_centroCusto" value="<?php echo($houseData['centro_custo']); ?>">
+                    </div>
+                    <div class="input-group" style="width: 25%;">
+                        <label for="input_operacao">Operação</label>
+                        <input type="text" id="input_operacao" value="<?php echo($houseData['operacao']); ?>">
+                    </div>
+                </div>
+
+                <button class="button" id="btn_salvarAlojamento" style="margin-bottom: 2em;">SALVAR</button>
 
                 <div class="file-container">
                     <?php
@@ -384,7 +381,7 @@
         console.log(<?php echo((int) $houseData['id_boleto']); ?>)
         $.ajax({
             type: "POST",
-            url: "/rotinas/apurarComprovante.php",
+            url: "/backend/apurarComprovante.php",
             data: {
                 id_boleto: <?php echo((int) $houseData['id_boleto']); ?>,
             },
@@ -401,7 +398,8 @@
             },
             error: function(result) {
                 tata.error('Um erro ocorreu',
-                    'Ocorreu um erro ao tentar apurar o comprovante de pagamento. (' + result.responseJSON.descricao_erro + ')', {
+                    'Ocorreu um erro ao tentar apurar o comprovante de pagamento. (' + result
+                    .responseJSON.descricao_erro + ')', {
                         duration: 6000
                     });
             }
@@ -418,14 +416,15 @@
                 formData.append('idBoleto', '<?php echo($houseData['id_boleto']); ?>');
 
                 $.ajax({
-                    url: '/rotinas/importarComprovante.php',
+                    url: '/backend/importarComprovante.php',
                     type: 'POST',
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: function(response) {
                         console.log(
-                        response); // Use essa função para lidar com a resposta do servidor
+                            response
+                            ); // Use essa função para lidar com a resposta do servidor
                         tata.success('Comprovante enviado',
                             'O comprovante de pagamento foi enviado com sucesso.', {
                                 duration: 6000
@@ -446,6 +445,51 @@
                 });
             }).click();
         });
+
+        $('#btn_salvarAlojamento').click(() => {
+            var idAlojamento = $('#input_id').val();
+            var data_endereco = $('#input_endereco').val();
+            var data_contrato = $('#input_contrato').val();
+            var data_digitoFinanceiro = $('#input_digFinanceiro').val();
+            var data_status = $('#input_status').val();
+            var data_centroCusto = $('#input_centroCusto').val();
+            var data_operacao = $('#input_operacao').val();
+
+            $.ajax({
+                    url: '/backend/editarMoradia.php',
+                    type: 'POST',
+                    data: {
+                        id_alojamento: idAlojamento,
+                        endereco: data_endereco,
+                        contrato: data_contrato,
+                        digito_financeiro: data_digitoFinanceiro,
+                        status: data_status,
+                        centro_custo: data_centroCusto,
+                        operacao: data_operacao
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        tata.success('Moradia editada',
+                            'Os dados da moradia foram atualizados com sucesso.', {
+                                duration: 6000
+                            });
+
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2500);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr.responseText);
+                        tata.error('Um erro ocorreu',
+                            'Ocorreu um erro ao editar os dados da moradia. (' +
+                            xhr.responseText + ')', {
+                                duration: 6000
+                            });
+                    }
+                });
+        });
+
+
     });
     </script>
 </body>
