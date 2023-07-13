@@ -164,3 +164,23 @@ table {
         border: none;
     }
 }
+
+input {
+    background: none;
+    border: 2px solid #000;
+    outline: none;
+    padding: 0.3rem 0.65rem;
+    font-size: .9rem;
+    font-weight: 400;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    border-radius: 23px;
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 1em .5em;
+}
+
+input:focus {
+    border: 1px solid rgb(0, 0, 0);
+    box-shadow: 0 0 0 0.25rem rgb(0 0 0 / 25%);
+}

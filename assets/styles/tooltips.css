@@ -1,13 +1,7 @@
-<br>
-<br>
-<br>
-<br>
-
-
+/*
 <span data-tooltip="Tooltip help here!" data-flow="bottom" style="text-align: center;">CSS Tooltips</span>
-
-<style>
-    [data-tooltip] {
+*/
+[data-tooltip] {
   position: relative;
   cursor: pointer;
 }
@@ -34,7 +28,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 7px 13px;
+  padding: 5px 5px;
   border-radius: 25px;
   background: #000000;
   color: #FFFFFF;
@@ -106,5 +100,3 @@
 [data-tooltip=""]::after, [data-tooltip=""]::before {
   display: none !important;
 }
-
-</style>

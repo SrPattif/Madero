@@ -146,4 +146,23 @@ table tr:hover {
 }
 .house-options .option:last-child {
   border: none;
+}
+
+input {
+  background: none;
+  border: 2px solid #000;
+  outline: none;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  border-radius: 23px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 1em 0.5em;
+}
+
+input:focus {
+  border: 1px solid rgb(0, 0, 0);
+  box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.25);
 }/*# sourceMappingURL=index.css.map */

@@ -261,10 +261,21 @@ input:focus {
   box-sizing: border-box;
 }
 
-.button:hover {
-  background-color: #000;
-  color: white !important;
+.button:hover, .simple-button:hover {
   letter-spacing: 2px;
+}
+
+.simple-button {
+  color: #000 !important;
+  font-weight: bold;
+  border: none;
+  font-size: 0.9rem;
+  margin-top: 0.8em;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .badge {

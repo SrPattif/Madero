@@ -61,13 +61,15 @@
                     </div>
                 </div>
 
-                <table class="ranking-table">
+                <input type="text" id="filterInput" placeholder="Digite o texto para filtrar">
+
+                <table class="ranking-table" id="dataTable">
                     <tr>
                         <th>#</th>
                         <th>Contrato</th>
                         <th>Endereço</th>
                         <th>Valor Condomínio</th>
-                        <th>Valor Reembolsável</th>
+                        <th class="sortable" data-column="despesas">Valor Reembolsável</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -167,6 +169,36 @@
     <script>
         $("#export-table-btn").click(function() {
             window.location.href = "/exporter/tableHabitations.php";
+        });
+
+        const filterInput = document.getElementById('filterInput');
+        const dataTable = document.getElementById('dataTable');
+
+        filterInput.addEventListener('input', function () {
+            const filterText = filterInput.value.toLowerCase();
+            const rows = dataTable.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+
+                for (let j = 0; j < cells.length; j++) {
+                    const cell = cells[j];
+                    const cellText = cell.textContent.toLowerCase();
+
+                    if (cellText.includes(filterText)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
         });
     </script>
 </body>

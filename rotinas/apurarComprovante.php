@@ -23,7 +23,7 @@ if(!isset($_POST['id_boleto'])) {
 
 $idBoleto = mysqli_real_escape_string($mysqli, $_POST['id_boleto']);
 
-$queryBoleto = "SELECT b.*, b.id AS id_boleto, r.data_baixa, r.valor_baixa AS valor_total, c.nome_interno AS arquivo_comprovante_bruto FROM boletos b INNER JOIN razao r ON r.documento=b.lancamento LEFT JOIN comprovantes c ON r.data_baixa=c.referencia WHERE b.id={$idBoleto};";
+$queryBoleto = "SELECT b.*, b.id AS id_boleto, r.data_baixa, r.valor_liquido AS valor_total, c.nome_interno AS arquivo_comprovante_bruto FROM boletos b INNER JOIN razao r ON r.documento=b.lancamento LEFT JOIN comprovantes c ON r.data_baixa=c.referencia WHERE b.id={$idBoleto};";
 $rowsBoleto = array();
 $resultBoletos = mysqli_query($mysqli, $queryBoleto);
 if(mysqli_num_rows($resultBoletos) != 1) {
@@ -73,7 +73,6 @@ if (sizeof($paginasEncontradas) == 1) {
         header("Content-Type: application/json");
         echo json_encode(array("apurado" => true, "nome_arquivo" =>  $newFileCode . ".pdf"));
         http_response_code(200);
-    exit();
         exit();
 
     } else {
@@ -84,9 +83,8 @@ if (sizeof($paginasEncontradas) == 1) {
     }
     
 } else {
-    echo '<br> O texto procurado (' . $textoProcurado . ') não foi encontrado no PDF ' . $arquivoPDF . '.';
     header("Content-Type: application/json");
-    echo json_encode(array("apurado" => false, "descricao_erro" => "Comprovante não encontrado."));
+    echo json_encode(array("apurado" => false, "descricao_erro" => "Comprovante não encontrado.", "tec_details" => "O texto procurado (" . $textoProcurado . ") não foi encontrado no PDF" . $arquivoPDF . "."));
     http_response_code(400);
     exit();
 }

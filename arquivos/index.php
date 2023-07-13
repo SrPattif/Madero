@@ -24,7 +24,7 @@
         array_push($rowsComprovantes, $row);
     }
 
-    $queryBoletos = "SELECT b.*, r.data_baixa, r.valor_baixa AS valor_total, a.endereco AS endereco_contratual, a.id AS id_alojamento FROM boletos b LEFT JOIN razao r ON b.lancamento=r.documento INNER JOIN alojamentos a ON b.id_alojamento=a.id WHERE MONTH(b.data_vencimento) = {$month} AND YEAR(b.data_vencimento) = {$year} ORDER BY b.data_vencimento ASC;";
+    $queryBoletos = "SELECT b.*, r.data_baixa, r.valor_liquido AS valor_total, a.endereco AS endereco_contratual, a.id AS id_alojamento FROM boletos b LEFT JOIN razao r ON b.lancamento=r.documento INNER JOIN alojamentos a ON b.id_alojamento=a.id WHERE MONTH(b.data_vencimento) = {$month} AND YEAR(b.data_vencimento) = {$year} ORDER BY b.data_vencimento ASC;";
     $rowsBoletos = array();
     $resultBoletos = mysqli_query($mysqli, $queryBoletos);
     while($row = mysqli_fetch_array($resultBoletos)){
@@ -49,6 +49,7 @@
 
     <!-- Estilos -->
     <link rel="stylesheet" href="/defaultStyle.css" />
+    <link rel="stylesheet" href="/assets/styles/tooltips.css" />
     <link rel="stylesheet" href="./index.css" />
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -63,6 +64,16 @@
     ?>
 
     <main>
+        <div class="overlay" id="overlay">
+            <div class="overlay__inner">
+                <div class="overlay__content">
+                    <span class="spinner"></span>
+                    <br>
+                    Aguarde enquanto carregamos os comprovantes
+            </div>
+            </div>
+        </div>
+
         <div class="page-content">
 
             <div class="card">
@@ -130,12 +141,13 @@
                     <h3>Lista de Boletos</h3>
                 </div>
 
+                <div class="button" style="width: 100%;" onclick="apurarComprovantesLote()">APURAR COMPROVANTES EM LOTE
+                </div>
+
                 <table>
                     <tr>
-                        <th>#</th>
                         <th></th>
                         <th>Nome Interno</th>
-                        <th>Nome Original</th>
                         <th>Moradia</th>
                         <th>Título</th>
                         <th>Fornecedor</th>
@@ -143,6 +155,7 @@
                         <th>Vencimento</th>
                         <th>Baixa</th>
                         <th>Valor Total</th>
+                        <th></th>
                     </tr>
                     <?php
                         $index = 0;
@@ -170,27 +183,44 @@
                             }
 
                             $originalName = $row['nome_original'];
-                            $maxLength = 40;
+                            $maxLength = 35;
                             if (strlen($originalName) > $maxLength) {
                                 $originalName = substr($originalName, 0, $maxLength) . "...";
                             }
 
                             
                         ?>
-                    <tr onclick="window.open('/uploads/<?php echo($row['nome_interno']); ?>', '_blank').focus();">
-                        <td style="text-align: center;"><?php echo($index); ?></td>
+                    <tr>
                         <td style="text-align: center;">
                             <div class="status <?php echo($statusColor); ?>"></div>
                         </td>
                         <td style="text-align: center;"><?php echo($row['nome_interno']); ?></td>
-                        <td><?php echo($originalName); ?></td>
-                        <td><?php echo((int) $row['id_alojamento'] . ' : ' . $row['endereco_contratual']); ?></td>
+                        <td><a href="/alojamentos/detalhes/?id_alojamento=<?php echo($row['id_alojamento']); ?>"
+                                target="_blank"><span data-tooltip="Detalhes da Moradia" data-flow="left"
+                                    style="text-align: center; z-index: 999;"><?php echo((int) $row['id_alojamento'] . ' : ' . $row['endereco_contratual']); ?></span></a>
+                        </td>
                         <td style="text-align: center;"><?php echo($row['lancamento']); ?></td>
                         <td style="text-align: center;"><?php echo($row['fornecedor']); ?></td>
                         <td style="text-align: center;"><?php echo(str_pad($row['loja'], 4, "0", STR_PAD_LEFT)); ?></td>
                         <td style="text-align: center;"><?php echo($dateExpires); ?></td>
                         <td style="text-align: center;"><?php echo($datePaid); ?></td>
                         <td style="text-align: center;"><?php echo($paidAmount); ?></td>
+                        <td>
+                            <div class="file-options">
+                                <div class="option">
+                                    <a href="/uploads/<?php echo($row['nome_interno']); ?>" target="_blank"><span
+                                            data-tooltip="Abrir Arquivo" data-flow="left"
+                                            style="text-align: center; z-index: 999;"><i
+                                                class='bx bxs-file'></i></span></a>
+                                </div>
+                                <div class="option">
+                                    <a href="/alojamentos/detalhes/?id_alojamento=<?php echo($row['id_alojamento']); ?>"
+                                        target="_blank"><span data-tooltip="Detalhes da Moradia" data-flow="left"
+                                            style="text-align: center; z-index: 999;"><i
+                                                class='bx bxs-home'></i></span></a>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                     <?php
                              }
@@ -543,6 +573,36 @@
         const dia = partes[2];
 
         return `${dia}/${mes}/${ano}`;
+    }
+
+    function apurarComprovantesLote() {
+        $("#overlay").show();
+
+        $.ajax({
+            type: "POST",
+            url: "/rotinas/apurarComprovanteLote.php",
+            success: function(result) {
+                $("#overlay").hide();
+
+                tata.success('Comprovantes apurados',
+                    'Os comprovantes disponíveis foram apurados.', {
+                        duration: 6000
+                    });
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2500);
+                return;
+            },
+            error: function(result) {
+                $("#overlay").hide();
+                
+                tata.error('Um erro ocorreu',
+                    'Ocorreu um erro ao tentar apurar o comprovante de pagamento.', {
+                        duration: 6000
+                    });
+            }
+        });
     }
     </script>
 </body>

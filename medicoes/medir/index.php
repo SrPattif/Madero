@@ -26,7 +26,7 @@ if ($month <= 0 || $month > 12) {
 
 $addressId = 0;
 if(isset($_GET['addressId'])) {
-    $addressId = $_GET['addressId'];
+    $addressId = mysqli_real_escape_string($mysqli, $_GET['addressId']);
 
 } else {
     $newAddressId = pickRandomAddress($month, $year);
@@ -40,7 +40,15 @@ if(isset($_GET['addressId'])) {
     exit();
 }
 
-$addressData = getAddressData($addressId);
+$query = "SELECT a.*, b.nome_interno AS arquivo_boleto FROM alojamentos a LEFT JOIN boletos b ON b.id_alojamento = a.id WHERE a.id = {$addressId} AND MONTH(b.data_vencimento)={$month} AND YEAR(b.data_vencimento)={$year};";
+$result = mysqli_query($mysqli, $query);
+$row = mysqli_num_rows($result);
+
+if ($row != 1) {
+    header('location: ../iniciar/');
+    exit();
+}
+$addressData = mysqli_fetch_assoc($result);
 
 $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
 
@@ -63,47 +71,61 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
 <body>
 
     <div class="page-content">
+        <div class="container">
 
-        <div class="header">
-            <span><?php echo ($monthList[$month - 1] . "/" . $year); ?></span>
-            <h2>Preencher cobrança de condomínio</h2>
-            <p>Informe as cobranças presentes no boleto de condomínio.</p>
-            <?php
+            <div class="left-content">
+                <embed src="/uploads/<?php echo($addressData['arquivo_boleto']); ?>">
+            </div>
+
+            <div class="right-content">
+                <div class="header">
+                    <span><?php echo ($monthList[$month - 1] . "/" . $year); ?></span>
+                    <h2>Preencher cobrança de condomínio</h2>
+                    <p>Informe as cobranças presentes no boleto de condomínio.</p>
+                    <?php
                 if(hasActiveMeditions($addressId, $month, $year)) {
             ?>
-                <div class="warning">Este alojamento já possui medições ativas.<br>Inserir uma nova medição agora irá excluir as outras medições ativas.</div>
-                <div class="address" style="border-color: #eea302;"><?php echo($addressData['endereco']); ?></div>
-            <?php
+                    <div class="warning">Este alojamento já possui medições ativas.<br>Inserir uma nova medição
+                        agora
+                        irá
+                        excluir as outras medições ativas.</div>
+                    <div class="address" style="border-color: #eea302;"><?php echo($addressData['endereco']); ?>
+                    </div>
+                    <?php
                 } else {
             ?>
-                <div class="address"><?php echo($addressData['endereco']); ?></div>
-            <?php
+                    <div class="address"><?php echo($addressData['endereco']); ?></div>
+                    <?php
                 }
             ?>
-        </div>
-
-        <div id="taxes-list">
-            <div class="tax">
-                <div class="tax-type">
-                    <span>Condomínio</span>
                 </div>
 
-                <div class="tax-value">
-                    <input type="text" id="tax-value" value="R$ 0" oninput="formatarValor('tax-value')" autofocus>
+                <div id="taxes-list">
+                    <div class="tax">
+                        <div class="tax-type">
+                            <span>Condomínio</span>
+                        </div>
+
+                        <div class="tax-value">
+                            <input type="text" id="tax-value" value="R$ 0" oninput="formatarValor('tax-value')"
+                                autofocus>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="add-tax-btn" class="add-tax-btn">
+                    <i class='bx bx-plus'></i>
+                </div>
+
+                <div class="continue-btn" id="continue-button">
+                    PRÓXIMO <i class='bx bx-right-arrow-alt'></i>
+                </div>
+                <div class="home-btn">
+                    <a href="/">VOLTAR AO INÍCIO</a>
                 </div>
             </div>
         </div>
 
-        <div id="add-tax-btn" class="add-tax-btn">
-            <i class='bx bx-plus'></i>
-        </div>
-
-        <div class="continue-btn" id="continue-button">
-            PRÓXIMO <i class='bx bx-right-arrow-alt'></i>
-        </div>
-        <div class="home-btn">
-            <a href="/">VOLTAR AO INÍCIO</a>
-        </div>
 
     </div>
 
@@ -112,130 +134,132 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
     <script src="/libs/tatatoast/dist/tata.js"></script>
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script>
-        function formatarValor(inputId) {
-            let input = document.getElementById(inputId);
-            let valor = input.value.replace(/\D/g, '');
+    function formatarValor(inputId) {
+        let input = document.getElementById(inputId);
+        let valor = input.value.replace(/\D/g, '');
 
-            valor = (parseFloat(valor) / 100).toFixed(2).toString().replace('.', ',');
-            valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        valor = (parseFloat(valor) / 100).toFixed(2).toString().replace('.', ',');
+        valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
 
-            if (valor == "NaN") {
-                valor = 0;
-            }
-
-            input.value = 'R$ ' + valor;
+        if (valor == "NaN") {
+            valor = 0;
         }
 
+        input.value = 'R$ ' + valor;
+    }
 
-        $('#continue-button').on('click', () => {
-            var taxData = $(".tax").map(function() {
-                var taxTypeElement = $(this).find(".tax-type");
-                var taxTypeValue;
-                var inputValue;
 
-                if (taxTypeElement.find("select").length > 0) {
-                    // Se houver um select dentro da div "tax-type"
-                    taxTypeValue = taxTypeElement.find("select").val();
-                } else if (taxTypeElement.find("span").length > 0) {
-                    // Se houver um span dentro da div "tax-type"
-                    taxTypeValue = 1;
-                }
+    $('#continue-button').on('click', () => {
+        var taxData = $(".tax").map(function() {
+            var taxTypeElement = $(this).find(".tax-type");
+            var taxTypeValue;
+            var inputValue;
 
-                inputValue = $(this).find("input").val().replace(/\D/g, '');
-                inputValue = parseFloat(inputValue.slice(0, -2) + '.' + inputValue.slice(-2))
-
-                return {
-                    id: taxTypeValue,
-                    value: inputValue
-                };
-            }).get();
-
-            var url = new URL(window.location.href);
-            var searchParams = new URLSearchParams(url.search);
-
-            var year = searchParams.get('year');
-            var month = searchParams.get('month');
-            var addressId = searchParams.get('addressId');
-            var callback = searchParams.get('callback');
-
-            var obj = {
-                'addressId': addressId,
-                'year': year,
-                'month': month,
-                'taxes': taxData
+            if (taxTypeElement.find("select").length > 0) {
+                // Se houver um select dentro da div "tax-type"
+                taxTypeValue = taxTypeElement.find("select").val();
+            } else if (taxTypeElement.find("span").length > 0) {
+                // Se houver um span dentro da div "tax-type"
+                taxTypeValue = 1;
             }
 
-            let hasError;
+            inputValue = $(this).find("input").val().replace(/\D/g, '');
+            inputValue = parseFloat(inputValue.slice(0, -2) + '.' + inputValue.slice(-2))
 
-            obj.taxes.forEach(element => {
-                if(element.id == "reject") {
-                    tata.error('Selecione o tipo de taxa', 'Existem campos que não possuem o tipo da taxa selecionada.', {
+            return {
+                id: taxTypeValue,
+                value: inputValue
+            };
+        }).get();
+
+        var url = new URL(window.location.href);
+        var searchParams = new URLSearchParams(url.search);
+
+        var year = searchParams.get('year');
+        var month = searchParams.get('month');
+        var addressId = searchParams.get('addressId');
+        var callback = searchParams.get('callback');
+
+        var obj = {
+            'addressId': addressId,
+            'year': year,
+            'month': month,
+            'taxes': taxData
+        }
+
+        let hasError;
+
+        obj.taxes.forEach(element => {
+            if (element.id == "reject") {
+                tata.error('Selecione o tipo de taxa',
+                    'Existem campos que não possuem o tipo da taxa selecionada.', {
                         duration: 6000
                     });
-                    hasError = true;
-                    return;
+                hasError = true;
+                return;
 
-                } else if (element.value <= 0) {
-                    tata.error('Informe o valor das taxas', 'Existem campos que não possuem o valor das taxas.', {
+            } else if (element.value <= 0) {
+                tata.error('Informe o valor das taxas',
+                    'Existem campos que não possuem o valor das taxas.', {
                         duration: 6000
                     });
-                    hasError = true;
-                    return;
-                }
+                hasError = true;
+                return;
+            }
 
-            });
-
-            if(hasError) return;
-
-            $.ajax({
-                type: "POST",
-                url: "./createMedition.php",
-                data: obj,
-                success: function(result) {
-                    tata.success('Medição bem sucedida', 'A medição foi bem sucedida.', {
-                        duration: 1500
-                    });
-
-                    setTimeout(() => {
-                        if(callback) {
-                            window.location.href = callback;
-                        } else {
-                            window.location.href = `./?year=${year}&month=${month}`
-                        }
-                    }, 1500);
-
-                },
-                error: function(result) {
-                    console.error(result);
-                }
-            });
-
-            console.log(obj);
         });
 
-        $("#add-tax-btn").click(function() {
-            var taxCount = $(".tax").length;
-            if (taxCount >= 7) {
-                tata.error('Limite de taxas excedido', 'Existem muitos campos de taxas criados.', {
-                    duration: 6000
+        if (hasError) return;
+
+        $.ajax({
+            type: "POST",
+            url: "./createMedition.php",
+            data: obj,
+            success: function(result) {
+                tata.success('Medição bem sucedida', 'A medição foi bem sucedida.', {
+                    duration: 1500
                 });
-                return; // Retorna o código, evitando adicionar uma nova div "tax"
+
+                setTimeout(() => {
+                    if (callback) {
+                        window.location.href = callback;
+                    } else {
+                        window.location.href = `./?year=${year}&month=${month}`
+                    }
+                }, 1500);
+
+            },
+            error: function(result) {
+                console.error(result);
             }
+        });
 
-            $.ajax({
-                url: "taxInput.php",
-                type: "GET",
-                dataType: "html",
-                success: function(data) {
-                    var taxHTML = $(data).filter(".tax");
-                    $("#taxes-list").append(taxHTML);
-                }
+        console.log(obj);
+    });
+
+    $("#add-tax-btn").click(function() {
+        var taxCount = $(".tax").length;
+        if (taxCount >= 7) {
+            tata.error('Limite de taxas excedido', 'Existem muitos campos de taxas criados.', {
+                duration: 6000
             });
-        });
+            return; // Retorna o código, evitando adicionar uma nova div "tax"
+        }
 
-        $(document).on("click", ".tax-remove", function() {
-            $(this).closest(".tax").remove();
+        $.ajax({
+            url: "taxInput.php",
+            type: "GET",
+            dataType: "html",
+            success: function(data) {
+                var taxHTML = $(data).filter(".tax");
+                $("#taxes-list").append(taxHTML);
+            }
         });
+    });
+
+    $(document).on("click", ".tax-remove", function() {
+        $(this).closest(".tax").remove();
+    });
     </script>
 
 </body>

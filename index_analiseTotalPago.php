@@ -31,7 +31,7 @@ $anos = array(
     2024 => array_fill_keys($meses, 0.0)
 );
 
-$query = "SELECT YEAR(b.data_vencimento) AS ano, MONTH(b.data_vencimento) AS mes, SUM(r.valor_total) AS soma_valor_total FROM boletos b LEFT JOIN razao r ON b.lancamento = r.documento GROUP BY YEAR(b.data_vencimento), MONTH(b.data_vencimento);";
+$query = "SELECT YEAR(b.data_vencimento) AS ano, MONTH(b.data_vencimento) AS mes, SUM(r.valor_liquido) AS soma_valor_total FROM boletos b LEFT JOIN razao r ON b.lancamento = r.documento GROUP BY YEAR(b.data_vencimento), MONTH(b.data_vencimento);";
 $result = mysqli_query($mysqli, $query);
 $row = mysqli_num_rows($result);
 $rows = array();

@@ -24,7 +24,7 @@
         }
     }
 
-    $query = "SELECT a.*, b.id AS id_boleto, b.codigo_interno, b.nome_interno AS arquivo_boleto, b.nome_original AS nome_boleto, b.arquivo_comprovante, b.data_vencimento, r.data_baixa, r.valor_baixa AS valor_total FROM alojamentos a LEFT JOIN boletos b ON b.id_alojamento=a.id AND MONTH(data_vencimento) = {$month} AND YEAR(data_vencimento) = {$year} LEFT JOIN razao r ON r.documento=b.lancamento WHERE a.id = {$houseId};";
+    $query = "SELECT a.*, b.id AS id_boleto, b.codigo_interno, b.nome_interno AS arquivo_boleto, b.nome_original AS nome_boleto, b.arquivo_comprovante, b.data_vencimento, r.data_baixa, r.valor_liquido AS valor_total FROM alojamentos a LEFT JOIN boletos b ON b.id_alojamento=a.id AND MONTH(data_vencimento) = {$month} AND YEAR(data_vencimento) = {$year} LEFT JOIN razao r ON r.documento=b.lancamento WHERE a.id = {$houseId};";
     $result = mysqli_query($mysqli, $query);
     if(mysqli_num_rows($result) != 1) {
         header('location: ../');
@@ -163,6 +163,7 @@
                         <div class="button" style="width: 45%; margin: 1em auto 0 auto;" onclick="apurarComprovante()">
                             APURAR COMPROVANTE
                         </div>
+                        <div class="simple-button" id="btn_importarComprovante">IMPORTAR COMPROVANTE</div>
                     </div>
                     <?php
                             } else {
@@ -388,17 +389,64 @@
                 id_boleto: <?php echo((int) $houseData['id_boleto']); ?>,
             },
             success: function(result) {
-                console.log(result);
+                tata.success('Comprovante apurado',
+                    'O comprovante de pagamento foi apurado com sucesso.', {
+                        duration: 6000
+                    });
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2500);
                 return;
             },
             error: function(result) {
                 tata.error('Um erro ocorreu',
-                    'Ocorreu um erro ao tentar apurar o comprovante de pagamento.', {
+                    'Ocorreu um erro ao tentar apurar o comprovante de pagamento. (' + result.responseJSON.descricao_erro + ')', {
                         duration: 6000
                     });
             }
         });
     }
+
+    $(document).ready(function() {
+        // Ao clicar na div, o seletor de arquivos será aberto
+        $('#btn_importarComprovante').click(function() {
+            $('<input type="file" accept="application/pdf">').on('change', function(e) {
+                var file = e.target.files[0];
+                var formData = new FormData();
+                formData.append('pdfFile', file);
+                formData.append('idBoleto', '<?php echo($houseData['id_boleto']); ?>');
+
+                $.ajax({
+                    url: '/rotinas/importarComprovante.php',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        console.log(
+                        response); // Use essa função para lidar com a resposta do servidor
+                        tata.success('Comprovante enviado',
+                            'O comprovante de pagamento foi enviado com sucesso.', {
+                                duration: 6000
+                            });
+
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2500);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr.responseText);
+                        tata.error('Um erro ocorreu',
+                            'Ocorreu um erro ao enviar o comprovante de pagamento. (' +
+                            xhr.responseText + ')', {
+                                duration: 6000
+                            });
+                    }
+                });
+            }).click();
+        });
+    });
     </script>
 </body>
 
