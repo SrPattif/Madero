@@ -17,7 +17,7 @@
         }
     }
 
-    $query = "SELECT a.*, COALESCE(SUM(CASE WHEN tt.refundable = 1 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_reembolsavel, COALESCE(SUM(CASE WHEN tt.refundable = 0 THEN avr.valor_taxa ELSE 0 END), 0) AS valor_nao_reembolsavel, b.id AS id_boleto, b.codigo_interno AS arquivo_boleto, b.arquivo_comprovante AS comprovante_boleto, r.documento AS titulo_razao, r.data_baixa, avr.`status` AS status_solicitacao FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso avr ON a.id = avr.id_alojamento AND avr.mes = {$month} AND avr.ano = {$year} LEFT JOIN boletos b ON b.id_alojamento = a.id LEFT JOIN razao r ON b.lancamento=r.documento LEFT JOIN tipos_taxas tt ON avr.id_taxa = tt.id GROUP BY a.id;";
+    $query = "SELECT a.*, COALESCE( SUM( CASE WHEN tt.refundable = 1 THEN avr.valor_taxa ELSE 0 END ), 0 ) AS valor_reembolsavel, COALESCE( SUM( CASE WHEN tt.refundable = 0 THEN avr.valor_taxa ELSE 0 END ), 0 ) AS valor_nao_reembolsavel, b.id AS id_boleto, b.codigo_interno AS arquivo_boleto, b.arquivo_comprovante AS comprovante_boleto, r.documento AS titulo_razao, r.data_baixa, avr.`status` AS status_solicitacao FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso avr ON a.id = avr.id_alojamento AND avr.mes = {$month} AND avr.ano = {$year} LEFT JOIN boletos b ON b.id_alojamento = a.id AND MONTH(b.data_vencimento) = {$month} AND YEAR(b.data_vencimento) = {$year} LEFT JOIN razao r ON b.lancamento = r.documento LEFT JOIN tipos_taxas tt ON avr.id_taxa = tt.id GROUP BY a.id;";
     $result = mysqli_query($mysqli, $query);
     $rows = array();
     while($row = mysqli_fetch_array($result)){
@@ -66,8 +66,10 @@
                 <table class="ranking-table" id="dataTable">
                     <tr>
                         <th>#</th>
+                        <th></th>
                         <th>Contrato</th>
                         <th>Endereço</th>
+                        <th>Dia Vcto.</th>
                         <th>Valor Condomínio</th>
                         <th class="sortable" data-column="despesas">Valor Reembolsável</th>
                         <th></th>
@@ -137,12 +139,30 @@
                                         break;
                                 }
                             }
+
+                            $boletoColor = 'gray';
+
+                            if(empty($row['arquivo_boleto'])) {
+                                $boletoColor = 'red';
+
+                            } else {
+                                if(empty($row['comprovante_boleto'])) {
+                                    $boletoColor = 'yellow';
+
+                                } else {
+                                    $boletoColor = 'green';
+                                }
+                            }
                     ?>
 
                     <tr onclick="window.open('./detalhes/?id_alojamento=<?php echo($row['id']); ?>', '_blank').focus();">
-                        <td><?php echo((int) $row['id']); ?></td>
+                        <td style="text-align: center;"><?php echo((int) $row['id']); ?></td>
+                        <td style="text-align: center;">
+                            <div class="status-circle status-<?php echo($boletoColor); ?>"></div>
+                        </td>
                         <td style="text-align: center;"><?php echo($row['contrato_totvs']); ?></td>
                         <td><?php echo($row['endereco']); ?></td>
+                        <td style="text-align: center;"><?php echo($row['dia_vencimento']); ?></td>
                         <td style="text-align: center;">R$ <?php echo(number_format($valorNaoReembolsavel, 2, ",", ".")); ?></td>
                         <td style="text-align: center;">R$ <?php echo(number_format($valorReembolsavel, 2, ",", ".")); ?></td>
                         <td><div class="status <?php echo($statusColor); ?>"><?php echo($statusCode); ?></div></td>

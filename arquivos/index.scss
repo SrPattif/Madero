@@ -365,6 +365,11 @@ td {
     border-style: solid;
 }
 
+.error-details {
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
 @keyframes spin {
   100% {
     transform: rotate(360deg);

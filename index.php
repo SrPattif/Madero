@@ -201,7 +201,7 @@
                     <div class="card-header">
                         <?php
                         $percentage = 0.0;
-                        if($refundableValue > 0) {
+                        if($qtdeAlojamentos > 0) {
                             $percentage = ($alojamentosComMedicao / $qtdeAlojamentos) * 100;
                         }
                         ?>
@@ -250,7 +250,7 @@
                     <div class="card-header">
                         <?php
                         $percentage = 0.0;
-                        if($refundableValue > 0) {
+                        if($qtdeBoletos > 0) {
                             $percentage = ($qtdeBoletosBaixados / $qtdeBoletos) * 100;
                         }
                         ?>

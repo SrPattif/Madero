@@ -532,7 +532,7 @@
                             <div class="badge badge-red"><i class="bx bx-x"></i> Erro ao Processar</div>
                             <span><b>${nomeOriginal}</b></span>
                             <br>
-                            <span>Não foi possível identificar o tipo do arquivo. Verifique se o nome do arquivo está correto, ou importe manualmente.<br>Retorno do servidor: ${dados.descricao_erro}</span>
+                            <span>Não foi possível identificar o tipo do arquivo. Verifique se o nome do arquivo está correto, ou importe manualmente.<br>Detalhes do erro: <span class="error-details">${dados.descricao_erro}</span></span>
                         </div>
                     </div>`;
 
