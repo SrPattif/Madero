@@ -16,6 +16,33 @@
 .card .card-header h3 {
   width: 70%;
 }
+.card .card-header .option-list {
+  box-sizing: border-box;
+  width: 30%;
+  text-align: right;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  text-align: right;
+  border-radius: 23px;
+}
+.card .card-header .option-list .option {
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  border-right: 2px solid #e2e2e2;
+  font-size: 0.7em;
+  transition: all 0.3s;
+}
+.card .card-header .option-list .option:hover {
+  letter-spacing: 0.4px;
+  font-weight: bold;
+}
+.card .card-header .option-list .option:last-child {
+  border: none;
+}
 
 .status {
   font-size: 0.8em;
@@ -261,7 +288,8 @@ input:focus {
   box-sizing: border-box;
 }
 
-.button:hover, .simple-button:hover {
+.button:hover,
+.simple-button:hover {
   letter-spacing: 2px;
 }
 
@@ -343,11 +371,12 @@ input:focus {
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
-  height: 100%;
+  height: auto;
   overflow: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 embed {
@@ -365,8 +394,57 @@ embed {
 @keyframes fade {
   from {
     opacity: 0;
-  } /* Começa com opacidade 0 (oculto) */
+  }
+  /* Começa com opacidade 0 (oculto) */
   to {
     opacity: 1;
-  } /* Termina com opacidade 1 (visível) */
+  }
+  /* Termina com opacidade 1 (visível) */
+}
+.options-list {
+  background-color: rgb(246, 246, 246);
+  border: 1px solid rgba(0, 0, 0, 0.446);
+  border-radius: 23px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.options-list .option {
+  padding: 0 0.3em;
+  text-align: center;
+  width: 100%;
+  border-right: 1px solid #000000;
+  cursor: pointer;
+}
+.options-list .option a {
+  color: #000000;
+  text-decoration: none;
+}
+.options-list .option:last-child {
+  border: none;
+}
+
+.double-buttons {
+  display: flex;
+  gap: 1em;
+  margin: 1em;
+}
+
+.modal-footer {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  box-sizing: border-box;
+}
+
+.center {
+  text-align: center;
+  width: 100%;
+}
+
+.vertical-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }/*# sourceMappingURL=index.css.map */

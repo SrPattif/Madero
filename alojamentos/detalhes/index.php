@@ -45,6 +45,13 @@
         array_push($rowsValores, $row);
     }
 
+    $queryContatos = "SELECT * FROM contatos_reembolso WHERE id_alojamento={$houseId};";
+    $resultContatos = mysqli_query($mysqli, $queryContatos);
+    $rowsContatos = array();
+    while($row = mysqli_fetch_array($resultContatos)){
+        array_push($rowsContatos, $row);
+    }
+
     $houseData = mysqli_fetch_assoc($result);
 
     
@@ -62,6 +69,7 @@
     <!-- Estilos -->
     <link rel="stylesheet" href="/defaultStyle.css" />
     <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="/assets/styles/tooltips.css" />
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -289,8 +297,13 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header" style="display: flex;">
                         <h3>Contatos para Reembolso</h3>
+                        <div class="option-list">
+                            <div class="option" onclick="abrirModal('modal_adicionarContato')">
+                                <i class='bx bxs-user-plus'></i> ADICIONAR CONTATO
+                            </div>
+                        </div>
                     </div>
 
                     <table>
@@ -300,12 +313,31 @@
                             <th>Data de Inclusão</th>
                             <th></th>
                         </tr>
+                        <?php
+                            foreach($rowsContatos as $row) {
+                                $id = $row['id'];
+                                $email = $row['email_reembolso'];
+                                $observacoes = $row['observacoes'];
+                                $dataInclusao = date_format(date_create($row['data_inclusao']), "d/m/Y");
+                                
+                        ?>
                         <tr>
-                            <td>a@gmail.com</td>
-                            <td>Responsavel tecnico</td>
-                            <td>17/6/2023</td>
-                            <td>ações</td>
+                            <td><?php echo($email); ?></td>
+                            <td><?php echo($observacoes); ?></td>
+                            <td><?php echo($dataInclusao); ?></td>
+                            <td>
+                                <div class="options-list">
+                                    <div class="option" onclick="confirmarExclusaoContato(<?php echo((int) $id); ?>)">
+                                        <span data-tooltip="Remover Contato" data-flow="left"
+                                            style="text-align: center; color: #AA0000;"><i
+                                                class='bx bxs-user-x'></i></span>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
+                        <?php
+                            }
+                        ?>
                     </table>
                 </div>
 
@@ -319,9 +351,59 @@
                 <div id="modal_comprovante" class="modal">
                     <div class="modal-content">
                         <embed src="/uploads/<?php echo($houseData['arquivo_comprovante']); ?>">
-                        <div class="button" onclick="closeModal('modal_boleto')" style="width: 100%;">FECHAR</div>
+                        <div class="button" onclick="closeModal('modal_comprovante')" style="width: 100%;">FECHAR</div>
                     </div>
+                </div>
 
+                <div id="modal_confirmarExclusao" class="modal">
+                    <div class="modal-content vertical-center">
+                        <div class="center">
+                            <h2>Excluir contato de reembolso?</h2>
+                            <span>Tem certeza que deseja excluir o contato de reembolso selecionado?
+                                <br>
+                                Não sera possível restaurar as informações.</span>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="double-buttons">
+                                <div class="button" onclick="closeModal('modal_confirmarExclusao')" style="width: 50%;">
+                                    FECHAR</div>
+                                <div class="button" onclick="confirmarExclusaoContato(0, true);"
+                                    style="width: 50%; background-color: rgba(255, 3, 3, 0.7); border-color:rgba(255, 3, 3, 0.7);">
+                                    EXCLUIR CONTATO</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="modal_adicionarContato" class="modal">
+                    <div class="modal-content vertical-center">
+                        <div class="center">
+                            <h2>Cadastrar Contato para Reembolso</h2>
+                            <span>Insira abaixo as informações do contato.</span>
+
+                            <div class="double-inputs" style="width: 70%; margin: 2em auto;">
+                                <div class="input-group" style="width: 50%;">
+                                    <label for="input_email">Endereço de E-mail</label>
+                                    <input type="text" id="input_email" value="">
+                                </div>
+                                <div class="input-group" style="width: 50%;">
+                                    <label for="input_obs">Observações</label>
+                                    <input type="text" id="input_obs" value="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="double-buttons">
+                                <div class="button" onclick="closeModal('modal_adicionarContato')" style="width: 50%;">
+                                    FECHAR</div>
+                                <div class="button" id="btn_cadastrarContato"
+                                    style="width: 50%; background-color: rgba(0, 111, 195, 0.7); border-color:rgba(0, 111, 195, 0.7);">
+                                    CADASTRAR CONTATO</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -332,20 +414,17 @@
     <script src="/mobile-navbar.js"></script>
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script>
-    function abrirModal(modalId) {
-        $("#" + modalId).css("display", "flex");
+    var idContatoExclusao = 0;
 
-        setTimeout(function() {
-            $("#" + modalId).addClass("show");
-        }, 10);
-    }
+    function confirmarExclusaoContato(idContato, confirmado = false) {
+        if (confirmado) {
+            closeModal('modal_confirmarExclusao');
+            removerContato(idContatoExclusao);
 
-    function closeModal(modalId) {
-        $("#" + modalId).removeClass("show");
-
-        setTimeout(function() {
-            $("#" + modalId).css("display", "none");
-        }, 300);
+        } else {
+            idContatoExclusao = idContato;
+            abrirModal('modal_confirmarExclusao');
+        }
     }
 
     function abrirModal(modalId) {
@@ -357,7 +436,6 @@
     }
 
     function closeModal(modalId) {
-        console.log('close');
         $("#" + modalId).removeClass("show");
 
         setTimeout(function() {
@@ -378,7 +456,6 @@
     });
 
     function apurarComprovante() {
-        console.log(<?php echo((int) $houseData['id_boleto']); ?>)
         $.ajax({
             type: "POST",
             url: "/backend/apurarComprovante.php",
@@ -406,6 +483,34 @@
         });
     }
 
+    function removerContato(idContato) {
+        $.ajax({
+            type: "POST",
+            url: "/backend/removerContatoReembolso.php",
+            data: {
+                id_contato: idContato,
+            },
+            success: function(result) {
+                tata.success('Contato removido',
+                    'O contato para reembolso foi removido com sucesso.', {
+                        duration: 3000
+                    });
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2500);
+                return;
+            },
+            error: function(result) {
+                tata.error('Um erro ocorreu',
+                    'Ocorreu um erro ao tentar remover o contato de reembolso. (' + result
+                    .responseJSON.mensagem + ')', {
+                        duration: 6000
+                    });
+            }
+        });
+    }
+
     $(document).ready(function() {
         // Ao clicar na div, o seletor de arquivos será aberto
         $('#btn_importarComprovante').click(function() {
@@ -424,7 +529,7 @@
                     success: function(response) {
                         console.log(
                             response
-                            ); // Use essa função para lidar com a resposta do servidor
+                        ); // Use essa função para lidar com a resposta do servidor
                         tata.success('Comprovante enviado',
                             'O comprovante de pagamento foi enviado com sucesso.', {
                                 duration: 6000
@@ -456,37 +561,76 @@
             var data_operacao = $('#input_operacao').val();
 
             $.ajax({
-                    url: '/backend/editarMoradia.php',
-                    type: 'POST',
-                    data: {
-                        id_alojamento: idAlojamento,
-                        endereco: data_endereco,
-                        contrato: data_contrato,
-                        digito_financeiro: data_digitoFinanceiro,
-                        status: data_status,
-                        centro_custo: data_centroCusto,
-                        operacao: data_operacao
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        tata.success('Moradia editada',
-                            'Os dados da moradia foram atualizados com sucesso.', {
-                                duration: 6000
-                            });
+                url: '/backend/editarMoradia.php',
+                type: 'POST',
+                data: {
+                    id_alojamento: idAlojamento,
+                    endereco: data_endereco,
+                    contrato: data_contrato,
+                    digito_financeiro: data_digitoFinanceiro,
+                    status: data_status,
+                    centro_custo: data_centroCusto,
+                    operacao: data_operacao
+                },
+                success: function(response) {
+                    console.log(response);
+                    tata.success('Moradia editada',
+                        'Os dados da moradia foram atualizados com sucesso.', {
+                            duration: 6000
+                        });
 
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2500);
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(xhr.responseText);
-                        tata.error('Um erro ocorreu',
-                            'Ocorreu um erro ao editar os dados da moradia. (' +
-                            xhr.responseText + ')', {
-                                duration: 6000
-                            });
-                    }
-                });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2500);
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                    tata.error('Um erro ocorreu',
+                        'Ocorreu um erro ao editar os dados da moradia. (' +
+                        xhr.responseText + ')', {
+                            duration: 6000
+                        });
+                }
+            });
+        });
+
+        $('#btn_cadastrarContato').click(() => {
+            closeModal('modal_adicionarContato');
+            var idAlojamento = $('#input_id').val();
+            var data_email = $('#input_email').val();
+            var data_obs = $('#input_obs').val();
+
+            $('#input_obs').val("");
+            $('#input_email').val("");
+
+            $.ajax({
+                url: '/backend/cadastrarContatoReembolso.php',
+                type: 'POST',
+                data: {
+                    id_alojamento: idAlojamento,
+                    email: data_email,
+                    observacoes: data_obs
+                },
+                success: function(response) {
+                    console.log(response);
+                    tata.success('Contato de reembolsoo cadastrato',
+                        'O contato para reembolsos foi cadastrado com sucesso.', {
+                            duration: 3000
+                        });
+
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2500);
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                    tata.error('Um erro ocorreu',
+                        'Ocorreu um erro ao adicionar o contato de reembolso. (' +
+                        xhr.responseText + ')', {
+                            duration: 6000
+                        });
+                }
+            });
         });
 
 
