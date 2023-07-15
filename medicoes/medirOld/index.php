@@ -126,36 +126,6 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
             </div>
         </div>
 
-        <div id="modal_produto" class="modal">
-            <div class="modal-content vertical-center">
-                <div class="center">
-                    <h2>Cadastrar Contato para Reembolso</h2>
-                    <span>Insira abaixo as informações do contato.</span>
-
-                    <div class="double-inputs" style="width: 70%; margin: 2em auto;">
-                        <div class="input-group" style="width: 50%;">
-                            <label for="input_email">Endereço de E-mail</label>
-                            <input type="text" id="input_email" value="">
-                        </div>
-                        <div class="input-group" style="width: 50%;">
-                            <label for="input_obs">Observações</label>
-                            <input type="text" id="input_obs" value="">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <div class="double-buttons">
-                        <div class="button" onclick="closeModal('modal_produto')" style="width: 50%;">
-                            FECHAR</div>
-                        <div class="button" id="btn_cadastrarContato"
-                            style="width: 50%; background-color: rgba(0, 111, 195, 0.7); border-color:rgba(0, 111, 195, 0.7);">
-                            CADASTRAR CONTATO</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
     </div>
 
@@ -164,34 +134,6 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
     <script src="/libs/tatatoast/dist/tata.js"></script>
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script>
-    function abrirModal(modalId) {
-        $("#" + modalId).css("display", "flex");
-
-        setTimeout(function() {
-            $("#" + modalId).addClass("show");
-        }, 10);
-    }
-
-    function closeModal(modalId) {
-        $("#" + modalId).removeClass("show");
-
-        setTimeout(function() {
-            $("#" + modalId).css("display", "none");
-        }, 300);
-    }
-
-    $(document).ready(function() {
-        $(document).on("keyup", function(event) {
-            if (event.keyCode === 27) {
-                $('[id^="modal_"]').removeClass("show");
-
-                setTimeout(function() {
-                    $('[id^="modal_"]').css("display", "none");
-                }, 300);
-            }
-        });
-    });
-
     function formatarValor(inputId) {
         let input = document.getElementById(inputId);
         let valor = input.value.replace(/\D/g, '');
@@ -295,8 +237,6 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
         console.log(obj);
     });
 
-    /*
-
     $("#add-tax-btn").click(function() {
         var taxCount = $(".tax").length;
         if (taxCount >= 7) {
@@ -315,12 +255,6 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
                 $("#taxes-list").append(taxHTML);
             }
         });
-    });
-
-    */
-
-    $("#add-tax-btn").click(function() {
-        abrirModal('modal_produto');
     });
 
     $(document).on("click", ".tax-remove", function() {

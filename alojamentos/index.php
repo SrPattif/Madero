@@ -37,6 +37,7 @@
     <!-- Estilos -->
     <link rel="stylesheet" href="/defaultStyle.css" />
     <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="/assets/styles/tooltips.css" />
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -155,7 +156,8 @@
                             }
                     ?>
 
-                    <tr onclick="window.open('./detalhes/?id_alojamento=<?php echo($row['id']); ?>', '_blank').focus();">
+                    <tr
+                        onclick="window.open('./detalhes/?id_alojamento=<?php echo($row['id']); ?>', '_blank').focus();">
                         <td style="text-align: center;"><?php echo((int) $row['id']); ?></td>
                         <td style="text-align: center;">
                             <div class="status-circle status-<?php echo($boletoColor); ?>"></div>
@@ -163,13 +165,27 @@
                         <td style="text-align: center;"><?php echo($row['contrato_totvs']); ?></td>
                         <td><?php echo($row['endereco']); ?></td>
                         <td style="text-align: center;"><?php echo($row['dia_vencimento']); ?></td>
-                        <td style="text-align: center;">R$ <?php echo(number_format($valorNaoReembolsavel, 2, ",", ".")); ?></td>
-                        <td style="text-align: center;">R$ <?php echo(number_format($valorReembolsavel, 2, ",", ".")); ?></td>
-                        <td><div class="status <?php echo($statusColor); ?>"><?php echo($statusCode); ?></div></td>
+                        <td style="text-align: center;">R$
+                            <?php echo(number_format($valorNaoReembolsavel, 2, ",", ".")); ?></td>
+                        <td style="text-align: center;">R$
+                            <?php echo(number_format($valorReembolsavel, 2, ",", ".")); ?></td>
+                        <td>
+                            <div class="status <?php echo($statusColor); ?>"><?php echo($statusCode); ?></div>
+                        </td>
                         <td>
                             <div class="house-options">
-                                <div class="option"><a href="./detalhes/?id_alojamento=<?php echo($row['id']); ?>"><i class='bx bx-detail'></i></a></div>
-                                <div class="option"><a href="./editar/?id_alojamento=<?php echo($row['id']); ?>"><i class='bx bxs-edit-alt'></i></a></div>
+                                <div class="option">
+                                    <span data-tooltip="Detalhes da Moradia" data-flow="left"
+                                        style="text-align: center; z-index: 999;">
+                                        <a href="./detalhes/?id_alojamento=<?php echo($row['id']); ?>"><i
+                                                class='bx bx-detail'></i></a>
+                                    </span>
+                                </div>
+                                <div class="option">
+                                    <span data-tooltip="Editar Moradia" data-flow="left"
+                                        style="text-align: center; z-index: 999;"><a href="./editar/?id_alojamento=<?php echo($row['id']); ?>"><i
+                                            class='bx bxs-edit-alt'></i></a></span>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -187,39 +203,39 @@
     <script src="/mobile-navbar.js"></script>
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script>
-        $("#export-table-btn").click(function() {
-            window.location.href = "/exporter/tableHabitations.php";
-        });
+    $("#export-table-btn").click(function() {
+        window.location.href = "/exporter/tableHabitations.php";
+    });
 
-        const filterInput = document.getElementById('filterInput');
-        const dataTable = document.getElementById('dataTable');
+    const filterInput = document.getElementById('filterInput');
+    const dataTable = document.getElementById('dataTable');
 
-        filterInput.addEventListener('input', function () {
-            const filterText = filterInput.value.toLowerCase();
-            const rows = dataTable.getElementsByTagName('tr');
+    filterInput.addEventListener('input', function() {
+        const filterText = filterInput.value.toLowerCase();
+        const rows = dataTable.getElementsByTagName('tr');
 
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i];
-                const cells = row.getElementsByTagName('td');
-                let found = false;
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            const cells = row.getElementsByTagName('td');
+            let found = false;
 
-                for (let j = 0; j < cells.length; j++) {
-                    const cell = cells[j];
-                    const cellText = cell.textContent.toLowerCase();
+            for (let j = 0; j < cells.length; j++) {
+                const cell = cells[j];
+                const cellText = cell.textContent.toLowerCase();
 
-                    if (cellText.includes(filterText)) {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (found) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
+                if (cellText.includes(filterText)) {
+                    found = true;
+                    break;
                 }
             }
-        });
+
+            if (found) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
     </script>
 </body>
 
