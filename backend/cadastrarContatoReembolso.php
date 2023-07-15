@@ -10,6 +10,8 @@ if (!isset($_SESSION['USER_ID'])) {
     exit();
 }
 
+$userId = $_SESSION['USER_ID'];
+
 include('../libs/databaseConnection.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -25,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data_email = mysqli_real_escape_string($mysqli, $_POST['email']);
     $data_obs = mysqli_real_escape_string($mysqli, $_POST['observacoes']);
 
-    $query = "INSERT INTO contatos_reembolso (`id_alojamento`, `email_reembolso`, `observacoes`) VALUES ({$idAlojamento}, '{$data_email}', '{$data_obs}');";
+    $query = "INSERT INTO contatos_reembolso (`id_alojamento`, `email_reembolso`, `observacoes`, `usuario_inclusao`) VALUES ({$idAlojamento}, '{$data_email}', '{$data_obs}', {$userId});";
     $resultUpdate = mysqli_query($mysqli, $query);
             
     if($resultUpdate) {

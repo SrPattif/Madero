@@ -201,7 +201,7 @@
                             } elseif(!empty($valorNaoReembolsavel) && $valorNaoReembolsavel > 0 && empty($valorReembolsavel) || $valorReembolsavel == 0) {
                                 $statusColor = "green";
                                 $statusCode = "Sem valores reembolsáveis";
-                                $statusDescription = "A moradia não possui valores que possam ser reembolsáveis.";
+                                $statusDescription = "A moradia não possui valores que possam ser reembolsados.";
 
                             } elseif(empty($rowsValores[0]['id_boleto']) || empty($rowsValores[0]['arquivo_boleto'])) {
                                 $statusColor = "orange";
@@ -584,7 +584,6 @@
                     }, 2500);
                 },
                 error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
                     tata.error('Um erro ocorreu',
                         'Ocorreu um erro ao editar os dados da moradia. (' +
                         xhr.responseText + ')', {
@@ -595,10 +594,19 @@
         });
 
         $('#btn_cadastrarContato').click(() => {
-            closeModal('modal_adicionarContato');
             var idAlojamento = $('#input_id').val();
             var data_email = $('#input_email').val();
             var data_obs = $('#input_obs').val();
+
+            if (data_email == '') {
+                tata.error('Preencha os campos obrigatórios',
+                    'É necessário preencher todos os campos obrigatórios para cadastrar um contato de reembolso.', {
+                        duration: 6000
+                    });
+                return;
+            }
+
+            closeModal('modal_adicionarContato');
 
             $('#input_obs').val("");
             $('#input_email').val("");

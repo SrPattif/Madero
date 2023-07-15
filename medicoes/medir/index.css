@@ -147,6 +147,10 @@ body {
   width: 50%;
 }
 
+.taxes-list {
+  width: 100%;
+}
+
 .continue-btn {
   width: 100%;
   box-sizing: border-box;
@@ -263,20 +267,34 @@ input {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  color: #000;
   position: relative;
+  text-align: left;
+}
+.modal-content input {
+  background: none;
+  border: 2px solid #000;
+  outline: none;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  border-radius: 23px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 1em 0.5em;
+  text-align: left;
+  color: #000;
+}
+.modal-content input:focus {
+  border: 1px solid rgb(0, 0, 0);
+  box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.25);
 }
 
 .modal-footer {
   width: 100%;
   position: absolute;
   bottom: 0;
-  box-sizing: border-box;
-}
-
-.double-buttons {
-  display: flex;
-  gap: 1em;
-  margin: 1em;
 }
 
 .button {
@@ -313,6 +331,81 @@ input {
   text-align: center;
   box-sizing: border-box;
 }
+
+.double-buttons {
+  display: flex;
+  gap: 1em;
+  margin: 1em;
+}
+
+.center {
+  text-align: center;
+  width: 100%;
+}
+
+.vertical-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.painel-produtos {
+  border: 2px solid #d3d3d3;
+  border-radius: 23px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+}
+.painel-produtos ul {
+  list-style: none;
+  overflow: hidden;
+}
+.painel-produtos ul li {
+  overflow: hidden;
+  border-bottom: 2px solid #d3d3d3;
+  padding: 1em;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.painel-produtos ul li .nome-produto {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.painel-produtos ul li .desc-produto {
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+}
+.painel-produtos ul li:hover {
+  background-color: #D3D3D3;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e2e2e2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.filter {
+  margin: 1em 0;
+}
 @keyframes fadeInDown {
   0% {
     opacity: 0;
@@ -330,4 +423,7 @@ input {
   100% {
     opacity: 1;
   }
+}
+.bold {
+  font-weight: bold;
 }/*# sourceMappingURL=index.css.map */

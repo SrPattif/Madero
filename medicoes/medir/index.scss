@@ -163,6 +163,10 @@ body {
     }
 }
 
+.taxes-list {
+    width: 100%;
+}
+
 .continue-btn {
     width: 100%;
     box-sizing: border-box;
@@ -286,8 +290,31 @@ input {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-
+    color: #000;
     position: relative;
+    text-align: left;
+
+    input {
+        background: none;
+        border: 2px solid #000;
+        outline: none;
+        padding: 0.3rem 0.65rem;
+        font-size: .9rem;
+        font-weight: 400;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        border-radius: 23px;
+        width: 100%;
+        box-sizing: border-box;
+    
+        margin: 1em .5em;
+        text-align: left;
+        color: #000;
+    }
+    
+    input:focus {
+        border: 1px solid rgb(0, 0, 0);
+        box-shadow: 0 0 0 0.25rem rgb(0 0 0 / 25%);
+    }
 }
 
 
@@ -295,13 +322,6 @@ input {
     width: 100%;
     position: absolute;
     bottom: 0;
-    box-sizing: border-box;
-}
-
-.double-buttons {
-    display: flex;
-    gap: 1em;
-    margin: 1em;
 }
 
 .button {
@@ -337,6 +357,88 @@ input {
     width: 100%;
     text-align: center;
     box-sizing: border-box;
+}
+
+.double-buttons {
+    display: flex;
+    gap: 1em;
+    margin: 1em;
+}
+
+.center {
+    text-align: center;
+    width: 100%;
+}
+
+.vertical-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.painel-produtos {
+    border: 2px solid #d3d3d3;
+    border-radius: 23px;
+
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+
+    ul {
+        list-style: none;
+        overflow: hidden;
+        
+        li {
+            overflow: hidden;
+            border-bottom: 2px solid #d3d3d3;
+            padding: 1em;
+
+            transition: all .2s;
+            cursor: pointer;
+
+            .nome-produto {
+                font-weight: bold;
+                font-size: 1.1rem;
+            }
+
+            .desc-produto {
+                font-size: .8rem;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+
+        li:hover {
+            background-color: #D3D3D3;
+        }
+    }
+}
+
+.bold {
+    font-weight: bold;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #e2e2e2;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.filter {
+    margin: 1em 0;
 }
 
 @-webkit-keyframes fadeInDown {
@@ -385,4 +487,8 @@ input {
     100% {
         opacity: 1;
     }
+}
+
+.bold {
+    font-weight: bold;
 }

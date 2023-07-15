@@ -36,19 +36,25 @@ if(isset($_GET['addressId'])) {
         exit();
     }
 
-    header('location: ./?year=' . $year . '&month=' . $month . '&addressId=' . $newAddressId);
-    exit();
+    $addressId = $newAddressId;
 }
 
-$query = "SELECT a.*, b.nome_interno AS arquivo_boleto FROM alojamentos a LEFT JOIN boletos b ON b.id_alojamento = a.id WHERE a.id = {$addressId} AND MONTH(b.data_vencimento)={$month} AND YEAR(b.data_vencimento)={$year};";
+$query = "SELECT a.*, b.nome_interno AS arquivo_boleto FROM alojamentos a LEFT JOIN boletos b ON b.id_alojamento = a.id AND MONTH(b.data_vencimento)={$month} AND YEAR(b.data_vencimento)={$year} WHERE a.id = {$addressId};";
 $result = mysqli_query($mysqli, $query);
 $row = mysqli_num_rows($result);
 
-if ($row != 1) {
+if ($row > 1) {
     header('location: ../iniciar/');
     exit();
 }
 $addressData = mysqli_fetch_assoc($result);
+
+$queryTaxas = "SELECT * FROM tipos_taxas WHERE id != 1 ORDER BY refundable DESC;"; // Obter todas as taxas, exceto condomínio.
+$resultTaxas = mysqli_query($mysqli, $queryTaxas);
+$rowsTaxas = array();
+while($row = mysqli_fetch_array($resultTaxas)){
+    array_push($rowsTaxas, $row);
+}
 
 $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
 
@@ -74,7 +80,21 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
         <div class="container">
 
             <div class="left-content">
+                <?php
+                    if(empty($addressData['arquivo_boleto'])) {
+                ?>
+                <div class="vertical-center"><span>
+                        <i class='bx bxs-error'></i>
+                        <br>
+                        A moradia não possui um boleto de condomínio cadastrado.
+                    </span></div>
+                <?php
+                    } else {
+                ?>
                 <embed src="/uploads/<?php echo($addressData['arquivo_boleto']); ?>">
+                <?php 
+                    }
+                ?>
             </div>
 
             <div class="right-content">
@@ -100,10 +120,10 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
             ?>
                 </div>
 
-                <div id="taxes-list">
+                <div id="taxes-list" class="taxes-list">
                     <div class="tax">
                         <div class="tax-type">
-                            <span>Condomínio</span>
+                            <span>1 : Condomínio</span>
                         </div>
 
                         <div class="tax-value">
@@ -127,32 +147,37 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
         </div>
 
         <div id="modal_produto" class="modal">
-            <div class="modal-content vertical-center">
-                <div class="center">
-                    <h2>Cadastrar Contato para Reembolso</h2>
-                    <span>Insira abaixo as informações do contato.</span>
-
-                    <div class="double-inputs" style="width: 70%; margin: 2em auto;">
-                        <div class="input-group" style="width: 50%;">
-                            <label for="input_email">Endereço de E-mail</label>
-                            <input type="text" id="input_email" value="">
-                        </div>
-                        <div class="input-group" style="width: 50%;">
-                            <label for="input_obs">Observações</label>
-                            <input type="text" id="input_obs" value="">
-                        </div>
-                    </div>
+            <div class="modal-content">
+                <h2>Selecionar Produto</h2>
+                <span>Selecione o produto desejado ou cadastre um novo.</span>
+                <div class="filter">
+                    <input type="text" id="filterInput" oninput="filtrarProdutos()"
+                        placeholder="Digite o texto para filtrar">
                 </div>
-
-                <div class="modal-footer">
-                    <div class="double-buttons">
-                        <div class="button" onclick="closeModal('modal_produto')" style="width: 50%;">
-                            FECHAR</div>
-                        <div class="button" id="btn_cadastrarContato"
-                            style="width: 50%; background-color: rgba(0, 111, 195, 0.7); border-color:rgba(0, 111, 195, 0.7);">
-                            CADASTRAR CONTATO</div>
-                    </div>
+                <div class="painel-produtos" id="painel-produtos">
+                    <ul>
+                        <?php
+                            foreach($rowsTaxas as $row) {
+                                $idTaxa = $row['id'];
+                                $protheusTaxa = $row['codigo_protheus'];
+                                $reembolsavelTaxa = boolval($row['refundable']);
+                                $nomeTaxa = $row['description'];
+                        ?>
+                        <li onclick="addTaxModal(<?php echo((int) $idTaxa); ?>)">
+                            <span class="nome-produto" id="span_nomeProduto"><?php echo($nomeTaxa); ?></span>
+                            <div class="desc-produto">
+                                <span>Código Interno: <span class="bold"><?php echo((int) $idTaxa); ?></span></span>
+                                <span>Código Protheus: <span class="bold"><?php echo($protheusTaxa); ?></span></span>
+                                <span>Reembolsável: <span class="bold"
+                                        style="color: <?php echo($reembolsavelTaxa ? "#00AA00" : "#AA0000"); ?>;"><?php echo($reembolsavelTaxa ? "SIM" : "NÃO"); ?></span></span>
+                            </div>
+                        </li>
+                        <?php
+                            }
+                        ?>
+                    </ul>
                 </div>
+                <div class="button" onclick="closeModal('modal_produto')" style="width: 100%;">FECHAR</div>
             </div>
         </div>
 
@@ -208,26 +233,24 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
 
 
     $('#continue-button').on('click', () => {
-        var taxData = $(".tax").map(function() {
+        var taxObj = [];
+        $(".tax").map(function() {
             var taxTypeElement = $(this).find(".tax-type");
             var taxTypeValue;
             var inputValue;
 
-            if (taxTypeElement.find("select").length > 0) {
-                // Se houver um select dentro da div "tax-type"
-                taxTypeValue = taxTypeElement.find("select").val();
-            } else if (taxTypeElement.find("span").length > 0) {
-                // Se houver um span dentro da div "tax-type"
-                taxTypeValue = 1;
+            if (taxTypeElement.find("span").length == 1) {
+                var taxTypeFullName = taxTypeElement.find("span")[0].textContent;
+                taxTypeValue = taxTypeFullName.split(" : ")[0];
             }
 
             inputValue = $(this).find("input").val().replace(/\D/g, '');
             inputValue = parseFloat(inputValue.slice(0, -2) + '.' + inputValue.slice(-2))
 
-            return {
-                id: taxTypeValue,
-                value: inputValue
-            };
+            taxObj.push({
+                "id": taxTypeValue,
+                "value": inputValue
+            })
         }).get();
 
         var url = new URL(window.location.href);
@@ -242,7 +265,7 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
             'addressId': addressId,
             'year': year,
             'month': month,
-            'taxes': taxData
+            'taxes': taxObj
         }
 
         let hasError;
@@ -281,6 +304,7 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
                 setTimeout(() => {
                     if (callback) {
                         window.location.href = callback;
+
                     } else {
                         window.location.href = `./?year=${year}&month=${month}`
                     }
@@ -295,7 +319,24 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
         console.log(obj);
     });
 
-    /*
+    function filtrarProdutos() {
+        var textoFiltro = document.getElementById('filterInput').value.toLowerCase();
+
+        var listaProdutos = document.getElementById('painel-produtos').getElementsByTagName('li');
+
+        if (listaProdutos.length > 0) {
+            for (var i = 0; i < listaProdutos.length; i++) {
+                var nomeProduto = listaProdutos[i].querySelector('#span_nomeProduto').textContent.toLowerCase();
+
+                if (nomeProduto.includes(textoFiltro)) {
+                    listaProdutos[i].style.display = 'block';
+                } else {
+                    listaProdutos[i].style.display = 'none';
+                }
+            }
+        }
+    }
+
 
     $("#add-tax-btn").click(function() {
         var taxCount = $(".tax").length;
@@ -303,29 +344,72 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
             tata.error('Limite de taxas excedido', 'Existem muitos campos de taxas criados.', {
                 duration: 6000
             });
-            return; // Retorna o código, evitando adicionar uma nova div "tax"
+            return;
         }
 
-        $.ajax({
-            url: "taxInput.php",
-            type: "GET",
-            dataType: "html",
-            success: function(data) {
-                var taxHTML = $(data).filter(".tax");
-                $("#taxes-list").append(taxHTML);
-            }
-        });
-    });
-
-    */
-
-    $("#add-tax-btn").click(function() {
         abrirModal('modal_produto');
+
     });
+
+    function addTaxModal(taxId) {
+        closeModal('modal_produto');
+        addTax(taxId);
+    }
+
+    function addTax(taxId) {
+        fetch("./productData.php?idProduto=" + taxId)
+            .then(response => response.json())
+            .then(data => {
+                if (data.sucesso) {
+                    var taxDiv = document.createElement("div");
+                    taxDiv.classList.add("tax");
+
+                    var removeDiv = document.createElement("div");
+                    removeDiv.classList.add("tax-remove");
+                    removeDiv.innerHTML = "<i class='bx bx-x'></i>";
+
+                    var typeDiv = document.createElement("div");
+                    typeDiv.classList.add("tax-type");
+
+                    var typeSpan = document.createElement("span");
+                    typeSpan.textContent = `${parseInt(data.dadosProduto.id)} : ${data.dadosProduto.nomeTaxa}`;
+
+                    typeDiv.appendChild(typeSpan);
+
+                    var valueDiv = document.createElement("div");
+                    valueDiv.classList.add("tax-value");
+
+                    var valueInput = document.createElement("input");
+                    valueInput.id = `input_produto${data.dadosProduto.id}`;
+                    valueInput.value = "R$ 0";
+                    valueInput.setAttribute("oninput", `formatarValor('input_produto${data.dadosProduto.id}')`);
+
+                    // Adiciona o input dentro da div de valor
+                    valueDiv.appendChild(valueInput);
+
+                    // Adiciona as divs dentro da div de imposto
+                    taxDiv.appendChild(removeDiv);
+                    taxDiv.appendChild(typeDiv);
+                    taxDiv.appendChild(valueDiv);
+
+                    // Adiciona a div de imposto dentro de taxes-list
+                    var taxesList = document.getElementById("taxes-list");
+                    taxesList.appendChild(taxDiv);
+                }
+            })
+            .catch(error => {
+                // Trate erros que possam ocorrer durante a solicitação
+                console.error('Ocorreu um erro:', error);
+            });
+    }
 
     $(document).on("click", ".tax-remove", function() {
         $(this).closest(".tax").remove();
     });
+
+    function getRandomNum(minimo, maximo) {
+        return Math.floor(Math.random() * (maximo - minimo + 1)) + minimo;
+    }
     </script>
 
 </body>
