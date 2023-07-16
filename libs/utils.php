@@ -7,7 +7,7 @@ function pickRandomAddress($month, $year) {
     $month = mysqli_real_escape_string($mysqli, $month);
     $year = mysqli_real_escape_string($mysqli, $year);
 
-    $query = "SELECT DISTINCT a.* FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso ar ON a.id = ar.id_alojamento AND ar.ano = {$year} AND ar.mes = {$month} WHERE ar.id_alojamento IS NULL;";
+    $query = "SELECT DISTINCT a.* FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso ar ON a.id = ar.id_alojamento AND ar.ano = {$year} AND ar.mes = {$month} INNER JOIN boletos b ON b.id_alojamento = a.id AND MONTH(b.data_vencimento)={$month} AND YEAR(b.data_vencimento)={$year} WHERE ar.id_alojamento IS NULL;";
     $result = mysqli_query($mysqli, $query);
     $rows = array();
     while($row = mysqli_fetch_array($result)){

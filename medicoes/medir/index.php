@@ -29,14 +29,19 @@ if(isset($_GET['addressId'])) {
     $addressId = mysqli_real_escape_string($mysqli, $_GET['addressId']);
 
 } else {
-    $newAddressId = pickRandomAddress($month, $year);
+    $query = "SELECT DISTINCT a.* FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso ar ON a.id = ar.id_alojamento AND ar.ano = {$year} AND ar.mes = {$month} INNER JOIN boletos b ON b.id_alojamento = a.id AND MONTH(b.data_vencimento)={$month} AND YEAR(b.data_vencimento)={$year} WHERE ar.id_alojamento IS NULL;";
+    $result = mysqli_query($mysqli, $query);
+    $rows = array();
+    while($row = mysqli_fetch_array($result)){
+        array_push($rows, $row);
+    }
 
-    if($newAddressId == -1) {
-        header('location: ../allFilled');
+    if (empty($rows)) {
+        header('location: ../completo/');
         exit();
     }
 
-    $addressId = $newAddressId;
+    $addressId = $rows[0]['id'];
 }
 
 $query = "SELECT a.*, b.nome_interno AS arquivo_boleto FROM alojamentos a LEFT JOIN boletos b ON b.id_alojamento = a.id AND MONTH(b.data_vencimento)={$month} AND YEAR(b.data_vencimento)={$year} WHERE a.id = {$addressId};";
@@ -49,7 +54,7 @@ if ($row > 1) {
 }
 $addressData = mysqli_fetch_assoc($result);
 
-$queryTaxas = "SELECT * FROM tipos_taxas WHERE id != 1 ORDER BY refundable DESC;"; // Obter todas as taxas, exceto condomínio.
+$queryTaxas = "SELECT * FROM tipos_taxas WHERE id != 1 ORDER BY refundable DESC, id ASC;"; // Obter todas as taxas, exceto condomínio.
 $resultTaxas = mysqli_query($mysqli, $queryTaxas);
 $rowsTaxas = array();
 while($row = mysqli_fetch_array($resultTaxas)){
@@ -149,7 +154,7 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
         <div id="modal_produto" class="modal">
             <div class="modal-content">
                 <h2>Selecionar Produto</h2>
-                <span>Selecione o produto desejado ou cadastre um novo.</span>
+                <span>Selecione o produto desejado.</span>
                 <div class="filter">
                     <input type="text" id="filterInput" oninput="filtrarProdutos()"
                         placeholder="Digite o texto para filtrar">
@@ -160,6 +165,7 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
                             foreach($rowsTaxas as $row) {
                                 $idTaxa = $row['id'];
                                 $protheusTaxa = $row['codigo_protheus'];
+                                $naturezaTaxa = $row['natureza'];
                                 $reembolsavelTaxa = boolval($row['refundable']);
                                 $nomeTaxa = $row['description'];
                         ?>
@@ -167,7 +173,8 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
                             <span class="nome-produto" id="span_nomeProduto"><?php echo($nomeTaxa); ?></span>
                             <div class="desc-produto">
                                 <span>Código Interno: <span class="bold"><?php echo((int) $idTaxa); ?></span></span>
-                                <span>Código Protheus: <span class="bold"><?php echo($protheusTaxa); ?></span></span>
+                                <span>Produto Protheus: <span class="bold"><?php echo($protheusTaxa); ?></span></span>
+                                <span>Natureza: <span class="bold"><?php echo($naturezaTaxa); ?></span></span>
                                 <span>Reembolsável: <span class="bold"
                                         style="color: <?php echo($reembolsavelTaxa ? "#00AA00" : "#AA0000"); ?>;"><?php echo($reembolsavelTaxa ? "SIM" : "NÃO"); ?></span></span>
                             </div>
@@ -258,7 +265,7 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
 
         var year = searchParams.get('year');
         var month = searchParams.get('month');
-        var addressId = searchParams.get('addressId');
+        var addressId = <?php echo((int) $addressId); ?>;
         var callback = searchParams.get('callback');
 
         var obj = {
@@ -298,7 +305,7 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
             data: obj,
             success: function(result) {
                 tata.success('Medição bem sucedida', 'A medição foi bem sucedida.', {
-                    duration: 1500
+                    duration: 1000
                 });
 
                 setTimeout(() => {
@@ -308,7 +315,7 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
                     } else {
                         window.location.href = `./?year=${year}&month=${month}`
                     }
-                }, 1500);
+                }, 1000);
 
             },
             error: function(result) {

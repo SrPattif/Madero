@@ -341,7 +341,7 @@
                             }
                         ?>
                         <h1>R$ <?php echo(number_format($refundableValue, 2, ",", ".")); ?></h1>
-                        <span>Valor Total em Taxas de Condomínio (medições)</span>
+                        <span>Valor Total em Taxas não Reembolsáveis (medições)</span>
                     </div>
                 </div>
             </div>

@@ -31,7 +31,7 @@ if (isset($_SESSION['month'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moradias Grupo Madero | Todas as Moradias</title>
+    <title>Moradias Grupo Madero | Solicitações de Reembolso</title>
 
     <!-- Estilos -->
     <link rel="stylesheet" href="/defaultStyle.css" />
@@ -79,7 +79,7 @@ if (isset($_SESSION['month'])) {
                         }
                     ?>
 
-                    <tr onclick="window.open('/alojamentos/detalhes/?id_alojamento=<?php echo($row['id']); ?>', '_blank').focus();">
+                    <tr onclick="window.open('./enviar/?id_alojamento=<?php echo($row['id']); ?>', '_blank').focus();">
                         <td><?php echo ((int) $row['id']); ?></td>
                         <td style="text-align: center;"><?php echo ($row['contrato_totvs']); ?></td>
                         <td><?php echo ($row['endereco']); ?></td>

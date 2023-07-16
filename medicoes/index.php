@@ -1,5 +1,5 @@
 <?php
-header('location: ./start/');
+header('location: ./iniciar/');
 exit();
 
 ?>

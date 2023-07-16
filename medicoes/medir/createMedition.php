@@ -43,7 +43,9 @@ foreach ($taxesArray as $tax) {
 }
 $query .= ";";
 
-mysqli_query($mysqli, "DELETE FROM alojamentos_valores_reembolso WHERE id_alojamento={$addressId} AND mes={$month} AND ano={$year};");
+$deleteQuery = "DELETE FROM alojamentos_valores_reembolso WHERE id_alojamento={$addressId} AND mes={$month} AND ano={$year};";
+error_log($deleteQuery);
+mysqli_query($mysqli, $deleteQuery);
 
 $result = mysqli_query($mysqli, $query);
 
