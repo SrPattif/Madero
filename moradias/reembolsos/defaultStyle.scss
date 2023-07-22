@@ -44,6 +44,7 @@ a:hover {
     .name {
         font-weight: bold;
         font-size: .8em;
+        cursor: pointer;
     }
 }
 
@@ -306,89 +307,3 @@ nav {
     background: #555;
 }
 
-.card {
-    width: 100%;
-    overflow: auto;
-    box-sizing: border-box;
-
-    border: 2px solid #d3d3d3;
-    border-radius: 23px;
-    padding: 1em;
-    margin-bottom: 1em;
-
-    position: relative;
-
-    .chevron {
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        /* Ajuste essa posição para definir a distância do chevron à borda direita */
-        transform: translateY(-50%);
-        font-size: 24px;
-        color: #000;
-        /* Defina a cor do ícone aqui */
-    }
-}
-
-@media (max-width: 1200px) {
-    .double-cards {
-        display: block;
-        width: 100%;
-
-        .card {
-            width: 100%;
-        }
-    }
-}
-
-table {
-    border: 2px solid #D3D3D3;
-    width: 100%;
-    text-align: left;
-    border-radius: 12px;
-    overflow: hidden;
-
-    td {
-        font-size: 13px;
-        padding: .2em 0;
-    }
-
-    th {
-        background: #DDDDDD;
-        font-size: 15px;
-        font-weight: bold;
-        text-align: left;
-    }
-
-    tr {
-        transition: all .2s;
-        cursor: pointer;
-    }
-
-    tr:hover {
-        background-color: #D3D3D3;
-    }
-}
-
-.module-description {
-    font-size: .9rem;
-}
-
-.module-category {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-}
-
-.card-modulo {
-    transition: all .2s;
-    cursor: pointer;
-}
-
-.card-modulo:hover {
-    background-color: #D3D3D3;
-}
-
-.page-title {
-    margin-bottom: 1.4rem;
-}

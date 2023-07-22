@@ -1,0 +1,47 @@
+.double-cards {
+  display: flex;
+  gap: 2em;
+}
+.double-cards .card {
+  width: 50%;
+  overflow: auto;
+  box-sizing: border-box;
+  border: 2px solid #d3d3d3;
+  border-radius: 23px;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+@media (max-width: 1200px) {
+  .double-cards {
+    display: block;
+    width: 100%;
+  }
+  .double-cards .card {
+    width: 100%;
+  }
+}
+table {
+  border: 2px solid #D3D3D3;
+  width: 100%;
+  text-align: left;
+  border-radius: 12px;
+  overflow: hidden;
+}
+table td {
+  font-size: 13px;
+  padding: 0.2em 0;
+}
+table th {
+  background: #DDDDDD;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+table tr {
+  transition: all 0.2s;
+  cursor: pointer;
+}
+table tr:hover {
+  background-color: #D3D3D3;
+}/*# sourceMappingURL=index.css.map */
