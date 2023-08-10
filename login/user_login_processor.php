@@ -52,7 +52,7 @@
             $userData = mysqli_fetch_assoc($result);
             $userId = $userData['id'];
 
-            if(boolval($userData['bloqueado']) == true) {
+            if(boolval($userData['troca_senha']) == true) {
                 $tokenMudarSenha = getRandomStringRandomInt(60);
                 $tokenQuery = "INSERT INTO tokens_senha (`token`, `id_usuario`, `valido_ate`) VALUES ('{$tokenMudarSenha}', '{$userId}', DATE_ADD(NOW(), INTERVAL 10 MINUTE));";
                 $resultToken = mysqli_query($mysqli, $tokenQuery);
@@ -73,6 +73,7 @@
                 if($resultUpdate) {
                     $_SESSION['USER_ID'] = $userData['id'];
                     $_SESSION['USER_USERNAME'] = $userData['username'];
+                    $_SESSION['USER_NAME'] = $userData['nome'];
     
                     $_SESSION['MESSAGES_LOGIN_ERROR'] = null;
     

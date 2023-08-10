@@ -132,7 +132,7 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
                         </div>
 
                         <div class="tax-value">
-                            <input type="text" id="tax-value" value="R$ 0" oninput="formatarValor('tax-value')"
+                            <input type="text" id="input_produtoStarter" value="R$ 0" oninput="formatarValor('input_produtoStarter')"
                                 autofocus>
                         </div>
                     </div>
@@ -140,6 +140,10 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
 
                 <div id="add-tax-btn" class="add-tax-btn">
                     <i class='bx bx-plus'></i>
+                </div>
+
+                <div class="valor-boleto">
+                    Valor Total: <span class="bold" id="valor-total">R$ 0,00</span>
                 </div>
 
                 <div class="continue-btn" id="continue-button">
@@ -196,6 +200,23 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
     <script src="/libs/tatatoast/dist/tata.js"></script>
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script>
+    $(document).ready(function() {
+        $(document).keypress(function(event) {
+            if (event.keyCode === 13) {
+                const $lis = $('#modal_produto ul li');
+                const $visibleLis = $lis.filter(':visible');
+                if ($visibleLis.length === 1) {
+                    $visibleLis.click();
+                }
+
+            } else if (event.keyCode == 61) {
+                event.preventDefault();
+                $("#add-tax-btn").click();
+                $('#filterInput').focus();
+            }
+        });
+    });
+
     function abrirModal(modalId) {
         $("#" + modalId).css("display", "flex");
 
@@ -236,6 +257,29 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
         }
 
         input.value = 'R$ ' + valor;
+
+        // calculando valor total e mudando SPAN
+        let total = 0;
+
+        // Seleciona todos os inputs cujo ID começa com "input_produto"
+        $('input[id^="input_produto"]').each(function() {
+            // Extrai o valor decimal do input
+            let valorDecimal = parseFloat($(this).val().replace(/\D/g, '').replace(',', '.')) / 100;
+            console.log(valorDecimal);
+
+            // Soma o valor decimal ao total
+            total += valorDecimal;
+        });
+
+        let currencyFormatter = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        });
+
+        let valorTotalFormatado = currencyFormatter.format(total)
+
+        // Atualiza o texto do elemento "span" com o ID "valor-total"
+        $("#valor-total").text(valorTotalFormatado);
     }
 
 
@@ -327,7 +371,7 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
     });
 
     function filtrarProdutos() {
-        var textoFiltro = document.getElementById('filterInput').value.toLowerCase();
+        var textoFiltro = removerAcentos(document.getElementById('filterInput').value.toLowerCase());
 
         var listaProdutos = document.getElementById('painel-produtos').getElementsByTagName('li');
 
@@ -335,7 +379,7 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
             for (var i = 0; i < listaProdutos.length; i++) {
                 var nomeProduto = listaProdutos[i].querySelector('#span_nomeProduto').textContent.toLowerCase();
 
-                if (nomeProduto.includes(textoFiltro)) {
+                if (removerAcentos(nomeProduto).includes(textoFiltro)) {
                     listaProdutos[i].style.display = 'block';
                 } else {
                     listaProdutos[i].style.display = 'none';
@@ -355,6 +399,10 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
         }
 
         abrirModal('modal_produto');
+        $('#filterInput').val("");
+        filtrarProdutos();
+        $('#filterInput').focus();
+
 
     });
 
@@ -402,6 +450,8 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
                     // Adiciona a div de imposto dentro de taxes-list
                     var taxesList = document.getElementById("taxes-list");
                     taxesList.appendChild(taxDiv);
+
+                    valueInput.focus();
                 }
             })
             .catch(error => {
@@ -416,6 +466,10 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
 
     function getRandomNum(minimo, maximo) {
         return Math.floor(Math.random() * (maximo - minimo + 1)) + minimo;
+    }
+
+    function removerAcentos(texto) {
+        return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
     </script>
 

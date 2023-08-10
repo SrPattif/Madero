@@ -582,7 +582,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/backend/apurarComprovanteLote.php",
+            url: "/moradias/reembolsos/backend/apurarComprovanteLote.php",
             success: function(result) {
                 $("#overlay").hide();
 

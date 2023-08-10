@@ -175,7 +175,7 @@ body {
   border: 2px dashed #ffffff;
   border-radius: 23px;
   padding: 0.2em 1em;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
   transition: all 0.4s;
   cursor: pointer;
 }
@@ -426,4 +426,8 @@ input {
 }
 .bold {
   font-weight: bold;
+}
+
+.valor-boleto {
+  margin-bottom: 1em;
 }/*# sourceMappingURL=index.css.map */

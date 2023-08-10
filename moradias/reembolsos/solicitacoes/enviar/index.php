@@ -80,7 +80,7 @@
     $rowsAlojamento = array();
     $resultAlojamento = mysqli_query($mysqli, $queryAlojamento);
     if(mysqli_num_rows($resultAlojamento) < 1) {
-        http_response_code(400);
+        header('location: ../');
         exit();
     }
     $rowsAlojamento = array();

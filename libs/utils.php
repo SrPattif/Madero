@@ -54,6 +54,22 @@ function getAddressData($addressId) {
     }
 }
 
+function getUserData($userId) {
+    global $mysqli;
+    $userId = mysqli_real_escape_string($mysqli, $userId);
+
+    $query = "SELECT * FROM usuarios WHERE id='{$userId}';";
+    $result = mysqli_query($mysqli, $query);
+    $row = mysqli_num_rows($result);
+
+    if ($row == 1) {
+        $userData = mysqli_fetch_assoc($result);
+        return $userData;
+    } else {
+        return null;
+    }
+}
+
 function getAddresMeditions($addressId, $month, $year) {
     global $mysqli;
     $addressId = mysqli_real_escape_string($mysqli, $addressId);

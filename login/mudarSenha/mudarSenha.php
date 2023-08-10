@@ -45,7 +45,7 @@
             $tokenData = mysqli_fetch_assoc($result);
             $userId = $tokenData['id_usuario'];
 
-            $query = "UPDATE `usuarios` SET password=md5('{$password}'), bloqueado=0 WHERE `id`={$userId};";
+            $query = "UPDATE `usuarios` SET password=md5('{$password}'), troca_senha=0 WHERE `id`={$userId};";
             $resultUpdate = mysqli_query($mysqli, $query);
             
             if($resultUpdate) {

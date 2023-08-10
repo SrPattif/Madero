@@ -4,10 +4,12 @@ if (!isset($_SESSION)) {
 }
 
 include($_SERVER['DOCUMENT_ROOT'] . '/login_checker.php');
-
 include($_SERVER['DOCUMENT_ROOT'] . '/libs/databaseConnection.php');
 
-$queryModulos = "SELECT * FROM modulos;";
+$nomeUsuario = $_SESSION['USER_NAME'];
+$nomeUsuario = explode(" ", $nomeUsuario)[0];
+
+$queryModulos = "SELECT * FROM modulos WHERE ativo=1;";
 $resultModulos = mysqli_query($mysqli, $queryModulos);
 $rowsModulos = array();
 while ($row = mysqli_fetch_array($resultModulos)) {
@@ -74,7 +76,18 @@ foreach($rowsModulos as $modulo) {
     <main>
         <div class="page-content">
             <div class="page-title">
-                <h3>Selecione um Módulo</h3>
+                <h2>Olá, <?php echo($nomeUsuario); ?>! 👋</h2>
+
+                <div class="card card-modulo" onclick="window.location.href='/conta/'">
+                    <h4><i class='bx bxs-user'></i> Sua Conta</h4>
+                    <span class="module-description">Veja seus dados e altere sua senha.</span>
+
+                    <i class='bx bx-chevron-right chevron'></i>
+                </div>
+
+                <br>
+
+                <h3>Selecione um módulo</h3>
                 <span style="font-size: 1rem;">Selecione um módulo do sistema para prosseguir.</span>
             </div>
             <?php

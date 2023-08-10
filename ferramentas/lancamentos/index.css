@@ -159,6 +159,10 @@
   font-size: 1rem;
 }
 
+.dados-lancamento {
+  margin-bottom: 1rem;
+}
+
 @media (max-width: 1200px) {
   .double-cards {
     display: block;
@@ -210,4 +214,28 @@ input {
 input:focus {
   border: 1px solid rgb(0, 0, 0);
   box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.25);
+}
+
+.lista-lancamentos {
+  margin-bottom: 1rem;
+}
+.lista-lancamentos ul {
+  display: inline;
+}
+.lista-lancamentos ul li {
+  cursor: pointer;
+  display: inline;
+  font-size: 0.8rem;
+  background-color: #000;
+  border-radius: 23px;
+  color: #fff;
+  padding: 0.2rem 0.4rem;
+  margin-right: 0.5rem;
+}
+
+.mensagem-inicial {
+  color: #707070;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
 }/*# sourceMappingURL=index.css.map */

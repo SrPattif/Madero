@@ -192,7 +192,7 @@ body {
     border-radius: 23px;
 
     padding: .2em 1em;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
 
     transition: all .4s;
     cursor: pointer;
@@ -491,4 +491,8 @@ input {
 
 .bold {
     font-weight: bold;
+}
+
+.valor-boleto {
+    margin-bottom: 1em;
 }
