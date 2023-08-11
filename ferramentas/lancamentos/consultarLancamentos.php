@@ -15,9 +15,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $sql = "SELECT * FROM razao WHERE ";
 
+    $documentosProcurados = array();
+    $documentosEncontrados = array();
+
     $i = 0;
     foreach ($data['listaLancamentos'] as $lancamento) {
         $lancamento = mysqli_real_escape_string($mysqli, $lancamento);
+
+        array_push($documentosProcurados, $lancamento);
 
         if(preg_match('/^[0-9]+$/', $lancamento)) {
             if($i > 0) $sql .= " OR ";
@@ -38,7 +43,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $documento = $row['documento'];
+            array_push($documentosEncontrados, $documento);
+
             $valorLiquido = floatval($row['valor_unitario']);
+
+            $arquivoComprovante = $row['comprovante_pagamento'];
 
             $fornecedorCodigo = $row['cod_fornecedor'];
             $fornecedorLoja = $row['loja_fornecedor'];
@@ -63,16 +72,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $dataBaixa = "-";
             if(isset($row['data_baixa'])) $dataBaixa = date_format(new DateTime($row['data_baixa']), "Y-m-d\TH:i:s\Z");
 
+            $dataAtualizacao = "-";
+            if(isset($row['data_atualizacao'])) $dataAtualizacao = date_format(new DateTime($row['data_atualizacao']), "Y-m-d\TH:i:s\Z");
+
             $contrato = $row['contrato'];
 
 
             array_push($retorno, array(
                 "documento" => $documento,
+                "existente" => true,
                 "valor" => $valorLiquido,
                 "contrato" => $contrato,
                 "fornecedor" => array(
                     "codigo" => $fornecedorCodigo,
-                    "loja" => $fornecedorLoja,
+                    "loja" => sprintf('%04d', $fornecedorLoja),
                     "descricao" => $fornecedorNome
                 ),
                 "filial" => array(
@@ -91,9 +104,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     "emissao" => $dataEmissao,
                     "vencimento" => $dataVencimento,
                     "baixa" => $dataBaixa
-                )
+                ),
+                "comprovante" => $arquivoComprovante,
+                "atualizacao" => $dataAtualizacao
             ));
         }
+    }
+
+    $naoEncontrados = array_diff($documentosProcurados, $documentosEncontrados);
+
+    foreach ($naoEncontrados as $documento) {
+        array_push($retorno, array(
+            "documento" => $documento,
+            "existente" => false,
+        ));
     }
 
     http_response_code(200);

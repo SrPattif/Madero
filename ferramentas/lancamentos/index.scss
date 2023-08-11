@@ -18,9 +18,14 @@
     padding: 1em;
     margin-bottom: 1em;
 
+    .card-description {
+        font-size: .9rem;
+        margin-bottom: 1.5rem;
+    }
+
     .card-header {
         display: flex;
-        margin-bottom: 1em;
+        margin-bottom: .5em;
 
         h3 {
             width: 70%;
@@ -223,8 +228,6 @@ input {
     border-radius: 23px;
     width: 100%;
     box-sizing: border-box;
-
-    margin-bottom: .5rem;
 }
 
 input:focus {
@@ -234,7 +237,7 @@ input:focus {
 
 .lista-lancamentos {
     margin-bottom: 1rem;
-    
+
     ul {
         display: inline;
 
@@ -248,6 +251,13 @@ input:focus {
             color: #fff;
             padding: .2rem .4rem;
             margin-right: .5rem;
+
+            -webkit-animation-name: fadeInDown;
+            animation-name: fadeInDown;
+            -webkit-animation-duration: 1s;
+            animation-duration: 1s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
         }
     }
 }
@@ -257,4 +267,106 @@ input:focus {
     text-align: center;
     font-weight: bold;
     font-size: 1rem;
+}
+
+.error-card {
+    margin-top: 1rem;
+    border: 2px solid rgba(161, 19, 0, 0.4);
+    box-shadow: 0 0 0 0.25rem rgba(138, 16, 0, 0.15);
+
+    .title {
+        background-color: rgba(138, 16, 0, 0.15);
+        width: fit-content;
+        padding: 0rem .3rem;
+        border-radius: 23px;
+        margin-bottom: 1rem;
+    }
+}
+
+.data-atualizacao {
+    color: #707070;
+    text-align: center;
+    font-size: .9rem;
+}
+
+.comprovante {
+    width: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+    background-color: #d3d3d3;
+    border-radius: 23px;
+    padding: 1em;
+    text-align: center;
+    transition: all .3s;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+}
+
+.comprovante:hover {
+    transform: scale(1.02);
+}
+
+.key-input {
+    font-weight: bold;
+    background-color: #d3d3d3;
+    border-radius: 23px;
+    padding: 0 .5rem;
+    width: fit-content;
+}
+
+.input-lcto {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    margin-bottom: .5rem;
+    gap: .8rem;
+
+    .button {
+        width: 3%;
+        height: 100%;
+
+        margin: 0;
+
+        box-sizing: border-box;
+    }
+
+    input {
+        box-sizing: border-box;
+    }
+}
+
+@-webkit-keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
 }

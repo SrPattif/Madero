@@ -241,6 +241,7 @@ nav {
   border-radius: 23px;
   padding: 1em;
   margin-bottom: 1em;
+  font-size: 1rem;
   position: relative;
 }
 .card .chevron {
@@ -313,7 +314,7 @@ p {
 
 .timeline-event {
   position: relative;
-  margin: 50px 0;
+  margin: 25px 0;
   width: 100%;
 }
 
@@ -322,8 +323,8 @@ p {
   top: 0;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background-color: #000000;
   z-index: 1;
@@ -334,7 +335,7 @@ p {
 
 .timeline-event-content {
   position: relative;
-  margin-left: 50px;
+  margin-left: 25px;
   padding: 5px;
   background-color: transparent;
   width: 250px;
@@ -348,7 +349,7 @@ p {
 
 .timeline-event-description {
   margin: 5px 0 0;
-  font-size: 16px;
+  font-size: 0.9rem;
 }
 
 .button {

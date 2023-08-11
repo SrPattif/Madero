@@ -101,7 +101,7 @@ Content-Disposition: inline
 <body>
 <div id="mensagem">
         <p>Olá.</p>
-        <p>Nós alugamos o imóvel <b><?php echo($dadosAlojamento['endereco']); ?></b>, onde o pagamento do boleto de condomínio é de nossa responsabilidade como inquilinos, mas identificamos cobranças no boleto de condomínio com vencimento em <b><?php echo(strtolower($nomeMes)); ?></b> que são de responsabilidade do proprietário do imóvel.</p>
+        <p>Nós alugamos o imóvel <b><?php echo($dadosAlojamento['endereco']); ?></b>, onde o pagamento do boleto de condomínio é de nossa responsabilidade como inquilinos, mas identificamos cobranças no boleto com vencimento em <b><?php echo(strtolower($nomeMes)); ?></b> que são de responsabilidade do proprietário do imóvel.</p>
         <span>As taxas extras são as seguintes:</span>
         <table>
             <tr>

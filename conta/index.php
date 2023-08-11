@@ -17,9 +17,9 @@ if($userData == null) {
 }
 
 $descricaoEventos = array();
-$descricaoEventos['conta.criar'] = "Criação da Conta";
-$descricaoEventos['conta.autenticar'] = "Autenticação";
-$descricaoEventos['conta.trocarSenha'] = "Mudança de Senha";
+$descricaoEventos['conta.criar'] = "<i class='bx bxs-user-plus' ></i> Criação da Conta";
+$descricaoEventos['conta.autenticar'] = "<i class='bx bxs-door-open'></i> Autenticação";
+$descricaoEventos['conta.trocarSenha'] = "<i class='bx bxs-lock' ></i> Mudança de Senha";
 
 $nomeUsuario = $userData['nome'];
 $primeiroNome = explode(" ", $nomeUsuario)[0];
