@@ -391,7 +391,7 @@ $monthList = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho
 
     $("#add-tax-btn").click(function() {
         var taxCount = $(".tax").length;
-        if (taxCount >= 7) {
+        if (taxCount >= 12) {
             tata.error('Limite de taxas excedido', 'Existem muitos campos de taxas criados.', {
                 duration: 6000
             });

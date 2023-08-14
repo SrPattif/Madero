@@ -292,7 +292,7 @@ nav {
   margin-bottom: 1em;
   position: relative;
 }
-.card .chevron {
+.card .icon {
   position: absolute;
   top: 50%;
   right: 10px;
@@ -360,4 +360,28 @@ table tr:hover {
 
 .page-title {
   margin-bottom: 1.4rem;
+}
+
+.soon {
+  background-color: rgba(235, 201, 5, 0.483);
+  color: rgb(105, 89, 0);
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 0.1rem 0.3rem;
+  margin-bottom: 1rem;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-radius: 23px;
+}
+
+.testing {
+  background-color: rgba(0, 197, 197, 0.411);
+  color: rgb(0, 92, 92);
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 0.1rem 0.3rem;
+  margin-bottom: 1rem;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-radius: 23px;
 }/*# sourceMappingURL=index.css.map */

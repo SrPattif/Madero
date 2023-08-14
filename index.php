@@ -9,7 +9,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/libs/databaseConnection.php');
 $nomeUsuario = $_SESSION['USER_NAME'];
 $nomeUsuario = explode(" ", $nomeUsuario)[0];
 
-$queryModulos = "SELECT * FROM modulos WHERE ativo=1;";
+$queryModulos = "SELECT * FROM modulos WHERE ativo=1 ORDER BY `status`='ok' DESC;";
 $resultModulos = mysqli_query($mysqli, $queryModulos);
 $rowsModulos = array();
 while ($row = mysqli_fetch_array($resultModulos)) {
@@ -22,6 +22,7 @@ $modulosNomes = array();
 $modulosDescricoes = array();
 $modulosCategorias = array();
 $modulosIcones = array();
+$modulosStatus = array();
 foreach($rowsModulos as $modulo) {
     $idModulo = $modulo['id'];
     $nomeModulo = $modulo['modulo'];
@@ -29,6 +30,7 @@ foreach($rowsModulos as $modulo) {
     $caminhoModulo = $modulo['caminho'];
     $iconeModulo = $modulo['icone'];
     $descricaoModulo = $modulo['descricao'];
+    $statusModulo = $modulo['status'];
 
     if(!isset($modulos[$categoriaModulo])) {
         $modulos[$categoriaModulo] = array();
@@ -43,6 +45,7 @@ foreach($rowsModulos as $modulo) {
     $modulosNomes[$idModulo] = $nomeModulo;
     $modulosIcones[$idModulo] = $iconeModulo;
     $modulosDescricoes[$idModulo] = $descricaoModulo;
+    $modulosStatus[$idModulo] = $statusModulo;
 }
 ?>
 
@@ -82,7 +85,7 @@ foreach($rowsModulos as $modulo) {
                     <h4><i class='bx bxs-user'></i> Sua Conta</h4>
                     <span class="module-description">Veja seus dados e altere sua senha.</span>
 
-                    <i class='bx bx-chevron-right chevron'></i>
+                    <i class='icon bx bx-chevron-right chevron'></i>
                 </div>
 
                 <br>
@@ -99,13 +102,42 @@ foreach($rowsModulos as $modulo) {
 
                 <?php
                     foreach ($modulos[$categoria] as $id) {
+                        $status = $modulosStatus[$id];
+
+                        $statusClass = '';
+                        $statusText = '';
+                        $indicatorIcon = "<i class='icon bx bx-chevron-right chevron'></i>";
+
+                        switch ($status) {
+                            case 'em_breve':
+                                $statusClass = 'soon';
+                                $statusText = 'EM BREVE';
+                                $indicatorIcon = "<i class='icon bx bx-time-five'></i>";
+                                break;
+
+                            case 'testes':
+                                $statusClass = 'testing';
+                                $statusText = 'EM TESTES';
+                                break;
+                            
+                            default:
+                                # code...
+                                break;
+                        }
                 ?>
 
                 <div class="card card-modulo" onclick="window.location.href='<?php echo($modulosPath[$id]); ?>'">
+                <?php
+                    if($status != "ok") {
+                ?>
+                    <div class="<?php echo($statusClass); ?>"><?php echo($statusText); ?></div>
+                <?php
+                    }
+                ?>
                     <h5><i class='bx <?php echo($modulosIcones[$id]); ?>'></i> <?php echo($modulosNomes[$id]); ?></h5>
                     <span class="module-description"><?php echo($modulosDescricoes[$id]); ?></span>
 
-                    <i class='bx bx-chevron-right chevron'></i>
+                    <?php echo($indicatorIcon); ?>
                 </div>
 
                 <?php

@@ -43,6 +43,16 @@
 
     <main>
         <div class="page-content">
+            <div class="testing-card">
+                <div class="card-header">
+                    <h3><i class='bx bx-test-tube bx-tada bx-rotate-270' ></i> Módulo em Testes</h3>
+                </div>
+                Este módulo ainda está em fase de testes e <span class="bold">pode apresentar erros, problemas ou inconsistências</span>.
+                <br>Certifique-se de conferir todas as informações fornecidas antes de prosseguir.
+                <br>
+                <br>Se você <span class="bold">encontrar algum erro</span> ou divergência, <span class="bold">entre em contato</span> com o administrador do sistema.
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <h3>Consultar Lançamentos</h3>

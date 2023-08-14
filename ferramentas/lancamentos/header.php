@@ -20,7 +20,7 @@ if (!isset($_SESSION)) {
         </div>
 
         <ul class="nav-list">
-            <li><a href="/ferramentas/usuarios/"><i class='bx bxs-tachometer'></i> Início</a></li>
+            <li><a href="/ferramentas/lancamentos/"><i class='bx bxs-tachometer'></i> Início</a></li>
         </ul>
     </nav>
 </header>
