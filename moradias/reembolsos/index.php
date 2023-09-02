@@ -50,6 +50,12 @@
     require($_SERVER['DOCUMENT_ROOT'] . '/moradias/reembolsos/header.php');
     ?>
 
+    <div class="blur-manager">
+        <div class="blur-button" id="div_blurButton" onclick="alternarBlur()">
+            <i class='bx bx-show'></i> Reexibir Valores
+        </div>
+    </div>
+
     <main>
         <div class="page-content">
             <div class="double-cards">
@@ -112,8 +118,8 @@
                         <tr>
                             <td style="text-align: center;"><?php echo($index); ?></td>
                             <td><?php echo($address); ?></td>
-                            <td style="text-align: center;">R$ <?php echo(number_format($cond, 2, ",", ".")); ?></td>
-                            <td style="text-align: center;">R$ <?php echo(number_format($refund, 2, ",", ".")); ?></td>
+                            <td style="text-align: center;" class="td_value">R$ <?php echo(number_format($cond, 2, ",", ".")); ?></td>
+                            <td style="text-align: center;" class="td_value">R$ <?php echo(number_format($refund, 2, ",", ".")); ?></td>
                         </tr>
 
                         <?php   
@@ -151,7 +157,8 @@
                             <tr>
                                 <td style="text-align: center;"><?php echo($index); ?></td>
                                 <td><?php echo($row['description']); ?></td>
-                                <td style="text-align: center;">R$ <?php echo(number_format($row['maior_valor'], 2, ",", ".")); ?></td>
+                                <td style="text-align: center;" class="td_value">R$
+                                    <?php echo(number_format($row['maior_valor'], 2, ",", ".")); ?></td>
                             </tr>
                             <?php 
                                 $index++;
@@ -165,47 +172,27 @@
             <div class="double-cards">
                 <div class="card">
                     <div class="card-header">
-                        <?php
-                        $query = "SELECT COUNT(id) AS qtde_alojamentos FROM alojamentos;";
-                        $result = mysqli_query($mysqli, $query);
-                        $row = mysqli_num_rows($result);
-
-                        $qtdeAlojamentos = 0;
-                        if ($row == 1) {
-                            $resultData = mysqli_fetch_assoc($result);
-                            $qtdeAlojamentos = $resultData['qtde_alojamentos'];
-                        }
-                        ?>
-                        <h1><?php echo($qtdeAlojamentos); ?></h1>
+                        <h1 id="div_qtdeAlojamentos"><i class='bx bx-spin bx-loader-alt'></i></h1>
                         <span>Alojamentos Cadastrados</span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <?php
-                        $query = "SELECT COUNT(DISTINCT id_alojamento) AS alojamentos_com_medicao FROM alojamentos_valores_reembolso WHERE mes={$month} AND ano={$year};";
-                        $result = mysqli_query($mysqli, $query);
-                        $row = mysqli_num_rows($result);
-
-                        $alojamentosComMedicao = 0;
-                        if ($row == 1) {
-                            $resultData = mysqli_fetch_assoc($result);
-                            $alojamentosComMedicao = $resultData['alojamentos_com_medicao'];
-                        }
-                        ?>
-                        <h1><?php echo($alojamentosComMedicao); ?></h1>
+                        <h1 id="div_qtdeMedicoes"><i class='bx bx-spin bx-loader-alt'></i></h1>
                         <span>Medições Realizadas</span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
                         <?php
+                        /*
                         $percentage = 0.0;
                         if($qtdeAlojamentos > 0) {
                             $percentage = ($alojamentosComMedicao / $qtdeAlojamentos) * 100;
                         }
+                        */
                         ?>
-                        <h1><?php echo(number_format($percentage, 1, ",", ".")); ?>%</h1>
+                        <h1 id="div_indiceMedicoes"><i class='bx bx-spin bx-loader-alt'></i></h1>
                         <span>Índice de Medições Realizadas</span>
                     </div>
                 </div>
@@ -214,47 +201,19 @@
             <div class="double-cards">
                 <div class="card">
                     <div class="card-header">
-                        <?php
-                        $query = "SELECT COUNT(id) AS qtde_boletos FROM boletos WHERE MONTH(data_vencimento) = {$month} AND YEAR(data_vencimento) = {$year};";
-                        $result = mysqli_query($mysqli, $query);
-                        $row = mysqli_num_rows($result);
-
-                        $qtdeBoletos = 0;
-                        if ($row == 1) {
-                            $resultData = mysqli_fetch_assoc($result);
-                            $qtdeBoletos = $resultData['qtde_boletos'];
-                        }
-                        ?>
-                        <h1><?php echo($qtdeBoletos); ?></h1>
+                        <h1 id="div_boletosEnviados"><i class='bx bx-spin bx-loader-alt'></i></h1>
                         <span>Boletos Enviados</span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <?php
-                        $query = "SELECT COUNT(b.id) AS qtde_boletos_baixados FROM boletos b LEFT JOIN razao r ON b.lancamento=r.documento WHERE r.data_baixa IS NOT NULL AND MONTH(b.data_vencimento)={$month} AND YEAR(b.data_vencimento)={$year};";
-                        $result = mysqli_query($mysqli, $query);
-                        $row = mysqli_num_rows($result);
-
-                        $qtdeBoletosBaixados = 0;
-                        if ($row == 1) {
-                            $resultData = mysqli_fetch_assoc($result);
-                            $qtdeBoletosBaixados = $resultData['qtde_boletos_baixados'];
-                        }
-                        ?>
-                        <h1><?php echo($qtdeBoletosBaixados); ?></h1>
+                        <h1 id="div_boletosBaixados"><i class='bx bx-spin bx-loader-alt'></i></h1>
                         <span>Boletos Baixados</span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <?php
-                        $percentage = 0.0;
-                        if($qtdeBoletos > 0) {
-                            $percentage = ($qtdeBoletosBaixados / $qtdeBoletos) * 100;
-                        }
-                        ?>
-                        <h1><?php echo(number_format($percentage, 1, ",", ".")); ?>%</h1>
+                        <h1 id="div_indiceBoletos"><i class='bx bx-spin bx-loader-alt'></i></h1>
                         <span>Índice de Boletos Baixados</span>
                     </div>
                 </div>
@@ -263,47 +222,19 @@
             <div class="double-cards">
                 <div class="card">
                     <div class="card-header">
-                        <?php
-                            $query = "SELECT SUM(avr.valor_taxa) AS soma_valores FROM tipos_taxas tt JOIN alojamentos_valores_reembolso avr ON tt.id = avr.id_taxa WHERE tt.refundable = 1 AND avr.mes={$month} AND avr.ano={$year};";
-                            $result = mysqli_query($mysqli, $query);
-                            $row = mysqli_num_rows($result);
-
-                            $refundableValue = 0.0;
-                            if ($row == 1) {
-                                $refundableObject = mysqli_fetch_assoc($result);
-                                $refundableValue = $refundableObject['soma_valores'];
-                            }
-                        ?>
-                        <h1>R$ <?php echo(number_format($refundableValue, 2, ",", ".")); ?></h1>
+                        <h1 id="div_totalReembolsavel"><i class='bx bx-spin bx-loader-alt'></i></h1>
                         <span>Total Reembolsável</span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <?php
-                            $query = "SELECT SUM(avr.valor_taxa) AS soma_valores FROM tipos_taxas tt JOIN alojamentos_valores_reembolso avr ON tt.id = avr.id_taxa WHERE tt.refundable = 1 AND avr.mes={$month} AND avr.ano={$year} AND avr.status='reembolsado';";
-                            $result = mysqli_query($mysqli, $query);
-                            $row = mysqli_num_rows($result);
-
-                            $refundedValue = 0.0;
-                            if ($row == 1) {
-                                $refundedObject = mysqli_fetch_assoc($result);
-                                $refundedValue = $refundedObject['soma_valores'];
-                            }
-                        ?>
-                        <h1>R$ <?php echo(number_format($refundedValue, 2, ",", ".")); ?></h1>
+                        <h1 id="div_totalReembolsado"><i class='bx bx-spin bx-loader-alt'></i></h1>
                         <span>Total Reembolsado</span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <?php
-                            $percentage = 0.0;
-                            if($refundableValue > 0) {
-                                $percentage = ($refundedValue / $refundableValue) * 100;
-                            }
-                        ?>
-                        <h1><?php echo(number_format($percentage, 1, ",", ".")); ?>%</h1>
+                        <h1 id="div_indiceValoresReembolsados"><i class='bx bx-spin bx-loader-alt'></i></h1>
                         <span>Índice de Valores Reembolsados</span>
                     </div>
                 </div>
@@ -312,35 +243,13 @@
             <div class="double-cards">
                 <div class="card">
                     <div class="card-header">
-                        <?php
-                            $query = "SELECT SUM(r.valor_liquido) AS soma_valores FROM boletos b LEFT JOIN razao r ON r.documento=b.lancamento AND MONTH(b.data_vencimento)={$month} AND YEAR(b.data_vencimento)={$year};";
-                            $result = mysqli_query($mysqli, $query);
-                            $row = mysqli_num_rows($result);
-
-                            $totalAmount = 0.0;
-                            if ($row == 1) {
-                                $totalAmountObject = mysqli_fetch_assoc($result);
-                                $totalAmount = $totalAmountObject['soma_valores'];
-                            }
-                        ?>
-                        <h1>R$ <?php echo(number_format($totalAmount, 2, ",", ".")); ?></h1>
+                        <h1 id="div_totalPagoRazao"><i class='bx bx-spin bx-loader-alt'></i></h1>
                         <span>Valor Total Pago (razão)</span>
                     </div>
                 </div>
                 <div class="card" style="max-height: fit-content !important;">
                     <div class="card-header">
-                        <?php
-                            $query = "SELECT SUM(avr.valor_taxa) AS soma_valores FROM tipos_taxas tt JOIN alojamentos_valores_reembolso avr ON tt.id = avr.id_taxa WHERE tt.refundable = 0 AND avr.mes={$month} AND avr.ano={$year};";
-                            $result = mysqli_query($mysqli, $query);
-                            $row = mysqli_num_rows($result);
-
-                            $refundableValue = 0.0;
-                            if ($row == 1) {
-                                $refundableObject = mysqli_fetch_assoc($result);
-                                $refundableValue = $refundableObject['soma_valores'];
-                            }
-                        ?>
-                        <h1>R$ <?php echo(number_format($refundableValue, 2, ",", ".")); ?></h1>
+                        <h1 id="div_totalNaoReembolsavel"><i class='bx bx-spin bx-loader-alt'></i></h1>
                         <span>Valor Total em Taxas não Reembolsáveis (medições)</span>
                     </div>
                 </div>
@@ -370,29 +279,87 @@
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-    $.ajax({
-        type: "GET",
-        url: "./index_analiseTaxas.php",
-        success: function(result) {
-            loadGraphMeditions(result);
-            return;
-        },
-        error: function(result) {
-            console.log(result);
+    var blurElements = [
+        "#div_qtdeAlojamentos",
+        "#div_qtdeMedicoes",
+        "#div_indiceMedicoes",
+        "#div_boletosEnviados",
+        "#div_boletosBaixados",
+        "#div_indiceBoletos",
+        "#div_totalReembolsavel",
+        "#div_totalReembolsado",
+        "#div_indiceValoresReembolsados",
+        "#div_totalPagoRazao",
+        "#div_totalNaoReembolsavel",
+        "#chart_taxasMensais",
+        "#chart_totalPago",
+        ".td_value"
+    ]
+
+    var blurred = false;
+
+    $(document).ready(() => {
+        if(blurred) {
+            $('#div_blurButton').html("<i class='bx bx-show'></i> Reexibir Valores")
+
+            blurElements.forEach(div => {
+                $(div).addClass("number-blur");
+            });
+
+        } else {
+            $('#div_blurButton').html("<i class='bx bx-hide' ></i> Ocultar Valores")
         }
+
+        $.ajax({
+            type: "GET",
+            url: "./index_analiseTaxas.php",
+            success: function(result) {
+                loadGraphMeditions(result);
+                return;
+            },
+            error: function(result) {
+                console.log(result);
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "./index_analiseTotalPago.php",
+            success: function(result) {
+                loadGraphTotal(result);
+                return;
+            },
+            error: function(result) {
+                console.log(result);
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "./index_resumoGeral.php",
+            success: function(result) {
+                $("#div_qtdeAlojamentos").text(result.alojamentos);
+                $("#div_qtdeMedicoes").text(result.medicoes);
+                $("#div_indiceMedicoes").text(numberFormat((result.medicoes / result.alojamentos) * 100) + "%");
+
+                $("#div_boletosEnviados").text(result.boletos.enviados);
+                $("#div_boletosBaixados").text(result.boletos.baixados);
+                $("#div_indiceBoletos").text(numberFormat((result.boletos.baixados / result.boletos.enviados) * 100) + "%");
+
+                $("#div_totalReembolsavel").text("R$ " + numberFormat(result.totais.reembolsado, 2, ",", "."));
+                $("#div_totalReembolsado").text("R$ " + numberFormat(result.totais.reembolsado, 2, ",", "."));
+                $("#div_indiceValoresReembolsados").text(numberFormat((result.totais.reembolsado / result.totais.reembolsavel) * 100) + "%");
+
+                $("#div_totalPagoRazao").text("R$ " + numberFormat(result.totais.pago_razao, 2, ",", "."));
+                $("#div_totalNaoReembolsavel").text("R$ " + numberFormat(result.totais.nao_reembolsavel, 2, ",", "."));
+                return;
+            },
+            error: function(result) {
+                console.log(result);
+            }
+        });
     });
 
-    $.ajax({
-        type: "GET",
-        url: "./index_analiseTotalPago.php",
-        success: function(result) {
-            loadGraphTotal(result);
-            return;
-        },
-        error: function(result) {
-            console.log(result);
-        }
-    });
 
     function loadGraphMeditions(requestData) {
         console.log(requestData)
@@ -694,6 +661,39 @@
         const hslaColor = `hsla(${h}, ${s}%, ${l}%, ${opacity})`;
 
         return hslaColor;
+    }
+
+    function numberFormat(number, decimals = 2, decimalSeparator = ',', thousandSeparator = '.') {
+        if(number == NaN || number == undefined || !number) return 0;
+        const fixedNumber = number.toFixed(decimals);
+        const [integerPart, decimalPart] = fixedNumber.split('.');
+        
+        const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
+
+        return `${formattedInteger}${decimalSeparator}${decimalPart}`;
+    }
+
+    function alternarBlur() {
+        if(blurred) {
+            blurred = false;
+            $('#div_blurButton').html("<i class='bx bx-hide' ></i> Ocultar Valores")
+
+            blurElements.forEach(div => {
+                $(div).each((i, el) => {
+                    $(el).removeClass("number-blur")
+                });
+            });
+
+        } else {
+            blurred = true;
+            $('#div_blurButton').html("<i class='bx bx-show'></i> Reexibir Valores")
+
+            blurElements.forEach(div => {
+                $(div).each((i, el) => {
+                    $(el).addClass("number-blur")
+                });
+            });
+        }
     }
     </script>
 
