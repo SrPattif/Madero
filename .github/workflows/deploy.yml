@@ -35,7 +35,11 @@ jobs:
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
             - name: 🔒 Criação da .env de teste
-              run: echo "${{ secrets.ENV_TEST }}" > ./.env
+              run: |
+                touch .env
+                echo API_ENDPOINT="https://xxx.execute-api.us-west-2.amazonaws.com" >> .env
+                echo API_KEY=${{ secrets.GOOGLE_RECAPTCHA_SECRET_KEY }} >> .env
+                cat .env
 
     deploy-staging:
         runs-on: ubuntu-latest
