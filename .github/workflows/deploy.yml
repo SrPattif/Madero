@@ -28,14 +28,20 @@ jobs:
               uses: easingthemes/ssh-deploy@main
               with:
                 SSH_PRIVATE_KEY: ${{secrets.SERVER_SSH_KEY}}
-                ARGS: "-rlgoDzvc"
+                ARGS: "-rlgoDzvc --delete"
                 SOURCE: "/"
                 REMOTE_HOST: ${{vars.REMOTE_HOST}}
                 REMOTE_USER: ${{vars.REMOTE_USER}}
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
-            - name: 🔒 Criação da .env de teste
-              run: echo "a" > /domains/payoo.com.br/public_html/dev/.env
+            - name: Create .env file
+              uses: ozaytsev86/create-env-file@v1
+              with:
+                INPUT_ENV_DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+                INPUT_ENV_DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+                INPUT_ENV_DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+                INPUT_ENV_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+                INPUT_ENV_GOOGLE_RECAPTCHA_SECRET_KEY: ${{ secrets.GOOGLE_RECAPTCHA_SECRET_KEY }}
 
     deploy-staging:
         runs-on: ubuntu-latest
@@ -44,9 +50,9 @@ jobs:
             url: ${{vars.URL}}
         needs: deploy-development
         steps:
-            - name: 🔄 Sincronização do repositório
+            - name: Repo Checkout
               uses: actions/checkout@v1
-            - name: 📂 Envio dos arquivos ao servidor
+            - name: Hostinger Deployment
               uses: easingthemes/ssh-deploy@main
               with:
                 SSH_PRIVATE_KEY: ${{secrets.SERVER_SSH_KEY}}
@@ -56,8 +62,14 @@ jobs:
                 REMOTE_USER: ${{vars.REMOTE_USER}}
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
-            - name: 🔒 Criação da .env de homologação
-              run: echo "${{ secrets.ENV_FINAL }}" > ${{vars.TARGET}}.env
+            - name: Create .env file
+              uses: ozaytsev86/create-env-file@v1
+              with:
+                INPUT_ENV_DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+                INPUT_ENV_DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+                INPUT_ENV_DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+                INPUT_ENV_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+                INPUT_ENV_GOOGLE_RECAPTCHA_SECRET_KEY: ${{ secrets.GOOGLE_RECAPTCHA_SECRET_KEY }}
     deploy-production:
         runs-on: ubuntu-latest
         environment:
@@ -65,9 +77,9 @@ jobs:
             url: ${{vars.URL}}
         needs: deploy-staging
         steps:
-            - name: 🔄 Sincronização do repositório
+            - name: Repo Checkout
               uses: actions/checkout@v1
-            - name: 📂 Envio dos arquivos ao servidor
+            - name: Hostinger Deployment
               uses: easingthemes/ssh-deploy@main
               with:
                 SSH_PRIVATE_KEY: ${{secrets.SERVER_SSH_KEY}}
@@ -77,5 +89,11 @@ jobs:
                 REMOTE_USER: ${{vars.REMOTE_USER}}
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
-            - name: 🔒 Criação da .env de homologação
-              run: echo "${{ secrets.ENV_FINAL }}" > ${{vars.TARGET}}.env
+            - name: Create .env file
+              uses: ozaytsev86/create-env-file@v1
+              with:
+                INPUT_ENV_DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+                INPUT_ENV_DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+                INPUT_ENV_DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+                INPUT_ENV_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+                INPUT_ENV_GOOGLE_RECAPTCHA_SECRET_KEY: ${{ secrets.GOOGLE_RECAPTCHA_SECRET_KEY }}
