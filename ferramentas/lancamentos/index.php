@@ -173,13 +173,17 @@
 
     var listaLancamentos = [];
 
-    function gerenciarListaLancamentos(lancamento) {
+    function gerenciarListaLancamentos(lancamento, atualizar = false) {
         if (listaLancamentos.includes(lancamento)) {
             listaLancamentos = listaLancamentos.filter(function(item) {
                 return item !== lancamento;
             });
         } else {
             listaLancamentos.push(lancamento);
+        }
+
+        if(atualizar) {
+            atualizarLista();
         }
     }
 
@@ -233,7 +237,7 @@
                     var documento = lancamento.documento;
 
                     var li_lancamento = document.createElement('li');
-                    li_lancamento.innerHTML = documento + " <i class='bx bx-x'></i>";
+                    li_lancamento.innerHTML = `<span onclick="gerenciarListaLancamentos('${documento}', true)">${documento} <i class="bx bx-x"></i></span>`;
                     ulLancamentos.appendChild(li_lancamento);
 
                     if(encontrado) {
