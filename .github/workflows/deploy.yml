@@ -34,6 +34,15 @@ jobs:
                 REMOTE_USER: ${{vars.REMOTE_USER}}
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
+            - name: Create .env file
+              uses: SpicyPizza/create-envfile@v1
+              with:
+                envkey_DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+                envkey_DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+                envkey_DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+                envkey_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+                envkey_GOOGLE_RECAPTCHA_SECRET_KEY: ${{ secrets.GOOGLE_RECAPTCHA_SECRET_KEY }}
+                file_name: .env
 
     deploy-staging:
         runs-on: ubuntu-latest
@@ -54,6 +63,15 @@ jobs:
                 REMOTE_USER: ${{vars.REMOTE_USER}}
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
+            - name: Create .env file
+              uses: SpicyPizza/create-envfile@v1
+              with:
+                envkey_DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+                envkey_DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+                envkey_DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+                envkey_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+                envkey_GOOGLE_RECAPTCHA_SECRET_KEY: ${{ secrets.GOOGLE_RECAPTCHA_SECRET_KEY }}
+                file_name: .env
     deploy-production:
         runs-on: ubuntu-latest
         environment:
@@ -73,3 +91,12 @@ jobs:
                 REMOTE_USER: ${{vars.REMOTE_USER}}
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
+            - name: Create .env file
+              uses: SpicyPizza/create-envfile@v1
+              with:
+                envkey_DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+                envkey_DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+                envkey_DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+                envkey_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+                envkey_GOOGLE_RECAPTCHA_SECRET_KEY: ${{ secrets.GOOGLE_RECAPTCHA_SECRET_KEY }}
+                file_name: .env
