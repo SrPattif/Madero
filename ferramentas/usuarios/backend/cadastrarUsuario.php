@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $setor = mysqli_real_escape_string($mysqli, $_POST['setor']);
     $cargo = mysqli_real_escape_string($mysqli, $_POST['cargo']);
 
-    $query = "INSERT INTO usuarios (`username`, `nome`, `password`, `email`, `setor`, `cargo`, `bloqueado`, `troca_senha`) VALUES ('{$usuario}', '{$nome}', MD5('madero'), '{$email}', '{$setor}', '{$cargo}', 0, 1);";
+    $query = "INSERT INTO usuarios (`username`, `nome`, `password`, `email`, `setor`, `cargo`, `bloqueado`, `troca_senha`) VALUES ('{$usuario}', '{$nome}', MD5('madero123'), '{$email}', '{$setor}', '{$cargo}', 0, 1);";
     $resultUpdate = mysqli_query($mysqli, $query);
             
     if($resultUpdate) {
