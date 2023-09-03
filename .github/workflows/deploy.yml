@@ -3,11 +3,11 @@ name: com.payoo.madero
 on:
     push:
         branches: [main]
+        paths-ignore:
+          - '.env'
     pull_request:
         branches: [main]
     
-    workflow_dispatch:
-
 jobs:
     build:
         runs-on: ubuntu-latest
