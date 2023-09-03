@@ -56,7 +56,7 @@
 
     $usuario = mysqli_fetch_assoc($resultUsuario);
 
-    $acessoTotal = $usuario['nivel_acesso'] == "TOTAL" ? true : false;
+    $acessoTotal = $usuario['nivel_acesso'] == "TOTAL" ? 'true' : 'false';
 ?>
 
 <!DOCTYPE html>
