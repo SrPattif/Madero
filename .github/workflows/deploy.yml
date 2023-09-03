@@ -9,18 +9,11 @@ on:
         branches: [main]
     
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Build
-            run: echo building...
-
     deploy-development:
         runs-on: ubuntu-latest
         environment:
             name: development
             url: ${{vars.URL}}
-        needs: build
         steps:
             - name: 🔄 Sincronização do repositório
               uses: actions/checkout@v1
@@ -34,14 +27,6 @@ jobs:
                 REMOTE_USER: ${{vars.REMOTE_USER}}
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
-            - name: Create .env file
-              uses: ozaytsev86/create-env-file@v1
-              with:
-                INPUT_ENV_DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-                INPUT_ENV_DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-                INPUT_ENV_DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-                INPUT_ENV_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-                INPUT_ENV_GOOGLE_RECAPTCHA_SECRET_KEY: ${{ secrets.GOOGLE_RECAPTCHA_SECRET_KEY }}
 
     deploy-staging:
         runs-on: ubuntu-latest
@@ -62,14 +47,6 @@ jobs:
                 REMOTE_USER: ${{vars.REMOTE_USER}}
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
-            - name: Create .env file
-              uses: ozaytsev86/create-env-file@v1
-              with:
-                INPUT_ENV_DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-                INPUT_ENV_DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-                INPUT_ENV_DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-                INPUT_ENV_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-                INPUT_ENV_GOOGLE_RECAPTCHA_SECRET_KEY: ${{ secrets.GOOGLE_RECAPTCHA_SECRET_KEY }}
     deploy-production:
         runs-on: ubuntu-latest
         environment:
@@ -89,11 +66,3 @@ jobs:
                 REMOTE_USER: ${{vars.REMOTE_USER}}
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
-            - name: Create .env file
-              uses: ozaytsev86/create-env-file@v1
-              with:
-                INPUT_ENV_DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-                INPUT_ENV_DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-                INPUT_ENV_DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-                INPUT_ENV_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-                INPUT_ENV_GOOGLE_RECAPTCHA_SECRET_KEY: ${{ secrets.GOOGLE_RECAPTCHA_SECRET_KEY }}
