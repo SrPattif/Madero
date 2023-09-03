@@ -83,7 +83,7 @@ foreach($rowsModulos as $modulo) {
 
                 <div class="card card-modulo" onclick="window.location.href='/conta/'">
                     <h4><i class='bx bxs-user'></i> Sua Conta</h4>
-                    <span class="module-description">Veja seus dados e altere sua senha.</span>
+                    <span class="module-description">Veja seus dados, sua atividade e altere sua senha.</span>
 
                     <i class='icon bx bx-chevron-right chevron'></i>
                 </div>
