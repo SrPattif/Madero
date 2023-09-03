@@ -80,12 +80,12 @@ while ($row = mysqli_fetch_array($resultHistorico)) {
                     <div class="card-header">
                         <h3>Suas Permissões</h3>
                     </div>
-                    <span style="font-size: 1rem;">Você ainda não possui permissões cadastradas.</span>
+                    <span style="font-size: 1rem;">Você possui <span class="bold">acesso total</span> ao sistema.</span>
                 </div>
 
                 <div class="card" style="margin-top: 2rem;">
                     <div class="card-header">
-                        <h3>Histórico</h3>
+                        <h3>Sua Atividade</h3>
                     </div>
                     <div class="timeline">
                         <?php

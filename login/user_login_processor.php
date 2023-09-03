@@ -70,7 +70,11 @@
                 $query = "UPDATE `usuarios` SET first_login_ip = COALESCE(first_login_ip, '{$userIp}'), last_login_ip='{$userIp}', last_login_at=now(), first_login_at = COALESCE(first_login_at, now()) WHERE  `id`={$userId};";
                 $resultUpdate = mysqli_query($mysqli, $query);
                 
-                if($resultUpdate) {
+                $queryHistorico = "INSERT INTO historico_contas (id_usuario, tipo_evento, endereco_ip) VALUES ({$userId}, 'conta.autenticar', '{$userIp}');";
+                $resultHistorico  = mysqli_query($mysqli, $queryHistorico);
+
+                if($resultUpdate && $resultHistorico) {
+
                     $_SESSION['USER_ID'] = $userData['id'];
                     $_SESSION['USER_USERNAME'] = $userData['username'];
                     $_SESSION['USER_NAME'] = $userData['nome'];

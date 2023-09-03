@@ -47,8 +47,11 @@
 
             $query = "UPDATE `usuarios` SET password=md5('{$password}'), troca_senha=0 WHERE `id`={$userId};";
             $resultUpdate = mysqli_query($mysqli, $query);
+
+            $queryHistorico = "INSERT INTO historico_contas (id_usuario, tipo_evento, endereco_ip) VALUES ({$userId}, 'conta.trocarSenha', '{$userIp}');";
+            $resultHistorico  = mysqli_query($mysqli, $queryHistorico);
             
-            if($resultUpdate) {
+            if($resultUpdate && $resultHistorico) {
                 header("Content-Type: application/json");
                 echo json_encode(array("sucesso" => true, "mensagem" =>  "Senha alterada com sucesso."));
                 http_response_code(200);
