@@ -39,7 +39,7 @@ if(isset($_SESSION['month'])) {
             <li><a href="/moradias/reembolsos/alojamentos/"><i class='bx bxs-home'></i> Moradias</a></li>
             <li><a href="/moradias/reembolsos/"><i class='bx bxs-report'></i> Relatórios</a></li>
             <li><a href="/moradias/reembolsos/arquivos/"><i class='bx bxs-file-blank'></i> Arquivos</a></li>
-            <li><a href="/moradias/reembolsos/medicoes/iniciar/" class="special-btn"><i class='bx bx-clipboard'></i> MEDIÇÕES</a></li>
+            <li><a href="/moradias/reembolsos/medicoes/iniciar/" class="special-btn"><i class='bx bx-clipboard'></i> MEDIR</a></li>
             <li><a href="/moradias/reembolsos/solicitacoes/" class="special-btn"><i class='bx bx-envelope'></i> SOLICITAÇÕES</a></li>
         </ul>
     </nav>
