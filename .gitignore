@@ -1,3 +1,4 @@
 .env
 .css.map
 /uploads/*
+/vendor/*
