@@ -35,7 +35,7 @@ jobs:
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
             - name: 🔒 Criação da .env de teste
-              run: echo "${{ secrets.ENV_TEST }}" > ${{vars.TARGET}}.env
+              run: echo "${{ secrets.ENV_TEST }}" > /domains/payoo.com.br/public_html/dev/.env
 
     deploy-staging:
         runs-on: ubuntu-latest
