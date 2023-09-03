@@ -121,7 +121,6 @@ foreach($rowsModulos as $modulo) {
                                 break;
                             
                             default:
-                                # code...
                                 break;
                         }
                 ?>
