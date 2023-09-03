@@ -35,7 +35,7 @@ jobs:
                 REMOTE_PORT: ${{vars.REMOTE_PORT}}
                 TARGET: ${{vars.TARGET}}
             - name: 🔒 Criação da .env de teste
-              run: echo "${{ secrets.ENV_TEST }}" > .env
+              run: echo "${{ secrets.ENV_TEST }}" > ./.env
 
     deploy-staging:
         runs-on: ubuntu-latest
