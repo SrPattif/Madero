@@ -346,7 +346,7 @@
                 $("#div_boletosBaixados").text(result.boletos.baixados);
                 $("#div_indiceBoletos").text(numberFormat((result.boletos.baixados / result.boletos.enviados) * 100) + "%");
 
-                $("#div_totalReembolsavel").text("R$ " + numberFormat(result.totais.reembolsado, 2, ",", "."));
+                $("#div_totalReembolsavel").text("R$ " + numberFormat(result.totais.reembolsavel, 2, ",", "."));
                 $("#div_totalReembolsado").text("R$ " + numberFormat(result.totais.reembolsado, 2, ",", "."));
                 $("#div_indiceValoresReembolsados").text(numberFormat((result.totais.reembolsado / result.totais.reembolsavel) * 100) + "%");
 
