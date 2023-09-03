@@ -39,7 +39,7 @@ jobs:
                 touch .env
                 echo API_ENDPOINT="https://xxx.execute-api.us-west-2.amazonaws.com" >> .env
                 echo API_KEY=${{ secrets.GOOGLE_RECAPTCHA_SECRET_KEY }} >> .env
-                cat .env
+                realpath .env
 
     deploy-staging:
         runs-on: ubuntu-latest
