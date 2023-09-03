@@ -84,14 +84,14 @@
 <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
 <script>
 var urlArray = [
-    "https://master.restaurantemadero.com.br/assets/site/images/cms/5.jpg",
-    "https://www.restaurantemadero.com.br/assets/site/images/bcg_slide-4.jpg"
+    '/assets/images/bg_1.jpg',
+    '/assets/images/bg_2.jpg',
+    '/assets/images/bg_3.jpg',
+    '/assets/images/bg_4.jpg',
 ]
-var url = urlArray.sort(function () {
-  return Math.random() - 0.5;
-})[0];
+var randomIndex = Math.floor(Math.random() * urlArray.length);
 
-$(".right-content").css("background-image", "url('" + url + "')");
+$(".right-content").css(`background-image`, `url("${urlArray[randomIndex]}")`);
 </script>
 
 </html>
