@@ -313,6 +313,7 @@
         $.ajax({
             type: "GET",
             url: "./index_analiseTaxas.php",
+            async: true,
             success: function(result) {
                 loadGraphMeditions(result);
                 return;
@@ -325,6 +326,7 @@
         $.ajax({
             type: "GET",
             url: "./index_analiseTotalPago.php",
+            async: true,
             success: function(result) {
                 loadGraphTotal(result);
                 return;
@@ -337,6 +339,7 @@
         $.ajax({
             type: "GET",
             url: "./index_resumoGeral.php",
+            async: true,
             success: function(result) {
                 $("#div_qtdeAlojamentos").text(result.alojamentos);
                 $("#div_qtdeMedicoes").text(result.medicoes);
