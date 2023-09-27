@@ -78,8 +78,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             while ($row = $resultColumns->fetch_assoc()) {
                 $columnType = $row['Type'];
                 $columnField = $row['Field'];
-                if(str_contains($columnType, "varchar") || str_contains($columnType, "date")) {
+                if(str_contains($columnType, "varchar")) {
                     $databaseColumnsType[$columnField] = "string";
+
+                } else if(str_contains($columnType, "date")) {
+                    $databaseColumnsType[$columnField] = "string-date";
 
                 } else if(str_contains($columnType, "int")) {
                     $databaseColumnsType[$columnField] = "number";
@@ -133,6 +136,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                     }
                     $query .= "'" . trim($value) . "'";
+
+                } else if($databaseColumnsType[$key] == "string-date") {
+                    $date = date_create_from_format("d/m/Y", $value);
+                    if ($date !== false) {
+                        $value = "'" . date_format($date, "Y-m-d") . "'";
+                    } else {
+                        $value = "NULL";
+                    }
+                    $query .= trim($value);
 
                 } else if($databaseColumnsType[$key] == "double") {
                     $tempVal = str_replace(".", "", $value);
