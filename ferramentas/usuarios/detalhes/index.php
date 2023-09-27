@@ -51,7 +51,7 @@
     }
 
     foreach ($rowsPermissoes as $moduloPermitido) {
-        array_push($modulosPermitidos, (int) $moduloPermitido['id']);
+        array_push($modulosPermitidos, (int) $moduloPermitido['id_modulo']);
     }
 
     $usuario = mysqli_fetch_assoc($resultUsuario);
@@ -142,7 +142,7 @@
                                 <div class="control-group">
                                     <label class="control control-checkbox">
                                         <?php echo($strModulo); ?>
-                                        <input type="checkbox" <?php echo(in_array($idModulo, $modulosPermitidos) ? 'checked' : ''); ?> id="input_modulo<?php echo($idModulo); ?>" />
+                                        <input type="checkbox" <?php echo(in_array($idModulo, $modulosPermitidos) ? 'checked' : ''); ?> id="modulo_<?php echo($idModulo); ?>" />
                                         <div class="control_indicator"></div>
                                     </label>
                                 </div>
@@ -153,7 +153,7 @@
                         ?>
                     </div>
 
-                    <button class="button" id="btn_salvarAlojamento" style="margin-bottom: 2em;">SALVAR</button>
+                    <button class="button" id="btn_salvarPermissoes" style="margin-bottom: 2em;">SALVAR</button>
                 </div>
 
                 <div class="card" style="margin-top: 2rem;">
@@ -218,6 +218,51 @@
         $('#button_parcialAccess').addClass("access-selected");
 
         $('#card_permissions').show();
+    })
+
+    $('#btn_salvarPermissoes').click(() => {
+        var userModules = [];
+        var userId = $('#input_id').val();
+
+        $('[id^="modulo_"]').each(function() {
+            var moduleId = this.id.split('_').pop();
+            var checked = this.checked;
+
+            if(checked) {
+                userModules.push(moduleId);
+            }
+        });
+
+        console.log(userId)
+        console.log(userModules);
+
+        $.ajax({
+            type: "POST",
+            url: "/ferramentas/usuarios/backend/atualizarPermissoes.php",
+            data: {
+                idUsuario: userId,
+                modulos: userModules,
+            },
+            success: function(result) {
+                tata.success('Permissões atualizadas',
+                    'As permissões do usuário foram atualizadas com sucesso.', {
+                        duration: 3000
+                    });
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2500);
+                return;
+            },
+            error: function(result) {
+                tata.error('Um erro ocorreu',
+                    'Ocorreu um erro ao tentar atualizar as permissões do usuário. (' + result
+                    .responseJSON.mensagem + ')', {
+                        duration: 6000
+                    });
+            }
+        });
+
     })
     </script>
 

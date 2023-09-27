@@ -78,6 +78,7 @@
                     $_SESSION['USER_ID'] = $userData['id'];
                     $_SESSION['USER_USERNAME'] = $userData['username'];
                     $_SESSION['USER_NAME'] = $userData['nome'];
+                    $_SESSION['USER_ACCESS_LEVEL'] = $userData['nivel_acesso'];
     
                     $_SESSION['MESSAGES_LOGIN_ERROR'] = null;
     

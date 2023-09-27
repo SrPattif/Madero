@@ -6,10 +6,16 @@ if (!isset($_SESSION)) {
 include($_SERVER['DOCUMENT_ROOT'] . '/login_checker.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/libs/databaseConnection.php');
 
+$idUsuario = $_SESSION['USER_ID'];
 $nomeUsuario = $_SESSION['USER_NAME'];
 $nomeUsuario = explode(" ", $nomeUsuario)[0];
+$nivelAcessoUsuario = $_SESSION['USER_ACCESS_LEVEL'];
 
-$queryModulos = "SELECT * FROM modulos WHERE ativo=1 ORDER BY `status`='ok' DESC;";
+if($nivelAcessoUsuario == 'TOTAL') {
+    $queryModulos = "SELECT * FROM modulos WHERE ativo=1 ORDER BY `status`='ok' DESC;";
+} else {
+    $queryModulos = "SELECT m.* FROM permissoes p INNER JOIN modulos m ON m.id=p.id_modulo WHERE p.id_usuario={$idUsuario} AND m.ativo=1 ORDER BY m.status='ok' DESC;";
+}
 $resultModulos = mysqli_query($mysqli, $queryModulos);
 $rowsModulos = array();
 while ($row = mysqli_fetch_array($resultModulos)) {
