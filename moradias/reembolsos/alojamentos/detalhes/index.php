@@ -134,28 +134,27 @@
                             } else {
                                 $amount = "R$ " . number_format($houseData['valor_total'], 2, ",", ".");
                                
+                                $expiresDate = "-";
                                 $datePaid = "-";
                                 $differenceStatus = "";
-                                if(!empty($houseData['data_baixa'])) {
-                                    $paidDateObj = date_create($houseData['data_baixa']);
-                                    $datePaid = date_format($paidDateObj, "d/m/Y");
-
-                                    $daysDifference = $paidDateObj->diff($expiresDateObj)->format("%a");
-                                    $differenceStatus = "";
-                                    if($expiresDateObj < $paidDateObj) {
-                                        $differenceStatus = "(" . $daysDifference . " dias depois)";
-
-                                    } else if($paidDateObj < $expiresDateObj) {
-                                        $differenceStatus = "(" . $daysDifference . " dias antes)";
-                                    }
-                                }
-
-                                $expiresDate = "-";
                                 if(!empty($houseData['data_vencimento'])) {
                                     $expiresDateObj = date_create($houseData['data_vencimento']);
                                     $expiresDate = date_format($expiresDateObj, "d/m/Y");
-                                }
 
+                                    if(!empty($houseData['data_baixa'])) {
+                                        $paidDateObj = date_create($houseData['data_baixa']);
+                                        $datePaid = date_format($paidDateObj, "d/m/Y");
+    
+                                        $daysDifference = $paidDateObj->diff($expiresDateObj)->format("%a");
+                                        $differenceStatus = "";
+                                        if($expiresDateObj < $paidDateObj) {
+                                            $differenceStatus = "(" . $daysDifference . " dias depois)";
+    
+                                        } else if($paidDateObj < $expiresDateObj) {
+                                            $differenceStatus = "(" . $daysDifference . " dias antes)";
+                                        }
+                                    }
+                                }
 
                         ?>
                     <div class="file-details" onclick="abrirModal('modal_boleto')">
