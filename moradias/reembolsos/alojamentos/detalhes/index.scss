@@ -512,3 +512,23 @@ embed {
     }
 
 }
+
+.operacao {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+
+    input {
+        cursor: pointer;
+    }
+
+    .bxs-pencil {
+        position: absolute;
+        right: 7px;
+        top: 8px;
+        font-size: 1rem;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+}

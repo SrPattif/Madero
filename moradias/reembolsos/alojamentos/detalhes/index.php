@@ -89,7 +89,7 @@
                     <div class="input-group" style="width: fit-content;">
                         <label for="input_id">Identificador</label>
                         <input type="text" id="input_id" value="<?php echo((int) $houseData['id']); ?>"
-                            style="text-align: center;" readonly>
+                            style="text-align: center; cursor: not-allowed;" readonly>
                     </div>
                     <div class="input-group" style="width: 100%;">
                         <label for="input_endereco">Endereço da Moradia</label>
@@ -112,12 +112,15 @@
                         <input type="text" id="input_status" value="<?php echo($houseData['status']); ?>">
                     </div>
                     <div class="input-group" style="width: 25%;">
-                        <label for="input_centroCusto">Centro de Custo</label>
-                        <input type="text" id="input_centroCusto" value="<?php echo($houseData['centro_custo']); ?>">
+                        <label for="input_operacao">Operação</label>
+                        <div class="operacao">
+                            <i class='bx bxs-pencil'></i>
+                            <input type="text" id="input_operacao" value="<?php echo($houseData['operacao']); ?>" readonly>
+                        </div>
                     </div>
                     <div class="input-group" style="width: 25%;">
-                        <label for="input_operacao">Operação</label>
-                        <input type="text" id="input_operacao" value="<?php echo($houseData['operacao']); ?>">
+                        <label for="input_centroCusto">Centro de Custo</label>
+                        <input type="text" id="input_centroCusto" value="<?php echo($houseData['centro_custo']); ?>" style="cursor: not-allowed;" readonly>
                     </div>
                 </div>
 
