@@ -23,7 +23,7 @@ if(!isset($_POST['titulo'])) {
 
 $titulo = mysqli_real_escape_string($mysqli, $_POST['titulo']);
 
-$queryTitulo = "SELECT r.documento, r.data_baixa, r.valor_liquido AS valor_total, c.nome_interno AS arquivo_comprovante_bruto FROM razao r LEFT JOIN comprovantes c ON r.data_baixa=c.referencia WHERE r.documento={$titulo};";
+$queryTitulo = "SELECT r.documento, r.data_baixa, r.valor_liquido AS valor_total, c.nome_interno AS arquivo_comprovante_bruto FROM razao r LEFT JOIN comprovantes c ON r.data_baixa=c.referencia WHERE r.documento={$titulo} ORDER BY r.id DESC LIMIT 1;";
 $resultTitulo = mysqli_query($mysqli, $queryTitulo);
 if(mysqli_num_rows($resultTitulo) != 1) {
     header("Content-Type: application/json");

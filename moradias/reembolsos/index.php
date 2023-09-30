@@ -310,6 +310,11 @@
             $('#div_blurButton').html("<i class='bx bx-hide' ></i> Ocultar Valores")
         }
 
+        getData();
+
+    });
+
+    async function getData() {
         $.ajax({
             type: "GET",
             url: "./index_analiseTaxas.php",
@@ -361,7 +366,7 @@
                 console.log(result);
             }
         });
-    });
+    }
 
 
     function loadGraphMeditions(requestData) {

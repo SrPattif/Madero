@@ -32,6 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
+    $sql .= " ORDER BY id DESC;";
+
     if($i < 1) {
         http_response_code(200);
         header('Content-Type: application/json');

@@ -141,20 +141,22 @@
                                 }
 
                                 $expiresDate = "-";
+                                $differenceStatus = "";
                                 if(!empty($houseData['data_vencimento'])) {
                                     $expiresDateObj = date_create($houseData['data_vencimento']);
                                     $expiresDate = date_format($expiresDateObj, "d/m/Y");
+
+                                    $daysDifference = $paidDateObj->diff($expiresDateObj)->format("%a");
+                                    $differenceStatus = "";
+                                    if($expiresDateObj < $paidDateObj) {
+                                        $differenceStatus = "(" . $daysDifference . " dias depois)";
+
+                                    } else if($paidDateObj < $expiresDateObj) {
+                                        $differenceStatus = "(" . $daysDifference . " dias antes)";
+                                    }
                                 }
 
 
-                                $daysDifference = $paidDateObj->diff($expiresDateObj)->format("%a");
-                                $differenceStatus = "";
-                                if($expiresDateObj < $paidDateObj) {
-                                    $differenceStatus = "(" . $daysDifference . " dias depois)";
-
-                                } else if($paidDateObj < $expiresDateObj) {
-                                    $differenceStatus = "(" . $daysDifference . " dias antes)";
-                                }
                         ?>
                     <div class="file-details" onclick="abrirModal('modal_boleto')">
                         <div class="file-icon"><i class='bx bxs-file-pdf'></i></div>

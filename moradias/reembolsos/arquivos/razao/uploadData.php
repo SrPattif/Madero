@@ -164,9 +164,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $valuesAmount++;
         }
 
+        /*
+        $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, $query);
+        fclose($myfile);
+        */
         $resultColumns = $mysqli->query($query);
         if($resultColumns) {
             // Remover dados duplicados
+            /*
             $resultDuplicated = $mysqli->query("DELETE FROM razao WHERE documento IN (SELECT documento FROM razao GROUP BY documento HAVING COUNT(*) > 1) AND id NOT IN (SELECT MAX(id) FROM razao GROUP BY documento HAVING COUNT(*) > 1);");
         
             if($resultDuplicated) {
@@ -180,7 +186,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 echo json_encode(array("sucesso" => false, "descricao" => "Erro desconhecido na execução da query de remoção de duplicatas."));
                 http_response_code(500);
                 exit();
-            }
+            }*/
+
+            header("Content-Type: application/json");
+            echo json_encode(array("sucesso" => true, "descricao" => "Banco de dados atualizado."));
+            http_response_code(200);
+            exit();
 
         } else {
             header("Content-Type: application/json");

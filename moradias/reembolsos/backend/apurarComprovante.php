@@ -23,7 +23,7 @@ if(!isset($_POST['id_boleto'])) {
 
 $idBoleto = mysqli_real_escape_string($mysqli, $_POST['id_boleto']);
 
-$queryBoleto = "SELECT b.*, b.id AS id_boleto, r.data_baixa, r.valor_liquido AS valor_total, c.nome_interno AS arquivo_comprovante_bruto FROM boletos b INNER JOIN razao r ON r.documento=b.lancamento LEFT JOIN comprovantes c ON r.data_baixa=c.referencia WHERE b.id={$idBoleto};";
+$queryBoleto = "SELECT b.*, b.id AS id_boleto, r.data_baixa, r.valor_liquido AS valor_total, c.nome_interno AS arquivo_comprovante_bruto FROM boletos b INNER JOIN razao r ON r.documento=b.lancamento LEFT JOIN comprovantes c ON r.data_baixa=c.referencia WHERE b.id={$idBoleto} ORDER BY r.id DESC LIMIT 1;";
 $rowsBoleto = array();
 $resultBoletos = mysqli_query($mysqli, $queryBoleto);
 if(mysqli_num_rows($resultBoletos) != 1) {
