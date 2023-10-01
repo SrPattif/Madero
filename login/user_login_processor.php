@@ -4,8 +4,6 @@
         $redirectUrl = $_GET['redirect'];
     }
 
-
-    session_destroy();
     if (isset($_SESSION)) {
         unset($_SESSION);
     }
@@ -29,6 +27,10 @@
 
     include('../libs/databaseConnection.php');
     require($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
 
     $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
     $dotenv->load();
@@ -57,11 +59,59 @@
                 $tokenMudarSenha = getRandomStringRandomInt(60);
                 $tokenQuery = "INSERT INTO tokens_senha (`token`, `id_usuario`, `valido_ate`) VALUES ('{$tokenMudarSenha}', '{$userId}', DATE_ADD(NOW(), INTERVAL 10 MINUTE));";
                 $resultToken = mysqli_query($mysqli, $tokenQuery);
+
+                $email = $userData['email'];
             
                 if($resultToken) {
-                    header('location: /login/mudarSenha?token=' . $tokenMudarSenha . '&motivo=contaBloqueada');
-                    exit();
 
+                    // --------------------------------------
+
+
+                    $mail = new PHPMailer(true);
+
+                    try {
+                        $email_html = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/assets/emails/trocaSenha.html');
+
+                        $userName = $userData['nome'];;
+
+                        $email_html = str_replace('%PASSWORD_TOKEN%', $tokenMudarSenha, $email_html);
+                        $email_html = str_replace('%USER_NAME%', $userName, $email_html);
+
+                        $mail->isSMTP();
+                        $mail->Host = 'smtp.hostinger.com';
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'naoresponda@payoo.com.br';
+                        $mail->Password = $_ENV['EMAIL_PASSWORD'];
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                        $mail->Port = 465;
+
+                        $mail->setFrom('naoresponda@payoo.com.br', 'Payoo: não responda');
+                        $mail->addAddress($email);
+                        $mail->addReplyTo('contato@payoo.com.br', 'Payoo: contato');
+
+                        $mail->CharSet = "UTF-8";
+
+                        $mail->isHTML(true);
+                        $mail->Subject = 'Payoo: seu link para trocar de senha!';
+                        $mail->Body = $email_html;
+                        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+                        $mail->send();
+                        
+                        $_SESSION['MESSAGES_LOGIN_ERROR'] = null;
+                        $_SESSION['MESSAGES_LOGIN_CHANGE_PASSWORD'] = true;
+                        header('location: /login/?redirect=' . $redirectUrl);
+                        exit();
+
+                    } catch (Exception $e) {
+                        error_log($e);
+
+                        $_SESSION['MESSAGES_LOGIN_ERROR'] = true;
+                        header('location: /login/?redirect=' . $redirectUrl);
+                        exit();
+                    }
+
+                    // --------------------------------------
                 } else {
                     $_SESSION['MESSAGES_LOGIN_ERROR'] = true;
                     header('location: /login/?redirect=' . $redirectUrl);

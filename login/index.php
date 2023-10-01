@@ -46,6 +46,11 @@
             ?>
             <span class="text-error">Não foi possível verificar sua identidade. Verifique se a caixa de "Não sou um robô" está marcada.</span>
             <?php
+                } else if(isset($_SESSION['MESSAGES_LOGIN_CHANGE_PASSWORD'])) {
+                    $_SESSION['MESSAGES_LOGIN_CHANGE_PASSWORD'] = null;
+            ?>
+            <span class="text-info">Um link para troca de senha foi enviado ao e-mail cadastrado.</span>
+            <?php
                 }
             ?>
             <form id="login-form" action="./user_login_processor.php?redirect=<?php echo($redirectUrl); ?>"
