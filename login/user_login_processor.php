@@ -29,7 +29,6 @@
     require($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
 
     use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
 
     $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
@@ -72,7 +71,7 @@
                     try {
                         $email_html = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/assets/emails/trocaSenha.html');
 
-                        $userName = $userData['nome'];;
+                        $userName = $userData['nome'];
 
                         $email_html = str_replace('%PASSWORD_TOKEN%', $tokenMudarSenha, $email_html);
                         $email_html = str_replace('%USER_NAME%', $userName, $email_html);
