@@ -6,14 +6,14 @@
     include($_SERVER['DOCUMENT_ROOT'] . '/login_checker.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/libs/databaseConnection.php');
 
-    $ccConsulta = "";
+    $contratoConsulta = "";
     $rowsRazao = array();
-    if(isset($_GET['cc'])) {
-        $ccConsulta = mysqli_real_escape_string($mysqli, $_GET['cc']);
+    if(isset($_GET['contrato'])) {
+        $contratoConsulta = mysqli_real_escape_string($mysqli, $_GET['contrato']);
     }
 
-    if(strlen($ccConsulta) == 6) {
-        $queryRazao = "SELECT * FROM razao WHERE ctt_custo={$ccConsulta} ORDER BY id DESC LIMIT 50;";
+    if(strlen($contratoConsulta) > 0) {
+        $queryRazao = "SELECT * FROM razao WHERE contrato='{$contratoConsulta}' ORDER BY id DESC LIMIT 50;";
         $resultRazao = mysqli_query($mysqli, $queryRazao);
         while($row = mysqli_fetch_array($resultRazao)){
             array_push($rowsRazao, $row);
@@ -34,7 +34,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controladoria Grupo Madero | Lançamentos por Centro de Custo</title>
+    <title>Controladoria Grupo Madero | Lançamentos por Contrato</title>
 
     <!-- Estilos -->
     <link rel="stylesheet" href="../../defaultStyle.css" />
@@ -64,7 +64,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h3>Lançamentos por Centro de Custo</h3>
+                    <h3>Lançamentos por Contrato</h3>
                     <!--
                     <div class="option-list">
                         <div class="option" onclick="abrirModal('modal_cadastrarUsuario')">
@@ -74,18 +74,18 @@
                     -->
                 </div>
                 <div class="card-description">
-                    <span>Insira abaixo o número do Centro de Custo que deseja consultar.<br>Quando terminar a
+                    <span>Insira abaixo o Contrato que deseja consultar.<br>Quando terminar a
                         digitação, pressione <span class="key-input"><i class='bx bxs-keyboard'></i> ENTER</span> ou
                         clique em <span class="key-input"><i class='bx bx-chevrons-right'></i> PROSSEGUIR</span>.</span>
                 </div>
 
                 <div class="input-lcto">
-                    <input type="text" id="input_lancamento" value="<?php echo($ccConsulta); ?>" placeholder="Digite o número do Centro de Custo">
+                    <input type="text" id="input_lancamento" value="<?php echo($contratoConsulta); ?>" placeholder="Digite o Contrato">
                     <div class="button" onclick="manusearInput();"><i class='bx bx-chevrons-right'></i></div>
                 </div>
                 <div class="mensagem-inicial" id="div_msgInicial">
                     <i class='bx bx-chevrons-up'></i>
-                    Insira acima o número do Centro de Custo que deseja consultar.
+                    Insira acima o Contrato que deseja consultar.
                     <i class='bx bx-chevrons-up'></i>
                 </div>
 
@@ -185,9 +185,9 @@
 
     function manusearInput() {
         const inputLancamento = document.getElementById('input_lancamento');
-        const inputCC = inputLancamento.value;
+        const inputContrato = inputLancamento.value;
 
-        window.location.href = './?cc=' + inputCC;
+        window.location.href = './?contrato=' + inputContrato;
     }
 
     function formatISODateToCustomFormat(isoDateTime) {

@@ -22,7 +22,7 @@ if (!isset($_SESSION)) {
         <ul class="nav-list">
             <li><a href="/ferramentas/lancamentos/"><i class='bx bxs-barcode'></i> Por Lançamento</a></li>
             <li><a href="/ferramentas/lancamentos/detalhado/cc/"><i class='bx bxs-store'></i> Por Centro de Custo</a></li>
-            <li><a href="/ferramentas/lancamentos/"><i class='bx bx-paperclip'></i> Por Contrato</a></li>
+            <li><a href="/ferramentas/lancamentos/detalhado/contrato/"><i class='bx bx-paperclip'></i> Por Contrato</a></li>
         </ul>
     </nav>
 </header>
