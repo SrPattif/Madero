@@ -118,8 +118,10 @@
                         <tr>
                             <td style="text-align: center;"><?php echo($index); ?></td>
                             <td><?php echo($address); ?></td>
-                            <td style="text-align: center;" class="td_value">R$ <?php echo(number_format($cond, 2, ",", ".")); ?></td>
-                            <td style="text-align: center;" class="td_value">R$ <?php echo(number_format($refund, 2, ",", ".")); ?></td>
+                            <td style="text-align: center;" class="td_value">R$
+                                <?php echo(number_format($cond, 2, ",", ".")); ?></td>
+                            <td style="text-align: center;" class="td_value">R$
+                                <?php echo(number_format($refund, 2, ",", ".")); ?></td>
                         </tr>
 
                         <?php   
@@ -299,7 +301,7 @@
     var blurred = false;
 
     $(document).ready(() => {
-        if(blurred) {
+        if (blurred) {
             $('#div_blurButton').html("<i class='bx bx-show'></i> Reexibir Valores")
 
             blurElements.forEach(div => {
@@ -310,63 +312,114 @@
             $('#div_blurButton').html("<i class='bx bx-hide' ></i> Ocultar Valores")
         }
 
-        getData();
+        getData()
+            .then(results => {
+                const [data1, data2, data3] = results;
+                loadGraphMeditions(data1);
+                loadGraphTotal(data2);
+                updateDOM(data3);
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
     });
 
     async function getData() {
-        $.ajax({
+        const request1 = $.ajax({
             type: "GET",
             url: "./index_analiseTaxas.php",
             async: true,
-            success: function(result) {
-                loadGraphMeditions(result);
-                return;
-            },
-            error: function(result) {
-                console.log(result);
-            }
         });
 
-        $.ajax({
+        const request2 = $.ajax({
             type: "GET",
             url: "./index_analiseTotalPago.php",
             async: true,
-            success: function(result) {
-                loadGraphTotal(result);
-                return;
-            },
-            error: function(result) {
-                console.log(result);
-            }
         });
 
-        $.ajax({
+        const request3 = $.ajax({
             type: "GET",
             url: "./index_resumoGeral.php",
             async: true,
-            success: function(result) {
-                $("#div_qtdeAlojamentos").text(result.alojamentos);
-                $("#div_qtdeMedicoes").text(result.medicoes);
-                $("#div_indiceMedicoes").text(numberFormat((result.medicoes / result.alojamentos) * 100) + "%");
-
-                $("#div_boletosEnviados").text(result.boletos.enviados);
-                $("#div_boletosBaixados").text(result.boletos.baixados);
-                $("#div_indiceBoletos").text(numberFormat((result.boletos.baixados / result.boletos.enviados) * 100) + "%");
-
-                $("#div_totalReembolsavel").text("R$ " + numberFormat(result.totais.reembolsavel, 2, ",", "."));
-                $("#div_totalReembolsado").text("R$ " + numberFormat(result.totais.reembolsado, 2, ",", "."));
-                $("#div_indiceValoresReembolsados").text(numberFormat((result.totais.reembolsado / result.totais.reembolsavel) * 100) + "%");
-
-                $("#div_totalPagoRazao").text("R$ " + numberFormat(result.totais.pago_razao, 2, ",", "."));
-                $("#div_totalNaoReembolsavel").text("R$ " + numberFormat(result.totais.nao_reembolsavel, 2, ",", "."));
-                return;
-            },
-            error: function(result) {
-                console.log(result);
-            }
         });
+
+        return Promise.all([request1, request2, request3]);
     }
+
+    function updateDOM(result) {
+        $("#div_qtdeAlojamentos").text(result.alojamentos);
+        $("#div_qtdeMedicoes").text(result.medicoes);
+        $("#div_indiceMedicoes").text(numberFormat((result.medicoes / result.alojamentos) * 100) + "%");
+
+        $("#div_boletosEnviados").text(result.boletos.enviados);
+        $("#div_boletosBaixados").text(result.boletos.baixados);
+        $("#div_indiceBoletos").text(numberFormat((result.boletos.baixados / result.boletos.enviados) * 100) + "%");
+
+        $("#div_totalReembolsavel").text("R$ " + numberFormat(result.totais.reembolsavel, 2, ",", "."));
+        $("#div_totalReembolsado").text("R$ " + numberFormat(result.totais.reembolsado, 2, ",", "."));
+        $("#div_indiceValoresReembolsados").text(numberFormat((result.totais.reembolsado / result.totais.reembolsavel) *
+            100) + "%");
+
+        $("#div_totalPagoRazao").text("R$ " + numberFormat(result.totais.pago_razao, 2, ",", "."));
+        $("#div_totalNaoReembolsavel").text("R$ " + numberFormat(result.totais.nao_reembolsavel, 2, ",", "."));
+    }
+
+    /*
+
+    async function getData() {
+            $.ajax({
+                type: "GET",
+                url: "./index_analiseTaxas.php",
+                async: true,
+                success: function(result) {
+                    loadGraphMeditions(result);
+                    return;
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: "./index_analiseTotalPago.php",
+                async: true,
+                success: function(result) {
+                    loadGraphTotal(result);
+                    return;
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: "./index_resumoGeral.php",
+                async: true,
+                success: function(result) {
+                    $("#div_qtdeAlojamentos").text(result.alojamentos);
+                    $("#div_qtdeMedicoes").text(result.medicoes);
+                    $("#div_indiceMedicoes").text(numberFormat((result.medicoes / result.alojamentos) * 100) + "%");
+
+                    $("#div_boletosEnviados").text(result.boletos.enviados);
+                    $("#div_boletosBaixados").text(result.boletos.baixados);
+                    $("#div_indiceBoletos").text(numberFormat((result.boletos.baixados / result.boletos.enviados) * 100) + "%");
+
+                    $("#div_totalReembolsavel").text("R$ " + numberFormat(result.totais.reembolsavel, 2, ",", "."));
+                    $("#div_totalReembolsado").text("R$ " + numberFormat(result.totais.reembolsado, 2, ",", "."));
+                    $("#div_indiceValoresReembolsados").text(numberFormat((result.totais.reembolsado / result.totais.reembolsavel) * 100) + "%");
+
+                    $("#div_totalPagoRazao").text("R$ " + numberFormat(result.totais.pago_razao, 2, ",", "."));
+                    $("#div_totalNaoReembolsavel").text("R$ " + numberFormat(result.totais.nao_reembolsavel, 2, ",", "."));
+                    return;
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        }*/
 
 
     function loadGraphMeditions(requestData) {
@@ -672,17 +725,17 @@
     }
 
     function numberFormat(number, decimals = 2, decimalSeparator = ',', thousandSeparator = '.') {
-        if(number == NaN || number == undefined || !number) return 0;
+        if (number == NaN || number == undefined || !number) return 0;
         const fixedNumber = number.toFixed(decimals);
         const [integerPart, decimalPart] = fixedNumber.split('.');
-        
+
         const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
 
         return `${formattedInteger}${decimalSeparator}${decimalPart}`;
     }
 
     function alternarBlur() {
-        if(blurred) {
+        if (blurred) {
             blurred = false;
             $('#div_blurButton').html("<i class='bx bx-hide' ></i> Ocultar Valores")
 
