@@ -197,6 +197,10 @@ table tr {
   transition: all 0.2s;
   cursor: pointer;
 }
+table tr td {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+  font-size: 0.8rem;
+}
 table tr:hover {
   background-color: #D3D3D3;
 }
@@ -220,23 +224,7 @@ input:focus {
 }
 
 .lista-lancamentos {
-  margin-bottom: 1rem;
-}
-.lista-lancamentos ul {
-  display: inline;
-}
-.lista-lancamentos ul li {
-  cursor: pointer;
-  display: inline;
-  font-size: 0.8rem;
-  background-color: #000;
-  border-radius: 23px;
-  color: #fff;
-  padding: 0.2rem 0.4rem;
-  margin-right: 0.5rem;
-  animation-name: fadeInDown;
-  animation-duration: 1s;
-  animation-fill-mode: both;
+  margin-top: 1rem;
 }
 
 .mensagem-inicial {

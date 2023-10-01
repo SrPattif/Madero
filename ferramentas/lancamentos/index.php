@@ -5,13 +5,6 @@
 
     include($_SERVER['DOCUMENT_ROOT'] . '/login_checker.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/libs/databaseConnection.php');
-
-    $queryUsuarios = "SELECT * FROM usuarios;";
-    $resultUsuarios = mysqli_query($mysqli, $queryUsuarios);
-    $rowsUsuarios = array();
-    while($row = mysqli_fetch_array($resultUsuarios)){
-        array_push($rowsUsuarios, $row);
-    }
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +20,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controladoria Grupo Madero | Usuários e Credenciais</title>
+    <title>Controladoria Grupo Madero | Consultar Lançamentos</title>
 
     <!-- Estilos -->
     <link rel="stylesheet" href="./defaultStyle.css" />
@@ -87,52 +80,6 @@
                     </ul>
                 </div>
                 <div id="resultados-lancamentos">
-                </div>
-
-                <div id="modal_cadastrarUsuario" class="modal">
-                    <div class="modal-content vertical-center">
-                        <div class="center">
-                            <h2>Cadastrar Novo Usuário</h2>
-                            <span>Insira abaixo as informações do novo usuário.</span>
-
-                            <div class="double-inputs" style="width: 70%; margin: 1em auto;">
-                                <div class="input-group" style="width: 100%;">
-                                    <label for="input_nome">Nome e Sobrenome</label>
-                                    <input type="text" id="input_nome" value="">
-                                </div>
-                            </div>
-                            <div class="double-inputs" style="width: 70%; margin: 1em auto;">
-                                <div class="input-group" style="width: 50%;">
-                                    <label for="input_username">Nome de Usuário</label>
-                                    <input type="text" id="input_username" value="" oninput="checkAndAutoFillEmail()">
-                                </div>
-                                <div class="input-group" style="width: 50%;">
-                                    <label for="input_email">E-mail</label>
-                                    <input type="text" id="input_email" value="">
-                                </div>
-                            </div>
-                            <div class="double-inputs" style="width: 70%; margin: 1em auto;">
-                                <div class="input-group" style="width: 50%;">
-                                    <label for="input_setor">Setor</label>
-                                    <input type="text" id="input_setor" value="Controladoria">
-                                </div>
-                                <div class="input-group" style="width: 50%;">
-                                    <label for="input_cargo">Cargo</label>
-                                    <input type="text" id="input_cargo" value="">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <div class="double-buttons">
-                                <div class="simple-button" onclick="closeModal('modal_cadastrarUsuario')"
-                                    style="width: 50%;">
-                                    FECHAR</div>
-                                <div class="button" id="btn_cadastrarUsuario" style="width: 50%;">
-                                    CADASTRAR USUÁRIO</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
     </main>
