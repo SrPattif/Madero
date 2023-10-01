@@ -35,9 +35,9 @@ jobs:
             url: ${{vars.URL}}
         needs: deploy-development
         steps:
-            - name: Repo Checkout
+            - name: 🔄 Sincronização do repositório
               uses: actions/checkout@v1
-            - name: Hostinger Deployment
+            - name: 📂 Envio dos arquivos ao servidor
               uses: easingthemes/ssh-deploy@main
               with:
                 SSH_PRIVATE_KEY: ${{secrets.SERVER_SSH_KEY}}
@@ -54,9 +54,9 @@ jobs:
             url: ${{vars.URL}}
         needs: deploy-staging
         steps:
-            - name: Repo Checkout
+            - name: 🔄 Sincronização do repositório
               uses: actions/checkout@v1
-            - name: Hostinger Deployment
+            - name: 📂 Envio dos arquivos ao servidor
               uses: easingthemes/ssh-deploy@main
               with:
                 SSH_PRIVATE_KEY: ${{secrets.SERVER_SSH_KEY}}
