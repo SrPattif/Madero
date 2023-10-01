@@ -43,6 +43,7 @@
 
     <main>
         <div class="page-content">
+            <!--
             <div class="testing-card">
                 <div class="card-header">
                     <h3><i class='bx bx-test-tube bx-tada bx-rotate-270' ></i> Módulo em Testes</h3>
@@ -52,6 +53,7 @@
                 <br>
                 <br>Se você <span class="bold">encontrar algum erro</span> ou divergência, <span class="bold">entre em contato</span> com o administrador do sistema.
             </div>
+            -->
 
             <div class="card">
                 <div class="card-header">
