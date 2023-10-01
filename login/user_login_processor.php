@@ -5,6 +5,7 @@
     }
 
 
+    session_destroy();
     if (isset($_SESSION)) {
         unset($_SESSION);
     }
@@ -66,6 +67,7 @@
                     header('location: /login/?redirect=' . $redirectUrl);
                     exit();
                 }
+
             } else {
                 $query = "UPDATE `usuarios` SET first_login_ip = COALESCE(first_login_ip, '{$userIp}'), last_login_ip='{$userIp}', last_login_at=now(), first_login_at = COALESCE(first_login_at, now()) WHERE  `id`={$userId};";
                 $resultUpdate = mysqli_query($mysqli, $query);
