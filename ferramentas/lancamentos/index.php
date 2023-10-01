@@ -36,6 +36,17 @@
 
     <main>
         <div class="page-content">
+            <div class="new-card">
+                <div class="card-header">
+                    <h3><i class='bx bxs-hot bx-tada bx-rotate-270' ></i> NOVIDADE!</h3>
+                </div>
+                Agora, você pode pesquisar lançamentos por <span class="bold">contrato</span> ou <span class="bold">centro de custo</span>!
+                <br><br>
+                <a href="./detalhado/contrato/" class="simple-button" style="text-align: left;"><i class='bx bx-paperclip'></i> Pesquisar por Contrato</a>
+                <br>
+                <a href="./detalhado/cc/" class="simple-button" style="text-align: left;"><i class='bx bx-store'></i> Pesquisar por Centro de Custo</a>
+            </div>
+
             <!--
             <div class="testing-card">
                 <div class="card-header">
