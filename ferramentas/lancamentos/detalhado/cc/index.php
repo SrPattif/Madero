@@ -111,8 +111,8 @@
                                 $emissionDate = "-";
                                 $datePaid = "-";
                                 $bordero = "-";
-                                if(!empty($lcto['data_vencimento'])) {
-                                    $emissionDateObj = date_create($lcto['data_vencimento']);
+                                if(!empty($lcto['data_emissao'])) {
+                                    $emissionDateObj = date_create($lcto['data_emissao']);
                                     $emissionDate = date_format($emissionDateObj, "d/m/Y");
 
                                     if(!empty($lcto['data_baixa']) && $lcto['data_baixa'] != "0000-00-00") {
