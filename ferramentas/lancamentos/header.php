@@ -20,9 +20,8 @@ if (!isset($_SESSION)) {
         </div>
 
         <ul class="nav-list">
-            <li><a href="/ferramentas/lancamentos/"><i class='bx bxs-barcode'></i> Por Lançamento</a></li>
-            <li><a href="/ferramentas/lancamentos/detalhado/cc/"><i class='bx bxs-store'></i> Por Centro de Custo</a></li>
-            <li><a href="/ferramentas/lancamentos/detalhado/contrato/"><i class='bx bx-paperclip'></i> Por Contrato</a></li>
+            <li><a href="/ferramentas/lancamentos/"><i class='bx bxs-home'></i> Pesquisa Padrão</a></li>
+            <li><a href="/ferramentas/lancamentos/detalhado/"><i class='bx bxs-rocket'></i> Pesquisa Avançada</a></li>
         </ul>
     </nav>
 </header>
