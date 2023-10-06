@@ -6,18 +6,19 @@
     include($_SERVER['DOCUMENT_ROOT'] . '/login_checker.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/libs/databaseConnection.php');
 
-    $contratoConsulta = "";
+    $queryConsulta = "";
     $rowsRazao = array();
-    if(isset($_GET['contrato'])) {
-        $contratoConsulta = mysqli_real_escape_string($mysqli, $_GET['contrato']);
+    if(isset($_GET['cc'])) {
+        $queryConsulta = mysqli_real_escape_string($mysqli, $_GET['cc']);
     }
 
-    if(strlen($contratoConsulta) > 0) {
-        $queryRazao = "SELECT * FROM razao WHERE contrato='{$contratoConsulta}' ORDER BY id DESC LIMIT 50;";
+    if(strlen($queryConsulta) > 0) {
+        $queryRazao = "SELECT * FROM razao WHERE ctt_custo='{$queryConsulta}' OR contrato='{$queryConsulta}' OR documento='{$queryConsulta}' OR nome_fornecedor LIKE '%{$queryConsulta}%' ORDER BY id DESC LIMIT 75;";
         $resultRazao = mysqli_query($mysqli, $queryRazao);
         while($row = mysqli_fetch_array($resultRazao)){
             array_push($rowsRazao, $row);
         }
+
     }
 ?>
 
@@ -34,11 +35,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controladoria Grupo Madero | Lançamentos por Contrato</title>
+    <title>Controladoria Grupo Madero | Pesquisa Avançada</title>
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="../../defaultStyle.css" />
+    <link rel="stylesheet" href="../defaultStyle.css" />
     <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="/assets/styles/tooltips.css" />
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -49,6 +51,16 @@
     ?>
 
     <main>
+        <div class="overlay" id="overlay">
+            <div class="overlay__inner">
+                <div class="overlay__content">
+                    <span class="spinner"></span>
+                    <br>
+                    Aguarde enquanto carregamos lançamentos
+                </div>
+            </div>
+        </div>
+
         <div class="page-content">
             <!--
             <div class="testing-card">
@@ -64,28 +76,22 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h3>Lançamentos por Contrato</h3>
-                    <!--
-                    <div class="option-list">
-                        <div class="option" onclick="abrirModal('modal_cadastrarUsuario')">
-                            <i class='bx bxs-user-plus'></i> CADASTRAR USUÁRIO
-                        </div>
-                    </div>
-                    -->
+                    <h3>Pesquisa Avançada de Lançamentos</h3>
                 </div>
                 <div class="card-description">
-                    <span>Insira abaixo o Contrato que deseja consultar.<br>Quando terminar a
-                        digitação, pressione <span class="key-input"><i class='bx bxs-keyboard'></i> ENTER</span> ou
+                    <span>Insira abaixo o item que deseja procurar. Serão procurados por Centro de Custo, Fornecedor e Contrato.<br>
+                    Quando terminar a digitação, pressione <span class="key-input"><i class='bx bxs-keyboard'></i> ENTER</span> ou
                         clique em <span class="key-input"><i class='bx bx-chevrons-right'></i> PROSSEGUIR</span>.</span>
                 </div>
 
                 <div class="input-lcto">
-                    <input type="text" id="input_lancamento" value="<?php echo($contratoConsulta); ?>" placeholder="Digite o Contrato">
+                    <input type="text" id="input_lancamento" value="<?php echo($queryConsulta); ?>"
+                        placeholder="Digite o texto que deseja procurar.">
                     <div class="button" onclick="manusearInput();"><i class='bx bx-chevrons-right'></i></div>
                 </div>
                 <div class="mensagem-inicial" id="div_msgInicial">
                     <i class='bx bx-chevrons-up'></i>
-                    Insira acima o Contrato que deseja consultar.
+                    Insira acima o texto que deseja consultar.
                     <i class='bx bx-chevrons-up'></i>
                 </div>
 
@@ -95,6 +101,7 @@
                 <div class="lista-lancamentos">
                     <table>
                         <tr>
+                            <th></th>
                             <th>Documento</th>
                             <th>Contrato</th>
                             <th>Filial</th>
@@ -104,6 +111,7 @@
                             <th>Baixa</th>
                             <th>Valor</th>
                             <th>Natureza</th>
+                            <th></th>
                         </tr>
 
                         <?php
@@ -111,13 +119,23 @@
                                 $emissionDate = "-";
                                 $datePaid = "-";
                                 $bordero = "-";
-                                if(!empty($lcto['data_vencimento'])) {
-                                    $emissionDateObj = date_create($lcto['data_vencimento']);
+                                $comprovante = "";
+                                if(!empty($lcto['data_emissao'])) {
+                                    $emissionDateObj = date_create($lcto['data_emissao']);
                                     $emissionDate = date_format($emissionDateObj, "d/m/Y");
 
                                     if(!empty($lcto['data_baixa']) && $lcto['data_baixa'] != "0000-00-00") {
+                                        $statusColor = "status-orange";
                                         $paidDateObj = date_create($lcto['data_baixa']);
                                         $datePaid = date_format($paidDateObj, "d/m/Y");
+
+                                    } else {
+                                        $statusColor = "status-red";
+                                    }
+
+                                    if(!empty($lcto['comprovante_pagamento'])) {
+                                        $comprovante = $lcto['comprovante_pagamento'];
+                                        $statusColor = "status-green";
                                     }
                                 }
 
@@ -126,6 +144,9 @@
                                 }
                         ?>
                         <tr>
+                            <td style="text-align: center;">
+                                <div class="status <?php echo($statusColor); ?>"></div>
+                            </td>
                             <td style="font-weight: bold; text-align: center;"><?php echo($lcto['documento']); ?></td>
                             <td style="text-align: center;"><?php echo($lcto['contrato']); ?></td>
                             <td><?php echo($lcto['descr_filial']); ?></td>
@@ -133,13 +154,55 @@
                             <td style="text-align: center;"><?php echo($emissionDate); ?></td>
                             <td style="text-align: center;"><?php echo($bordero); ?></td>
                             <td style="text-align: center;"><?php echo($datePaid); ?></td>
-                            <td style="font-weight: bold; text-align: center;"><?php echo('R$ ' . number_format($lcto['valor_unitario'], 2, ",", ".")); ?></td>
+                            <td style="font-weight: bold; text-align: center;">
+                                <?php echo('R$ ' . number_format($lcto['valor_unitario'], 2, ",", ".")); ?></td>
                             <td><?php echo($lcto['descr_natureza']); ?></td>
+                            <td>
+                                <div class="options-list">
+                                    <?php
+                                        if($datePaid != "-" && !empty($comprovante)) {
+                                    ?>
+                                    <div class="option">
+                                        <span data-tooltip="Comprovante de Pagamento" data-flow="left"
+                                            style="text-align: center; z-index: 999;">
+                                            <a href="/uploads/<?php echo($comprovante); ?>" target="_blank"><i class='bx bx-file-blank'></i></a>
+                                        </span>
+                                    </div>
+                                    <?php
+                                        } else if($datePaid != "-" && empty($comprovante)) {
+                                    ?>
+                                    <div class="option">
+                                        <span data-tooltip="Apurar Comprovante" data-flow="left"
+                                            style="text-align: center; z-index: 999;">
+                                            <a onclick="apurarComprovante('<?php echo($lcto['documento']); ?>')"><i class='bx bx-file-find'></i></a>
+                                        </span>
+                                    </div>
+                                    <?php
+                                        } else {
+                                    ?>
+                                    <div class="option">
+                                        <span data-tooltip="Comprovante Indisponível" data-flow="left"
+                                            style="text-align: center; z-index: 999;">
+                                            <a style="cursor: not-allowed;"><i style="color: #AA0000;" class='bx bx-block'></i></a>
+                                        </span>
+                                    </div>
+                                    <?php
+                                        }
+                                    ?>
+                                </div>
+                            </td>
                         </tr>
                         <?php
                             }
                         ?>
                     </table>
+                </div>
+                <?php
+                    } else if(strlen($queryConsulta) > 0) {
+                ?>
+                <div class="card error-card" style="font-size: 1rem;">
+                    <h3 class="title">Sem resultados</h3>
+                    Nenhum titulo foi encontrado nos filtros informados.
                 </div>
                 <?php
                     }
@@ -185,9 +248,9 @@
 
     function manusearInput() {
         const inputLancamento = document.getElementById('input_lancamento');
-        const inputContrato = inputLancamento.value;
+        const inputCC = inputLancamento.value;
 
-        window.location.href = './?contrato=' + inputContrato;
+        window.location.href = './?cc=' + inputCC;
     }
 
     function formatISODateToCustomFormat(isoDateTime) {
@@ -243,24 +306,29 @@
     }
 
     function apurarComprovante(titulo) {
+        $("#overlay").show();
         $.ajax({
             type: "POST",
-            url: "./apurarComprovante.php",
+            url: "../apurarComprovante.php",
             data: {
                 titulo: titulo,
             },
             success: function(result) {
+                $("#overlay").hide();
+
                 tata.success('Comprovante apurado',
                     'O comprovante de pagamento foi apurado com sucesso.', {
                         duration: 6000
                     });
 
                 setTimeout(() => {
-                    atualizarLista()
+                    window.location.reload();
                 }, 500);
                 return;
             },
             error: function(result) {
+                $("#overlay").hide();
+
                 tata.error('Um erro ocorreu',
                     'Ocorreu um erro ao tentar apurar o comprovante de pagamento. (' + result
                     .responseJSON.descricao_erro + ')', {

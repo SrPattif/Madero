@@ -35,16 +35,25 @@
     ?>
 
     <main>
+        <div class="overlay" id="overlay">
+            <div class="overlay__inner">
+                <div class="overlay__content">
+                    <span class="spinner"></span>
+                    <br>
+                    Aguarde enquanto carregamos lançamentos
+                </div>
+            </div>
+        </div>
+
         <div class="page-content">
             <div class="new-card">
                 <div class="card-header">
-                    <h3><i class='bx bxs-hot bx-tada bx-rotate-270' ></i> NOVIDADE!</h3>
+                    <h3><i class='bx bxs-hot bx-tada bx-rotate-270'></i> NOVIDADE!</h3>
                 </div>
-                Agora, você pode pesquisar lançamentos por <span class="bold">contrato</span> ou <span class="bold">centro de custo</span>!
+                Agora, você pode pesquisar lançamentos por <span class="bold">contrato</span>, <span class="bold">centro de custo</span> ou <span
+                    class="bold">fornecedor</span>!
                 <br><br>
-                <a href="./detalhado/contrato/" class="simple-button" style="text-align: left;"><i class='bx bx-paperclip'></i> Pesquisar por Contrato</a>
-                <br>
-                <a href="./detalhado/cc/" class="simple-button" style="text-align: left;"><i class='bx bx-store'></i> Pesquisar por Centro de Custo</a>
+                Para isso, utilize a <a href="./detalhado/" class="simple-button" style="text-align: left;"><i class='bx bxs-rocket bx-tada'></i> Pesquisa avançada</a>!
             </div>
 
             <!--
@@ -71,12 +80,15 @@
                     -->
                 </div>
                 <div class="card-description">
-                    <span>Insira abaixo o número do lançamento que deseja consultar. Você pode inserir múltiplos títulos ao mesmo tempo. Para isso, basta separá-los com espaço.<br>Quando terminar a digitação, pressione <span class="key-input"><i class='bx bxs-keyboard'></i> ENTER</span> ou clique em <span class="key-input"><i class='bx bx-chevrons-right' ></i> PROSSEGUIR</span>.</span>
+                    <span>Insira abaixo o número do lançamento que deseja consultar. Você pode inserir múltiplos títulos
+                        ao mesmo tempo. Para isso, basta separá-los com espaço.<br>Quando terminar a digitação,
+                        pressione <span class="key-input"><i class='bx bxs-keyboard'></i> ENTER</span> ou clique em
+                        <span class="key-input"><i class='bx bx-chevrons-right'></i> PROSSEGUIR</span>.</span>
                 </div>
 
                 <div class="input-lcto">
                     <input type="text" id="input_lancamento" placeholder="Digite o número do lançamento">
-                    <div class="button" onclick="manusearInput();"><i class='bx bx-chevrons-right' ></i></div>
+                    <div class="button" onclick="manusearInput();"><i class='bx bx-chevrons-right'></i></div>
                 </div>
                 <div class="mensagem-inicial" id="div_msgInicial">
                     <i class='bx bx-chevrons-up'></i>
@@ -142,7 +154,7 @@
             listaLancamentos.push(lancamento);
         }
 
-        if(atualizar) {
+        if (atualizar) {
             atualizarLista();
         }
     }
@@ -158,7 +170,7 @@
 
             gerenciarListaLancamentos(titulo);
         });
-        
+
 
         inputLancamento.value = "";
         atualizarLista();
@@ -175,6 +187,8 @@
             ulLancamentos.removeChild(ulLancamentos.firstChild);
         }
 
+        $("#overlay").show();
+
         $.ajax({
             url: 'consultarLancamentos.php',
             type: 'POST',
@@ -184,7 +198,9 @@
             processData: false,
             contentType: false,
             success: function(response) {
-                if(response.length > 0) {
+                $("#overlay").hide();
+
+                if (response.length > 0) {
                     $('#div_msgIntermediaria').show();
                     $('#div_msgInicial').hide();
 
@@ -197,10 +213,11 @@
                     var documento = lancamento.documento;
 
                     var li_lancamento = document.createElement('li');
-                    li_lancamento.innerHTML = `<span onclick="gerenciarListaLancamentos('${documento}', true)">${documento} <i class="bx bx-x"></i></span>`;
+                    li_lancamento.innerHTML =
+                        `<span onclick="gerenciarListaLancamentos('${documento}', true)">${documento} <i class="bx bx-x"></i></span>`;
                     ulLancamentos.appendChild(li_lancamento);
 
-                    if(encontrado) {
+                    if (encontrado) {
                         var contrato = lancamento.contrato;
                         var filial = lancamento.filial;
                         var fornecedor = lancamento.fornecedor;
@@ -244,7 +261,7 @@
                                 </div>
                                 `;
 
-                        if(comprovante) {
+                        if (comprovante) {
                             htmlToInsert += `
                             <div class="comprovante" onclick="window.open('/uploads/${comprovante}', '_blank').focus();">
                                 <b><i class='bx bxs-file-pdf'></i> Comprovante de Pagamento</b>
@@ -299,6 +316,8 @@
 
             },
             error: function() {
+                $("#overlay").hide();
+
                 console.log('Erro ao obter dados do lançamento.')
             }
         });
@@ -306,7 +325,7 @@
     }
 
     function formatISODateToCustomFormat(isoDateTime) {
-        if(!isValidISODate(isoDateTime)) {
+        if (!isValidISODate(isoDateTime)) {
             return "-";
         }
         // Criar um objeto Date a partir da data ISO
@@ -331,7 +350,7 @@
 
         return formattedDate;
     }
-    
+
     function isValidISODate(dateStr) {
         const date = new Date(dateStr);
         // Verifica se o valor não é inválido e se não é igual a "-0001-11-30T00:00:00Z"
@@ -356,13 +375,15 @@
     function numberFormat(number, decimals = 2, decimalSeparator = ',', thousandSeparator = '.') {
         const fixedNumber = number.toFixed(decimals);
         const [integerPart, decimalPart] = fixedNumber.split('.');
-        
+
         const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
 
         return `${formattedInteger}${decimalSeparator}${decimalPart}`;
     }
 
     function apurarComprovante(titulo) {
+        $("#overlay").show();
+
         $.ajax({
             type: "POST",
             url: "./apurarComprovante.php",
@@ -370,6 +391,8 @@
                 titulo: titulo,
             },
             success: function(result) {
+                $("#overlay").hide();
+
                 tata.success('Comprovante apurado',
                     'O comprovante de pagamento foi apurado com sucesso.', {
                         duration: 6000
@@ -381,6 +404,8 @@
                 return;
             },
             error: function(result) {
+                $("#overlay").hide();
+
                 tata.error('Um erro ocorreu',
                     'Ocorreu um erro ao tentar apurar o comprovante de pagamento. (' + result
                     .responseJSON.descricao_erro + ')', {
@@ -389,7 +414,6 @@
             }
         });
     }
-
     </script>
 
 </body>
