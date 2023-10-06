@@ -8,8 +8,8 @@
 
     $queryConsulta = "";
     $rowsRazao = array();
-    if(isset($_GET['cc'])) {
-        $queryConsulta = mysqli_real_escape_string($mysqli, $_GET['cc']);
+    if(isset($_GET['q'])) {
+        $queryConsulta = mysqli_real_escape_string($mysqli, $_GET['q']);
     }
 
     if(strlen($queryConsulta) > 0) {
@@ -248,9 +248,9 @@
 
     function manusearInput() {
         const inputLancamento = document.getElementById('input_lancamento');
-        const inputCC = inputLancamento.value;
+        const query = inputLancamento.value;
 
-        window.location.href = './?cc=' + inputCC;
+        window.location.href = './?q=' + query;
     }
 
     function formatISODateToCustomFormat(isoDateTime) {
