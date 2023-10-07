@@ -1,0 +1,116 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+
+* {
+    font-family: "Poppins";
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    text-align: center;
+    background-color: #000;
+
+    color: white;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.madero-logo {
+    width: 200px;
+    height: 35px;
+    margin-bottom: 3em;
+}
+
+.page-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1rem;
+
+    -webkit-animation-name: fadeInDown;
+    animation-name: fadeInDown;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.header {
+    margin-bottom: 2em;
+}
+
+.home-btn {
+    margin-top: 1em;
+    font-weight: bold;
+    transition: all 1s;
+    font-size: .8em;
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+}
+
+.home-btn:hover {
+    letter-spacing: 1px;
+}
+
+@-webkit-keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+.bold {
+    font-weight: bold;
+}
+
+table {
+    th {
+        text-align: right;
+        width: 30%;
+        padding-right: .5rem;
+    }
+    td {
+        text-align: left;
+        width: 70%;
+        padding-left: .5rem;
+    }
+}
+
+.request-data {
+    border: 2px solid #d3d3d3;
+    border-radius: 23px;
+    padding: .6em;
+    margin-bottom: 1em;
+}

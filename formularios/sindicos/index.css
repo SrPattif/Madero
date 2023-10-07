@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+* {
+  font-family: "Poppins";
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  text-align: center;
+  background-color: #000;
+  color: white;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.madero-logo {
+  width: 200px;
+  height: 35px;
+  margin-bottom: 3em;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation-name: fadeInDown;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.header {
+  margin-bottom: 2em;
+}
+
+.continue-btn {
+  width: 100%;
+  box-sizing: border-box;
+  font-weight: bold;
+  border: 2px solid #ffffff;
+  border-radius: 23px;
+  padding: 0.2em 1em;
+  transition: all 0.4s;
+  cursor: pointer;
+}
+
+.continue-btn:hover {
+  background-color: #ffffff;
+  letter-spacing: 2px;
+  color: black;
+}
+
+.bold {
+  font-weight: bold;
+}
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}/*# sourceMappingURL=index.css.map */
