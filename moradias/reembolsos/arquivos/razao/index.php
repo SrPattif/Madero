@@ -325,12 +325,14 @@
             processData: false,
             contentType: false,
             success: function(response) {
+                console.log(response);
                 window.location.href = '?success=true';
 
                 $('#verifyColumnsButton').html("Processar");
                 $('#btn_autoFill').show();
             },
-            error: function() {
+            error: function(response) {
+                console.log(response);
                 tata.error('Um erro ocorreu',
                     'Ocorreu um erro ao enviar os dados para o backend. Por favor, tente novamente.', {
                         duration: 3000

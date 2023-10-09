@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         //var_dump($databaseColumnsType);
 
-        $query = "INSERT INTO razao (";
+        $query = "REPLACE INTO razao (";
         $query .= implode(",", array_keys($insertArray[0]));
         $query .= ") VALUES";
 
@@ -160,15 +160,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
                 $amount ++;
             }
+
             $query .= ")";
             $valuesAmount++;
         }
 
         /*
+
+        $query .= " ON DUPLICATE KEY UPDATE";
+            $ind = 0;
+            foreach (array_keys($insertArray[0]) as $col) {
+                if($ind == 0) {
+                    $query .= " ";
+                } else {
+                    $query .= ", ";
+                }
+                $query .= $col . "=VALUES(" . $col . ")";
+                $ind++;
+            }
+            
+        */
+        $query .= ";";
+
         $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
         fwrite($myfile, $query);
         fclose($myfile);
-        */
+
         $resultColumns = $mysqli->query($query);
         if($resultColumns) {
             // Remover dados duplicados
