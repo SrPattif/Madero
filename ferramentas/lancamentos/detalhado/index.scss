@@ -303,22 +303,8 @@ input:focus {
 }
 
 .input-lcto {
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-
+    display: block;
     margin-bottom: .5rem;
-    gap: .8rem;
-
-    .button {
-        width: 3%;
-        height: 100%;
-
-        margin: 0;
-
-        box-sizing: border-box;
-    }
 
     input {
         box-sizing: border-box;
@@ -398,6 +384,18 @@ input:focus {
     }
 }
 
+@media (max-width: 950px) {
+    .double-inputs {
+        width: 100% !important;
+        display: block !important;
+
+        .input-group {
+            width: 100% !important;
+            margin-bottom: 1em;
+        }
+    }
+}
+
 .overlay {
     z-index: 9999999;
     left: 0;
@@ -465,6 +463,21 @@ input:focus {
     .option:last-child {
         border: none;
     }
+}
+
+label {
+    display: block;
+    font-size: .9rem;
+    font-weight: bold;
+}
+
+.double-inputs {
+    width: 100%;
+    display: flex;
+    gap: 2em;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+    box-sizing: border-box;
 }
 
 .status {
