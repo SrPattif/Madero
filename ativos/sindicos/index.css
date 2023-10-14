@@ -1,0 +1,128 @@
+.double-cards {
+  display: flex;
+  gap: 2em;
+}
+.double-cards .card {
+  width: 50%;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.card {
+  border: 2px solid #d3d3d3;
+  border-radius: 23px;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+@media (max-width: 1200px) {
+  .double-cards, .triple-cards {
+    display: block !important;
+    width: 100%;
+  }
+  .double-cards .card, .triple-cards .card {
+    width: 100%;
+  }
+}
+table {
+  border: 2px solid #D3D3D3;
+  width: 100%;
+  text-align: left;
+  border-radius: 12px;
+  overflow: hidden;
+}
+table td {
+  font-size: 13px;
+  padding: 0.2em 0;
+}
+table th {
+  background: #DDDDDD;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+table tr {
+  transition: all 0.2s;
+  cursor: pointer;
+}
+table tr:hover {
+  background-color: #D3D3D3;
+}
+
+.number-blur {
+  filter: blur(7px);
+}
+
+.blur-manager {
+  margin: 1rem 0 0 0;
+  text-align: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+.blur-manager .blur-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.blur-manager .blur-button i {
+  margin-right: 0.3rem;
+  font-size: 1.2rem;
+}
+
+.blur-manager:hover {
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.page-content {
+  margin-top: 1rem !important;
+}
+
+.card-button {
+  overflow: hidden !important;
+  cursor: pointer;
+  height: 100% !important;
+}
+.card-button .lines {
+  display: inline-block;
+  width: 100%;
+  transition: transform 0.1s;
+}
+.card-button .lines:hover {
+  transform: scale(1.1);
+}
+.card-button .line {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.card-button i {
+  position: relative;
+  float: right;
+  font-size: 6rem;
+  top: 0;
+  right: 0px;
+}
+
+.triple-cards {
+  display: flex;
+  width: 100%;
+  gap: 2em;
+}
+.triple-cards .left {
+  float: left;
+  height: 100%;
+  width: 100%;
+}
+.triple-cards .left .card {
+  height: 100%;
+}
+.triple-cards .right {
+  float: right;
+  height: 100%;
+  width: 100%;
+}
+.triple-cards .right .card {
+  height: 50%;
+}/*# sourceMappingURL=index.css.map */
