@@ -1,6 +1,4 @@
 <?php
-    date_default_timezone_set('America/Sao_Paulo');
-
     require($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
 
     $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);

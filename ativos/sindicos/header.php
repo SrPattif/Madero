@@ -21,6 +21,8 @@ if (!isset($_SESSION)) {
 
         <ul class="nav-list">
             <li><a href="/ativos/sindicos/"><i class='bx bxs-home'></i> Início</a></li>
+            <li><a href="/ativos/sindicos/solicitacoes/"><i class='bx bxs-paper-plane'></i> Solicitações</a></li>
+            <li><a href="/ativos/sindicos/moradias/"><i class='bx bxs-home'></i> Síndicos</a></li>
         </ul>
     </nav>
 </header>
