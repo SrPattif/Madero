@@ -90,7 +90,7 @@
                             <div class="status <?php echo($statusColor); ?>"><?php echo($statusCode); ?></div>
                         </td>
                         <td style="text-align: center;"><?php echo($row['codigo_externo']); ?></td>
-                        <td style="text-align: center;"><?php echo($row['criado_em']); ?></td>
+                        <td style="text-align: center;"><?php echo(date_format(date_timezone_set(date_create($row['criado_em']), timezone_open('America/Sao_Paulo')), "d/m/Y H:i:s")); ?></td>
                         <td><?php echo($row['operacao']); ?></td>
                         <td><?php echo($row['endereco']); ?></td>
                         <td><?php echo($row['nome']); ?></td>
