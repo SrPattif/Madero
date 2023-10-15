@@ -70,6 +70,7 @@
 
                 <table class="ranking-table">
                     <tr>
+                        <th></th>
                         <th>#</th>
                         <th>Endereço da Moradia</th>
                         <th>Novo Síndico</th>
@@ -82,8 +83,21 @@
                                     array_push($rows, $row);
                                 }
                                 foreach($rows as $row) {
+                                    $statusColor = "orange";
+                                    switch ($row['situacao']) {
+                                        case 'aprovado':
+                                            $statusColor = "green";
+                                            break;
+                                        case 'pendente':
+                                            $statusColor = "orange";
+                                            break;
+                                        case 'rejeitado':
+                                            $statusColor = "red";
+                                            break;
+                                    }
                             ?>
                     <tr>
+                        <td><div class="circle circle-<?php echo($statusColor); ?>"></div></td>
                         <td style="text-align: center;"><?php echo(intval($row['id'])); ?></td>
                         <td><?php echo($row['endereco']); ?></td>
                         <td><?php echo($row['nome']); ?></td>
