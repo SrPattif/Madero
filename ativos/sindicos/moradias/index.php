@@ -55,6 +55,7 @@
                         <th>Dig Financeiro</th>
                         <th>Contrato</th>
                         <th>Endereço</th>
+                        <th> </th>
                         <th>Síndico</th>
                     </tr>
                     <?php
@@ -66,6 +67,7 @@
                         <td style="text-align: center;"><?php echo($row['digito_financeiro']); ?></td>
                         <td style="text-align: center;"><?php echo($row['contrato_totvs']); ?></td>
                         <td class="bold"><?php echo($row['endereco']); ?></td>
+                        <td style="text-align: center;"><?php echo($row['chapa']); ?></td>
                         <td><?php echo($row['nome']); ?></td>
                     </tr>
 
