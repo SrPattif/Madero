@@ -38,7 +38,7 @@ if(!empty($operacaoQuery)) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moradias Grupo Madero | Solicitar troca de síndico</title>
+    <title>Solicitar Troca de Síndico | Controladoria Grupo Madero</title>
 
     <link rel="stylesheet" href="./index.css" />
 

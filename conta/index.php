@@ -49,7 +49,7 @@ while ($row = mysqli_fetch_array($resultHistorico)) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controladoria Grupo Madero | Sua Conta</title>
+    <title>Sua Conta | Controladoria Grupo Madero</title>
 
     <!-- Estilos -->
     <link rel="stylesheet" href="./defaultStyle.css" />

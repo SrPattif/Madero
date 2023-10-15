@@ -16,7 +16,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controladoria Grupo Madero | Login</title>
+    <title>Autenticação | Controladoria Grupo Madero</title>
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 

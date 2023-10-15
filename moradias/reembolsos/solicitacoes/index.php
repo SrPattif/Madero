@@ -31,7 +31,7 @@ if (isset($_SESSION['month'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moradias Grupo Madero | Solicitações de Reembolso</title>
+    <title>Solicitações de Reembolso | Controladoria Grupo Madero</title>
 
     <!-- Estilos -->
     <link rel="stylesheet" href="/moradias/reembolsos/defaultStyle.css" />
