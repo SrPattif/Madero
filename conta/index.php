@@ -27,6 +27,10 @@ $setor = $userData['setor'];
 $cargo = $userData['cargo'];
 $username = $userData['username'];
 $email = $userData['email'];
+$imagemPerfil = "/assets/images/default-user.png";
+if(isset($userData['imagem_perfil'])) {
+    $imagemPerfil = "/uploads/pfp/" . $userData['imagem_perfil'];
+}
 
 $queryHistorico = "SELECT * FROM historico_contas WHERE id_usuario=$userId ORDER BY data DESC LIMIT 5;";
 $resultHistorico = mysqli_query($mysqli, $queryHistorico);
@@ -69,8 +73,7 @@ while ($row = mysqli_fetch_array($resultHistorico)) {
                 <div class="left">
                     <div class="card">
                         <div class="user-details">
-                            <div class="user-image">
-                                <img src="/assets/images/default-user.png" alt="">
+                            <div class="user-image" style="background-image: url('<?php echo($imagemPerfil); ?>');">
                             </div>
                             <h2><?php echo($nomeUsuario); ?></h2>
                             <div class="user-description bold"><?php echo($username); ?></div>
@@ -78,7 +81,10 @@ while ($row = mysqli_fetch_array($resultHistorico)) {
                             <div class="user-description"><?php echo($email); ?></div>
                         </div>
                     </div>
-
+                    <div class="card card-button" onclick="abrirModal('modal_foto')">
+                        ALTERAR FOTO
+                        <i class='bx bx-right-arrow-alt'></i>
+                    </div>
                     <div class="card card-button">
                         MUDAR SENHA
                         <i class='bx bx-right-arrow-alt'></i>
@@ -126,6 +132,20 @@ while ($row = mysqli_fetch_array($resultHistorico)) {
                 </div>
             </div>
         </div>
+
+        <div id="modal_foto" class="modal">
+            <div class="modal-content">
+                <div class="drop-files" id="drop-files-area">
+                    <form class="center">
+                        <span><i class='bx bx-cloud-upload'></i></span>
+                        <h4>Solte aqui sua nova foto de perfil</h4>
+                        <p id="drop-description" class="font-size: .2em;">Faça uma boa escolha!</p>
+                    </form>
+                </div>
+
+                <div class="button" onclick="closeModal('modal_foto')" style="width: 100%;">FECHAR</div>
+            </div>
+        </div>
     </main>
 
     <script src="mobile-navbar.js"></script>
@@ -133,6 +153,138 @@ while ($row = mysqli_fetch_array($resultHistorico)) {
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+    function abrirModal(modalId) {
+        $("#" + modalId).css("display", "flex");
+
+        setTimeout(function() {
+            $("#" + modalId).addClass("show");
+        }, 10);
+    }
+
+    function closeModal(modalId) {
+        $("#" + modalId).removeClass("show");
+
+        setTimeout(function() {
+            $("#" + modalId).css("display", "none");
+        }, 300);
+    }
+
+    $(document).ready(function() {
+        $(document).on("keyup", function(event) {
+            if (event.keyCode === 27) {
+                $('[id^="modal_"]').removeClass("show");
+
+                setTimeout(function() {
+                    $('[id^="modal_"]').css("display", "none");
+                }, 300);
+            }
+        });
+    });
+
+    //
+
+
+    let dropArea = document.getElementById('drop-files-area')
+    let dropInstruictions = document.getElementById('drop-description');
+    let filesDone = 0
+    let filesToDo = 0
+    let progressBar = document.getElementById('progress-bar')
+
+
+    ;
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false)
+    })
+
+    function preventDefaults(e) {
+        e.preventDefault()
+        e.stopPropagation()
+    }
+
+    ;
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false)
+    })
+
+    ;
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false)
+    })
+
+    function highlight(e) {
+        dropArea.classList.add('highlight')
+        dropInstruictions.style = 'display: none;';
+
+    }
+
+    function unhighlight(e) {
+        dropArea.classList.remove('highlight')
+        dropInstruictions.style = 'display: block;';
+    }
+
+    dropArea.addEventListener('drop', handleDrop, false)
+
+    function handleDrop(e) {
+        closeModal('modal_foto');
+
+        let dt = e.dataTransfer;
+        let files = dt.files;
+
+        if (files.length == 1) {
+            let file = files[0];
+
+            if (file.type == "image/png" || file.type == "image/jpeg") {
+                uploadFile(file);
+
+            } else {
+                tata.error('Tipo de Arquivo Inválido', 'Apenas imagens podem ser enviadas.', {
+                    duration: 3000
+                });
+            }
+        } else {
+            tata.error('Quantidade de Arquivos Inválida', 'Você pode enviar apenas uma imagem.', {
+                duration: 3000
+            });
+        }
+    }
+
+    function uploadFile(file) {
+        let formData = new FormData()
+
+        formData.append('file', file)
+
+        $.ajax({
+            url: 'uploadPFP.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log(response);
+                if (!response.salvo) {
+                    tata.error('Erro ao processar arquivo', 'Ocorreu um erro ao processar o arquivo.', {
+                        duration: 3000
+                    })
+                } else {
+                    tata.success('Imagem de Perfil Alterada',
+                        'Sua imagem de perfil foi alterada com sucesso!', {
+                            duration: 3000
+                        })
+                }
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2500);
+            },
+            error: function(response) {
+                console.log(response);
+                
+                tata.error('Erro ao processar arquivo', 'Ocorreu um erro ao processar o arquivo.', {
+                    duration: 3000
+                })
+            }
+        });
+    }
     </script>
 
 </body>

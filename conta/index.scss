@@ -438,14 +438,19 @@ p {
 
 .user-details {
     text-align: center;
+
+    overflow: hidden;
 }
 
 .user-image {
-    img {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-    }
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    margin: 0 auto;
 }
 
 .card-button {
@@ -466,4 +471,85 @@ p {
 
 .disconnect {
     color: rgb(187, 17, 17);
+}
+
+/* The Modal (background) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999999999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    border-radius: 23px;
+    background-color: #fefefe;
+    margin: 2em auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    height: auto;
+    overflow: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+}
+
+.drop-files {
+    border: 2px dotted #3e3e3e;
+    border-radius: 23px;
+    padding: 2em 0;
+    height: 30% !important;
+
+    .center {
+        text-align: center;
+        color: #3e3e3e;
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        p {
+            font-size: .8em;
+            transition: all 1s;
+        }
+
+        i {
+            font-size: 4em;
+        }
+    }
+}
+
+.highlight {
+    border: 2px solid #3e3e3e;
+}
+
+@media (max-width: 920px) {
+    .cards-container {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+
+        .left, .right {
+            width: 100%;
+        }
+    }
 }
