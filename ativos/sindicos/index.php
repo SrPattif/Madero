@@ -347,7 +347,13 @@
             async: true,
         });
 
-        return Promise.all([request3]);
+        const request2 = $.ajax({
+            type: "GET",
+            url: "./index_analiseTrocasMensal.php",
+            async: true,
+        });
+
+        return Promise.all([request2, request3]);
     }
 
     function updateDOM(result) {
@@ -355,25 +361,6 @@
         $("#div_qtdeTrocas").text(result.qtde_solicitacoes);
         $("#div_qtdeTrocasMes").text(result.qtde_solicitacoes_mes);
     }
-
-    const requestData = {
-        "2023": {
-            "01": 0,
-            "02": 0,
-            "03": 0,
-            "04": 0,
-            "05": 94,
-            "06": 121,
-            "07": 49,
-            "08": 58,
-            "09": 92,
-            "10": 22,
-            "11": 0,
-            "12": 0,
-        }
-    }
-
-    loadGraph(requestData);
 
     function loadGraph(requestData) {
         console.log(requestData)
@@ -446,8 +433,9 @@
     $(document).ready(() => {
         getData()
             .then(results => {
-                const [data3] = results;
+                const [data2, data3] = results;
                 updateDOM(data3);
+                loadGraph(data2);
             })
             .catch(error => {
                 console.error(error);
