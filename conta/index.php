@@ -37,7 +37,7 @@ while ($row = mysqli_fetch_array($resultHistorico)) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt_BR">
 
 <head>
     <!-- Google tag (gtag.js) -->
@@ -65,45 +65,64 @@ while ($row = mysqli_fetch_array($resultHistorico)) {
 
     <main>
         <div class="page-content">
-            <div class="card">
-                <h2><?php echo($nomeUsuario); ?></h2>
-                <div class="user-description bold"><?php echo($username); ?></div>
-                <div class="user-description"><?php echo($cargo); ?>, <?php echo($setor); ?>.</div>
-                <div class="user-description"><?php echo($email); ?></div>
-
-                <br>
-                
-                <div class="simple-button" style="color: #2f2f94;"><i class='bx bxs-lock-alt'></i> MUDAR SENHA</div>
-                <div class="simple-button" style="color: #AA0000;"><i class='bx bx-log-out'></i> DESCONECTAR</div>
-
-                <div class="card" style="margin-top: 2rem;">
-                    <div class="card-header">
-                        <h3>Suas Permissões</h3>
+            <div class="cards-container">
+                <div class="left">
+                    <div class="card">
+                        <div class="user-details">
+                            <div class="user-image">
+                                <img src="/assets/images/default-user.png" alt="">
+                            </div>
+                            <h2><?php echo($nomeUsuario); ?></h2>
+                            <div class="user-description bold"><?php echo($username); ?></div>
+                            <div class="user-description"><?php echo($cargo); ?>, <?php echo($setor); ?>.</div>
+                            <div class="user-description"><?php echo($email); ?></div>
+                        </div>
                     </div>
-                    <span style="font-size: 1rem;">Você possui <span class="bold">acesso total</span> ao sistema.</span>
+
+                    <div class="card card-button">
+                        MUDAR SENHA
+                        <i class='bx bx-right-arrow-alt'></i>
+                    </div>
+                    <a href="/login/desconectar.php">
+                        <div class="card card-button disconnect">
+                            DESCONECTAR
+                            <i class='bx bx-log-out'></i>
+                        </div>
+                    </a>
                 </div>
 
-                <div class="card" style="margin-top: 2rem;">
-                    <div class="card-header">
-                        <h3>Sua Atividade</h3>
+                <div class="right">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Suas Permissões</h3>
+                        </div>
+                        <span style="font-size: 1rem;">Você possui <span class="bold">acesso total</span> ao
+                            sistema.</span>
                     </div>
-                    <div class="timeline">
-                        <?php
+
+                    <div class="card" style="margin-top: 2rem;">
+                        <div class="card-header">
+                            <h3>Sua Atividade</h3>
+                        </div>
+                        <div class="timeline">
+                            <?php
                             foreach($rowsHistorico as $evento) {
                                 $tipoEvento = $evento['tipo_evento'];
                                 $dataEvento = date_format(date_timezone_set(date_create($evento['data']), timezone_open('America/Sao_Paulo')), "d/m/Y H:i:s");
                         ?>
-                        <div class="timeline-event">
-                            <div class="timeline-event-icon"></div>
-                            <div class="timeline-event-content">
-                                <p class="timeline-event-date"><?php echo($descricaoEventos[$tipoEvento]); ?></p>
-                                <p class="timeline-event-description"><?php echo($dataEvento); ?></p>
+                            <div class="timeline-event">
+                                <div class="timeline-event-icon"></div>
+                                <div class="timeline-event-content">
+                                    <p class="timeline-event-date"><?php echo($descricaoEventos[$tipoEvento]); ?></p>
+                                    <p class="timeline-event-description"><?php echo($dataEvento); ?></p>
+                                </div>
                             </div>
-                        </div>
-                        <?php
+                            <?php
                             }
                         ?>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>

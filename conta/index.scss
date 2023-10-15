@@ -322,7 +322,7 @@ table {
 }
 
 .user-description {
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 p {
@@ -416,4 +416,54 @@ p {
     transition: all .3s;
     width: 100%;
     box-sizing: border-box;
+}
+
+.cards-container {
+    display: flex;
+
+    gap: 2rem;
+
+    .left {
+        float: left;
+
+        width: 25%;
+    }
+
+    .right {
+        float: right;
+
+        width: 75%;
+    }
+}
+
+.user-details {
+    text-align: center;
+}
+
+.user-image {
+    img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+    }
+}
+
+.card-button {
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .2s;
+
+    i {
+        font-size: 1.3rem;
+        position: absolute;
+        right: 1rem;
+    }
+}
+
+.card-button:hover {
+    letter-spacing: 1px;
+}
+
+.disconnect {
+    color: rgb(187, 17, 17);
 }
