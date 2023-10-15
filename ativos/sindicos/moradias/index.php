@@ -82,10 +82,6 @@
     <script src="/mobile-navbar.js"></script>
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script>
-    $("#export-table-btn").click(function() {
-        window.location.href = "/ativos/sindicos/exportador/tabelaMoradias.php";
-    });
-
     const filterInput = document.getElementById('filterInput');
     const dataTable = document.getElementById('dataTable');
 
@@ -176,6 +172,12 @@
             }
         });
     }
+
+    $(document).ready(() => {
+        $("#export-table-btn").click(function() {
+            window.location.href = "/ativos/sindicos/exportador/tabelaMoradias.php";
+        });
+    })
     </script>
 </body>
 
