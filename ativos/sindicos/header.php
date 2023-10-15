@@ -9,10 +9,12 @@ if (!isset($_SESSION)) {
 
 <header>
     <nav>
-        <div class="logo" href="/">
-            <img class="madero-logo" src="/assets/images/madero-white.png" alt="">
-            <span class="name" onclick="window.location.href='/'">SÍNDICOS</span>
-        </div>
+        <a href="/">
+            <div class="logo" href="/">
+                <img class="madero-logo" src="/assets/images/madero-white.png" alt="">
+                <span class="name">SÍNDICOS</span>
+            </div>
+        </a>
         <div class="mobile-menu">
             <div class="line1"></div>
             <div class="line2"></div>
