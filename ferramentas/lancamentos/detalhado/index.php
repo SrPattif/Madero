@@ -236,7 +236,7 @@
                                     <?php
                                         } else if($datePaid != "-" && empty($comprovante)) {
                                     ?>
-                                    <div class="option">
+                                    <div class="option" id="comprov_<?php echo($lcto['documento']); ?>">
                                         <span data-tooltip="Apurar Comprovante" data-flow="left"
                                             style="text-align: center; z-index: 999;">
                                             <a onclick="apurarComprovante('<?php echo($lcto['documento']); ?>')"><i
@@ -404,13 +404,19 @@
             success: function(result) {
                 $("#overlay").hide();
 
+                $("#comprov_" + titulo).html(`<span data-tooltip="Comprovante de Pagamento" data-flow="left"
+                                            style="text-align: center; z-index: 999;">
+                                            <a href="/uploads/${result.nome_arquivo}" target="_blank"><i
+                                                    class='bx bx-file-blank'></i></a>
+                                        </span>`);
+
                 tata.success('Comprovante apurado',
                     'O comprovante de pagamento foi apurado com sucesso.', {
                         duration: 6000
                     });
 
                 setTimeout(() => {
-                    window.location.reload();
+                    //window.location.reload();
                 }, 500);
                 return;
             },
