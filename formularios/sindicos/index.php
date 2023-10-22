@@ -22,17 +22,28 @@
             <h2>Solicitar Troca de Síndico</h2>
             <p>Formulário para realizar a alteração de síndicos de moradias do Grupo Madero.
                 <br>
-                Em caso de dúvidas, entre em contato: <span class="bold"><i class='bx bxl-whatsapp'></i> (41) 9 8894-8303</span>.
+                Em caso de dúvidas, entre em contato: <span class="bold"><i class='bx bxl-whatsapp'></i> (41) 9
+                    8894-8303</span>.
             </p>
         </div>
 
-        <div id="continue-btn" class="continue-btn" onclick="window.location.href='./solicitacao/'">
+        <div id="continue-btn" class="continue-btn" onclick="startForm()">
             INICIAR <i class='bx bx-right-arrow-alt'></i>
         </div>
     </div>
 
     <script src="/libs/tatatoast/dist/tata.js"></script>
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script>
+    function startForm() {
+        localStorage.removeItem("form_telephone");
+        localStorage.removeItem("form_shop");
+        localStorage.removeItem("form_accommodation");
+        localStorage.removeItem("form_step");
+
+        window.location.href = './solicitacao/'
+    }
+    </script>
 </body>
 
 </html>
