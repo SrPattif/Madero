@@ -252,7 +252,7 @@
     let filesToDo = 0
     let progressBar = document.getElementById('progress-bar')
 
-
+    ;
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropArea.addEventListener(eventName, preventDefaults, false)
     })

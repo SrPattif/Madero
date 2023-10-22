@@ -145,7 +145,9 @@ if(isset($_FILES['file'])) {
             exit();
         }
 
-        $queryCheck = "SELECT * FROM comprovantes WHERE dia='{$day}' AND mes='{$month}' AND ano='{$year}';";
+        $hash = hash_file('sha256', $fileTmpName);
+
+        $queryCheck = "SELECT * FROM comprovantes WHERE hash='{$hash}';";
         $resultCheck = mysqli_query($mysqli, $queryCheck);
         if(mysqli_num_rows($resultCheck) > 0) {
             header("Content-Type: application/json");
@@ -156,7 +158,7 @@ if(isset($_FILES['file'])) {
 
         $referencia = date_create("$year-$month-$day")->format('Y-m-d');
 
-        $query = "INSERT INTO comprovantes (`nome_interno`, `codigo_interno`, `nome_original`, `tipo_arquivo`, `dia`, `mes`, `ano`, `referencia`) VALUES ('{$fileName}', '{$fileNewId}', '{$originalFileName}', '{$fileExtension}', '{$day}', '{$month}', '{$year}', '{$referencia}');";
+        $query = "INSERT INTO comprovantes (`nome_interno`, `codigo_interno`, `nome_original`, `tipo_arquivo`, `hash`, `dia`, `mes`, `ano`, `referencia`) VALUES ('{$fileName}', '{$fileNewId}', '{$originalFileName}', '{$fileExtension}', '{$hash}', '{$day}', '{$month}', '{$year}', '{$referencia}');";
         $result = mysqli_query($mysqli, $query);
 
         if ($result) {
