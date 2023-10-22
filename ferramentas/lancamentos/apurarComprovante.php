@@ -54,7 +54,7 @@ try {
         $arquivoComprovante = $comprovante['arquivo_comprovante'];
 
         $arquivoPDF = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $arquivoComprovante;
-        $textoProcurado = strval('R$' . number_format($dadosTitulo['valor_total'], 2, ",", "."));
+        $textoProcurado = strval(number_format($dadosTitulo['valor_total'], 2, ",", "."));
         $paginasEncontradas = array();
 
         $parser = new \Smalot\PdfParser\Parser();
