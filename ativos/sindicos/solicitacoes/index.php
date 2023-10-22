@@ -197,12 +197,12 @@
                 console.log(result)
                 tata.success('Solicitação aprovada',
                     'A solicitação foi recusada.', {
-                        duration: 2500
+                        duration: 1500
                     });
 
                 setTimeout(() => {
                     window.location.reload();
-                }, 2500);
+                }, 1500);
                 return;
             },
             error: function(result) {
