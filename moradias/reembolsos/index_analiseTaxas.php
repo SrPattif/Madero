@@ -19,7 +19,7 @@ $anos = array(
 );
 
 
-$query = "SELECT tt.description AS nome_taxa, m.ano, m.mes, COALESCE(SUM(avr.valor_taxa), 0) AS valor_total FROM ( SELECT DISTINCT description, id FROM tipos_taxas ) tt CROSS JOIN ( SELECT DISTINCT ano, mes FROM alojamentos_valores_reembolso ) m LEFT JOIN alojamentos_valores_reembolso avr ON tt.id = avr.id_taxa AND m.ano = avr.ano AND m.mes = avr.mes GROUP BY tt.description, m.ano, m.mes ORDER BY ano,mes ASC;";
+$query = "SELECT tt.description AS nome_taxa, m.ano, m.mes, COALESCE(SUM(avr.valor_taxa), 0) AS valor_total FROM ( SELECT DISTINCT description, id FROM tipos_taxas ) tt CROSS JOIN ( SELECT DISTINCT ano, mes FROM alojamentos_valores_reembolso ) m LEFT JOIN alojamentos_valores_reembolso avr ON tt.id = avr.id_taxa AND m.ano = avr.ano AND m.mes = avr.mes GROUP BY tt.description, m.ano, m.mes ORDER BY ano,mes DESC, valor_total DESC;";
 $result = mysqli_query($mysqli, $query);
 $row = mysqli_num_rows($result);
 $rows = array();
