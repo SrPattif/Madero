@@ -51,7 +51,7 @@ $colunas_dinamicas_concatenadas = implode(", ", $colunas_dinamicas);
 $colunas_query = "$colunas_fixas, $colunas_dinamicas_concatenadas";
 
 // Consulta principal com todas as colunas
-$query_principal = "SELECT $colunas_query FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso avr ON a.id = avr.id_alojamento AND avr.mes = {$month} AND avr.ano = {$year} GROUP BY a.id";
+$query_principal = "SELECT $colunas_query FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso avr ON a.id = avr.id_alojamento AND avr.mes = {$month} AND avr.ano = {$year} WHERE a.condominio=1 GROUP BY a.id";
 
 
 // Executar a consulta principal e obter o resultado

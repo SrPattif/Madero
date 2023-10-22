@@ -17,7 +17,7 @@
         }
     }
 
-    $query = "SELECT a.*, COALESCE( SUM( CASE WHEN tt.refundable = 1 THEN avr.valor_taxa ELSE 0 END ), 0 ) AS valor_reembolsavel, COALESCE( SUM( CASE WHEN tt.refundable = 0 THEN avr.valor_taxa ELSE 0 END ), 0 ) AS valor_nao_reembolsavel, b.id AS id_boleto, b.codigo_interno AS arquivo_boleto, b.arquivo_comprovante AS comprovante_boleto, r.documento AS titulo_razao, r.data_baixa, avr.`status` AS status_solicitacao FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso avr ON a.id = avr.id_alojamento AND avr.mes = {$month} AND avr.ano = {$year} LEFT JOIN boletos b ON b.id_alojamento = a.id AND MONTH(b.data_vencimento) = {$month} AND YEAR(b.data_vencimento) = {$year} LEFT JOIN razao r ON b.lancamento = r.documento LEFT JOIN tipos_taxas tt ON avr.id_taxa = tt.id GROUP BY a.id;";
+    $query = "SELECT a.*, COALESCE( SUM( CASE WHEN tt.refundable = 1 THEN avr.valor_taxa ELSE 0 END ), 0 ) AS valor_reembolsavel, COALESCE( SUM( CASE WHEN tt.refundable = 0 THEN avr.valor_taxa ELSE 0 END ), 0 ) AS valor_nao_reembolsavel, b.id AS id_boleto, b.codigo_interno AS arquivo_boleto, b.arquivo_comprovante AS comprovante_boleto, r.documento AS titulo_razao, r.data_baixa, avr.`status` AS status_solicitacao FROM alojamentos a LEFT JOIN alojamentos_valores_reembolso avr ON a.id = avr.id_alojamento AND avr.mes = {$month} AND avr.ano = {$year} LEFT JOIN boletos b ON b.id_alojamento = a.id AND MONTH(b.data_vencimento) = {$month} AND YEAR(b.data_vencimento) = {$year} LEFT JOIN razao r ON b.lancamento = r.documento LEFT JOIN tipos_taxas tt ON avr.id_taxa = tt.id WHERE a.condominio=1 GROUP BY a.id;";
     $result = mysqli_query($mysqli, $query);
     $rows = array();
     while($row = mysqli_fetch_array($result)){

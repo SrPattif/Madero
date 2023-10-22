@@ -23,7 +23,7 @@ if (isset($_SESSION['month']) && ($_SESSION['month'] > 0 && $_SESSION['month'] <
 // Consulta para obter todas as métricas em uma única consulta
 $query = "
     SELECT
-        (SELECT COUNT(id) FROM alojamentos) AS qtde_alojamentos,
+        (SELECT COUNT(id) FROM alojamentos WHERE condominio=1) AS qtde_alojamentos,
         (SELECT COUNT(DISTINCT id_alojamento) FROM alojamentos_valores_reembolso WHERE mes = {$month} AND ano = {$year}) AS alojamentos_com_medicao,
         (SELECT COUNT(id) FROM boletos WHERE MONTH(data_vencimento) = {$month} AND YEAR(data_vencimento) = {$year}) AS qtde_boletos,
         (SELECT COUNT(b.id) FROM boletos b LEFT JOIN razao r ON b.lancamento = r.documento WHERE r.data_baixa IS NOT NULL AND MONTH(b.data_vencimento) = {$month} AND YEAR(b.data_vencimento) = {$year}) AS qtde_boletos_baixados,
