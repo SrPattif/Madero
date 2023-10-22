@@ -19,6 +19,22 @@ if(!isset($_POST['telefone']) || !isset($_POST['operacao']) || !isset($_POST['al
     exit();
 }
 
+$query = "SELECT * FROM formularios WHERE nome='sindicos';";
+$result = mysqli_query($mysqli, $query);
+if(mysqli_num_rows($result) != 1) {
+    header('location: /');
+    exit();
+}
+$formData = mysqli_fetch_assoc($result);
+
+if($formData['status'] != 'ativo') {
+    header("Content-Type: application/json");
+    echo json_encode(array("gerado" => false, "msg" => "Este formulário está desativado."));
+    http_response_code(400);
+    exit();
+}
+    
+
 $telefone = mysqli_real_escape_string($mysqli, $_POST['telefone']);
 $operacao = mysqli_real_escape_string($mysqli, $_POST['operacao']);
 $idAlojamento = mysqli_real_escape_string($mysqli, $_POST['alojamento']);

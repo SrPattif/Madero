@@ -215,3 +215,38 @@ table {
         font-weight: bold;
     }
 }
+
+.button {
+    background: #000;
+    color: #ffffff !important;
+    font-weight: bold;
+    border: none;
+    padding: .2em 1em;
+    border-radius: 23px;
+    border: 2px solid #000;
+    font-size: .9rem;
+    margin-top: .8em;
+    cursor: pointer;
+    transition: all .3s;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.button:hover,
+.simple-button:hover {
+    letter-spacing: 2px;
+}
+
+.simple-button {
+    color: #000 !important;
+    font-weight: bold;
+    border: none;
+    font-size: .9rem;
+    margin-top: .8em;
+    cursor: pointer;
+    transition: all .3s;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+}

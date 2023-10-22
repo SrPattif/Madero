@@ -9,6 +9,30 @@
     $numeroDoMes = date('n');
     $nomesDosMeses = [ 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro' ];
     $nomeDoMes = $nomesDosMeses[$numeroDoMes - 1];
+
+    $query = "SELECT * FROM formularios WHERE nome='sindicos';";
+    $result = mysqli_query($mysqli, $query);
+    if(mysqli_num_rows($result) != 1) {
+        header('location: /');
+        exit();
+    }
+    $formData = mysqli_fetch_assoc($result);
+
+    $formStatus = 'Inoperante';
+
+    switch ($formData['status']) {
+        case 'ativo':
+            $formStatus = 'Ativo';
+            break;
+
+        case 'desativado':
+            $formStatus = 'Desativado';
+            break;
+        
+        default:
+            # code...
+            break;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +82,8 @@
             <div class="double-cards">
                 <div class="card">
                     <div class="card-header">
-                        <h1 id="div_qtdeMedicoes">Ativo</h1>
+                        <h1 id="div_qtdeMedicoes">
+                            <?php echo($formStatus); ?></h1>
                         <span>Status do Formulário</span>
                     </div>
                 </div>
@@ -165,7 +190,8 @@
             let text = $('#url_copy').text();
             try {
                 await navigator.clipboard.writeText(text);
-                tata.info('Link copiado', 'O link do formulário foi copiado para sua área de transferência.', {
+                tata.info('Link copiado',
+                    'O link do formulário foi copiado para sua área de transferência.', {
                         duration: 3000
                     });
             } catch (err) {

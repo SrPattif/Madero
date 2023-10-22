@@ -69,4 +69,16 @@ body {
     opacity: 1;
     transform: none;
   }
+}
+.unavailable-form {
+  border: 2px solid #942415;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.unavailable-form span {
+  padding: 0.2rem;
+}
+.unavailable-form i {
+  background-color: #942415;
+  padding: 0.4rem;
 }/*# sourceMappingURL=index.css.map */

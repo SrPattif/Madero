@@ -1,3 +1,15 @@
+<?php
+    include($_SERVER['DOCUMENT_ROOT'] . '/libs/databaseConnection.php');
+
+    $query = "SELECT * FROM formularios WHERE nome='sindicos';";
+    $result = mysqli_query($mysqli, $query);
+    if(mysqli_num_rows($result) != 1) {
+        header('location: /');
+        exit();
+    }
+    $formData = mysqli_fetch_assoc($result);
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -27,9 +39,26 @@
             </p>
         </div>
 
+        <?php
+            if($formData['status'] == "ativo") {
+        ?>
+
         <div id="continue-btn" class="continue-btn" onclick="startForm()">
             INICIAR <i class='bx bx-right-arrow-alt'></i>
         </div>
+
+        <?php
+            } else {
+        ?>
+
+        <div class="unavailable-form">
+            <i class='bx bxs-no-entry'></i> <span>Este formulário está indisponível.</span>
+        </div>
+
+        <?php
+            }
+        ?>
+
     </div>
 
     <script src="/libs/tatatoast/dist/tata.js"></script>

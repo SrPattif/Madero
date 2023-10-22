@@ -95,3 +95,18 @@ body {
         transform: none;
     }
 }
+
+.unavailable-form {
+    border: 2px solid #942415;
+    border-radius: 12px;
+    overflow: hidden;
+
+    span {
+        padding: .2rem;
+    }
+
+    i {
+        background-color: #942415;
+        padding: .4rem;
+    }
+}
