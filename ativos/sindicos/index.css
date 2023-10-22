@@ -164,4 +164,24 @@ table tr:hover {
 .circle-red {
   background-color: rgba(251, 23, 23, 0.6);
   opacity: 1;
+}
+
+.url-container {
+  width: 100%;
+}
+.url-container .url {
+  background-color: #d3d3d3;
+  border-radius: 23px;
+  padding: 0.5rem;
+  margin: 1em auto;
+  text-align: center;
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.url-container .url:hover {
+  letter-spacing: 1px;
+  font-weight: bold;
 }/*# sourceMappingURL=index.css.map */

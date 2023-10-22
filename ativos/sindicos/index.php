@@ -33,6 +33,11 @@
     ?>
     <main>
         <div class="page-content">
+            <div class="url-container">
+                <div class="url" id="btn_copyUrl"><i class='bx bxs-copy'></i>
+                    <span id="url_copy">https://<?php echo($_SERVER['HTTP_HOST']); ?>/formularios/sindicos/</span>
+                </div>
+            </div>
             <div class="double-cards">
                 <div class="card card-button">
                     <div class="lines">
@@ -59,7 +64,7 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h1 id="div_qtdeMedicoes">39 usuários</h1>
+                        <h1 id="div_qtdeMedicoes">0 usuários</h1>
                         <span>Ativos no Momento</span>
                     </div>
                 </div>
@@ -97,7 +102,9 @@
                                     }
                             ?>
                     <tr>
-                        <td><div class="circle circle-<?php echo($statusColor); ?>"></div></td>
+                        <td>
+                            <div class="circle circle-<?php echo($statusColor); ?>"></div>
+                        </td>
                         <td style="text-align: center;"><?php echo(intval($row['id'])); ?></td>
                         <td><?php echo($row['endereco']); ?></td>
                         <td><?php echo($row['nome']); ?></td>
@@ -153,6 +160,21 @@
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+    $(document).ready(() => {
+        $('#btn_copyUrl').on('click', async () => {
+            let text = $('#url_copy').text();
+            try {
+                await navigator.clipboard.writeText(text);
+                tata.info('Link copiado', 'O link do formulário foi copiado para sua área de transferência.', {
+                        duration: 3000
+                    });
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+            }
+
+        })
+    })
+
     // Função auxiliar para gerar cores aleatórias
     function getRandomColor() {
         var color = 'hsl(' + Math.floor(Math.random() * 360) + ', 70%, 50%)';
