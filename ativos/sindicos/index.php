@@ -64,19 +64,23 @@
             </div>
             <div class="double-cards">
                 <div class="card card-button">
-                    <div class="lines">
-                        <div class="line"><i class='bx bxs-edit-alt'></i></div>
-                        <div class="line">EDITAR</div>
-                        <div class="line">FORMULÁRIO</div>
-                    </div>
+                    <a href="/ativos/sindicos/formulario/">
+                        <div class="lines">
+                            <div class="line"><i class='bx bxs-edit-alt'></i></div>
+                            <div class="line">EDITAR</div>
+                            <div class="line">FORMULÁRIO</div>
+                        </div>
+                    </a>
                 </div>
 
                 <div class="card card-button">
-                    <div class="lines">
-                        <div class="line"><i class='bx bxs-paper-plane'></i></div>
-                        <div class="line">VER TODAS</div>
-                        <div class="line">AS SOLICITAÇÕES</div>
-                    </div>
+                    <a href="/ativos/sindicos/solicitacoes/">
+                        <div class="lines">
+                            <div class="line"><i class='bx bxs-paper-plane'></i></div>
+                            <div class="line">VER TODAS</div>
+                            <div class="line">AS SOLICITAÇÕES</div>
+                        </div>
+                    </a>
                 </div>
             </div>
             <div class="double-cards">
