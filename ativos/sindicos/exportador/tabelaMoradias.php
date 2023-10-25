@@ -10,7 +10,7 @@ date_default_timezone_set('America/Sao_Paulo');
 $data = date("d-m H", time()) . 'h' . date("i", time());
 $fileName = "Síndicos - atualizado em " . $data . ".xlsx"; 
 
-$query_principal = "SELECT a.contrato_totvs, a.digito_financeiro, a.centro_custo, a.operacao, a.status, a.endereco, atv.chapa AS chapa_sindico, atv.nome AS nome_sindico FROM alojamentos a LEFT JOIN ativos atv ON a.id_sindico=atv.id;";
+$query_principal = "SELECT a.contrato_totvs, a.digito_financeiro, a.centro_custo, a.operacao, a.status, a.endereco, atv.chapa AS chapa_sindico, atv.nome AS nome_sindico FROM alojamentos a LEFT JOIN ativos atv ON a.id_sindico=atv.chapa;";
 $result = mysqli_query($mysqli, $query_principal);
 
 $excelData[] = array('CONTRATO', 'DIG FINANCEIRO', 'CENTRO DE CUSTO', 'OPERACAO', 'STATUS', 'ENDERECO', 'SINDICO - CHAPA', 'SINDICO - NOME');

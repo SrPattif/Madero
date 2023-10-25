@@ -7,7 +7,7 @@ if(!isset($_GET['codigoSolicitacao'])) {
 }
 $codigoExterno = mysqli_real_escape_string($mysqli, $_GET['codigoSolicitacao']);
 
-$query = "SELECT ss.*, a.nome, al.endereco FROM solicitacoes_sindicos ss LEFT JOIN ativos a ON ss.id_sindico=a.id LEFT JOIN alojamentos al ON ss.id_alojamento=al.id WHERE ss.codigo_externo='{$codigoExterno}';";
+$query = "SELECT ss.*, a.nome, al.endereco FROM solicitacoes_sindicos ss LEFT JOIN ativos a ON ss.id_sindico=a.chapa LEFT JOIN alojamentos al ON ss.id_alojamento=al.id WHERE ss.codigo_externo='{$codigoExterno}';";
 $result = mysqli_query($mysqli, $query);
 if(mysqli_num_rows($result) != 1) {
     header('location: /formularios/sindicos/');

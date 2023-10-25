@@ -22,7 +22,7 @@ if(!empty($operacaoQuery)) {
         array_push($rowsAlojamentos, $row);
     }
     
-    $querySindicos = "SELECT id, operacao, nome, funcao FROM ativos WHERE operacao='{$operacaoQuery}' ORDER BY operacao ASC;"; // Obter todos os colaboradores disponíveis.
+    $querySindicos = "SELECT chapa AS id, operacao, nome, funcao FROM ativos WHERE operacao='{$operacaoQuery}' ORDER BY operacao ASC;"; // Obter todos os colaboradores disponíveis.
     $resultSindicos = mysqli_query($mysqli, $querySindicos);
     while($row = mysqli_fetch_array($resultSindicos)){
         array_push($rowsSindicos, $row);

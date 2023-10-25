@@ -5,7 +5,7 @@
     $month = date('n');
     $year = date('Y');
 
-    $query = "SELECT a.*, at.nome, at.chapa FROM alojamentos a LEFT JOIN ativos at ON a.id_sindico=at.id;";
+    $query = "SELECT a.*, at.nome, at.chapa FROM alojamentos a LEFT JOIN ativos at ON a.id_sindico=at.chapa;";
     $result = mysqli_query($mysqli, $query);
     $rows = array();
     while($row = mysqli_fetch_array($result)){
