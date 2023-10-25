@@ -502,3 +502,30 @@ input {
     }
 
 }
+
+.unavailable {
+    border: 2px solid #b43120;
+    border-radius: 12px;
+    overflow: hidden;
+    width: fit-content;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: .5rem;
+
+    span {
+        padding: .1rem .3rem;
+        font-size: .9rem;
+    }
+
+    .icon {
+        background-color: #b43120;
+        padding: .26rem;
+        color: white;
+
+        height: 100%;
+    }
+}

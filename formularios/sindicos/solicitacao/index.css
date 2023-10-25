@@ -437,4 +437,25 @@ input {
   .modal-content {
     width: 100%;
   }
+}
+.unavailable {
+  border: 2px solid #b43120;
+  border-radius: 12px;
+  overflow: hidden;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+.unavailable span {
+  padding: 0.1rem 0.3rem;
+  font-size: 0.9rem;
+}
+.unavailable .icon {
+  background-color: #b43120;
+  padding: 0.26rem;
+  color: white;
+  height: 100%;
 }/*# sourceMappingURL=index.css.map */

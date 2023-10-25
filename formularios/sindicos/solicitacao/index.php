@@ -16,13 +16,13 @@ while($row = mysqli_fetch_array($resultOperacoes)){
 $rowsAlojamentos = array();
 $rowsSindicos = array();
 if(!empty($operacaoQuery)) {
-    $queryAlojamentos = "SELECT id,digito_financeiro, operacao, endereco FROM alojamentos ORDER BY operacao ASC;"; // Obter todas as moradias disponíveis.
+    $queryAlojamentos = "SELECT a.id, a.digito_financeiro, a.operacao, a.endereco, atv.nome AS sindico, MAX(ss.criado_em) AS data_ultima_solicitacao, ss.situacao AS status_ultima_solicitacao FROM alojamentos a  LEFT JOIN ativos atv ON a.id_sindico = atv.chapa LEFT JOIN solicitacoes_sindicos ss ON a.id = ss.id_alojamento  GROUP BY a.id, a.digito_financeiro, a.operacao, a.endereco, atv.nome ORDER BY a.operacao ASC;"; // Obter todas as moradias disponíveis.
     $resultAlojamentos = mysqli_query($mysqli, $queryAlojamentos);
     while($row = mysqli_fetch_array($resultAlojamentos)){
         array_push($rowsAlojamentos, $row);
     }
     
-    $querySindicos = "SELECT chapa AS id, operacao, nome, funcao FROM ativos WHERE operacao='{$operacaoQuery}' ORDER BY operacao ASC;"; // Obter todos os colaboradores disponíveis.
+    $querySindicos = "SELECT chapa AS id, operacao, nome, funcao FROM ativos WHERE operacao='{$operacaoQuery}';"; // Obter todos os colaboradores disponíveis.
     $resultSindicos = mysqli_query($mysqli, $querySindicos);
     while($row = mysqli_fetch_array($resultSindicos)){
         array_push($rowsSindicos, $row);
@@ -184,12 +184,43 @@ if(!empty($operacaoQuery)) {
                                 $digito = $row['digito_financeiro'];
                                 $operacao = $row['operacao'];
                                 $endereco = $row['endereco'];
+                                $sindico = $row['sindico'];
                         ?>
-                        <li onclick="selecionarMoradia('<?php echo($idAlojamento); ?>', '<?php echo($endereco); ?>')">
+                        <li
+                        <?php
+                        if($row['status_ultima_solicitacao'] != "pendente") echo('onclick="selecionarMoradia(`' . $idAlojamento . '`, `' . $endereco . '`)"');
+                        ?> >
+                            <?php
+                            if($row['status_ultima_solicitacao'] == "pendente") {
+                            ?>
+
+                            <div class="unavailable">
+                                <div class="icon"><i class='bx bxs-no-entry'></i></div> <span>Troca de síndico
+                                    indisponível.</span>
+                            </div>
+
+                            <?php
+                            }
+                            ?>
+
+                            <?php
+                            ?>
+
                             <div class="desc">
                                 <span><?php echo($operacao); ?></span>
                             </div>
                             <span class="nome" id="span_moradiaNome"><?php echo($endereco); ?></span>
+                            <?php 
+                                if(isset($sindico)) {
+                            ?>
+
+                            <div class="desc">
+                                <span>Síndico atual: <span class="bold"><?php echo($sindico); ?></span></span>
+                            </div>
+
+                            <?php 
+                                }
+                            ?>
                         </li>
                         <?php
                             }
@@ -331,14 +362,15 @@ if(!empty($operacaoQuery)) {
                                     });
 
                                 setTimeout(() => {
-                                    window.location.href = `../finalizado/?codigoSolicitacao=${codigo}`;
+                                    window.location.href =
+                                        `../finalizado/?codigoSolicitacao=${codigo}`;
                                 }, 1000);
 
                             } else {
                                 tata.error('Erro desconecido',
-                                'Ocorreu um erro desconecido ao processar a solicitação.', {
-                                    duration: 3000
-                                });
+                                    'Ocorreu um erro desconecido ao processar a solicitação.', {
+                                        duration: 3000
+                                    });
                             }
                         },
                         error: function(result) {
@@ -457,7 +489,7 @@ if(!empty($operacaoQuery)) {
         closeModal('modal_moradias');
         $('#btn_selecionarMoradia').text(endereco);
 
-        if(id && typeof(parseInt(id)) == "number") {
+        if (id && typeof(parseInt(id)) == "number") {
             data.alojamento = parseInt(id);
         }
     }
@@ -466,7 +498,7 @@ if(!empty($operacaoQuery)) {
         closeModal('modal_sindicos');
         $('#btn_selecionarSindico').text(nome);
 
-        if(id && typeof(parseInt(id)) == "number") {
+        if (id && typeof(parseInt(id)) == "number") {
             data.sindico = parseInt(id);
         }
     }
