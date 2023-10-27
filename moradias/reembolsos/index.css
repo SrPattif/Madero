@@ -6,8 +6,9 @@
   width: 50%;
   overflow: auto;
   box-sizing: border-box;
-  border: 2px solid #d3d3d3;
-  border-radius: 23px;
+  border-radius: var(--card-border-radius);
+  border: 1px solid var(--card-border-color);
+  background-color: var(--card-background-color);
   padding: 1em;
   margin-bottom: 1em;
 }

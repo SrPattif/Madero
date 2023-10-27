@@ -50,9 +50,8 @@
                 <div class="card-header">
                     <h3><i class='bx bxs-hot bx-tada bx-rotate-270'></i> NOVIDADE!</h3>
                 </div>
-                Agora, você pode pesquisar lançamentos por <span class="bold">contrato</span>, <span class="bold">centro de custo</span> ou <span
-                    class="bold">fornecedor</span>!
-                <br><br>
+                Agora, você pode pesquisar lançamentos com um <span class="bold">filtro avançado</span>!
+                <br>
                 Para isso, utilize a <a href="./detalhado/" class="simple-button" style="text-align: left;"><i class='bx bxs-rocket bx-tada'></i> Pesquisa avançada</a>!
             </div>
 

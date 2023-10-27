@@ -3,6 +3,9 @@
 :root {
   --background-color: #000;
   --text-color: #fff;
+  --card-background-color: #ededed;
+  --card-border-color: #cecece;
+  --card-border-radius: 12px;
 }
 
 * {
@@ -237,8 +240,9 @@ nav {
   width: 100%;
   overflow: auto;
   box-sizing: border-box;
-  border: 2px solid #d3d3d3;
-  border-radius: 23px;
+  border-radius: var(--card-border-radius);
+  border: 1px solid var(--card-border-color);
+  background-color: var(--card-background-color);
   padding: 1em;
   margin-bottom: 1em;
   font-size: 1rem;

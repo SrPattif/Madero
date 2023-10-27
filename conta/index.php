@@ -56,7 +56,6 @@ while ($row = mysqli_fetch_array($resultHistorico)) {
     <title>Sua Conta | Controladoria Grupo Madero</title>
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="./defaultStyle.css" />
     <link rel="stylesheet" href="./index.css" />
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>

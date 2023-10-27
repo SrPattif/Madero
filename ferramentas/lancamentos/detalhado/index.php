@@ -11,20 +11,21 @@
     $conditions = array();
 
     foreach ($colunasPesquisa as $filtro) {
-        if (!empty($_GET[$filtro])) {
+        if (isset($_GET[$filtro]) && !empty($_GET[$filtro])) {
             $conditions[] = $filtro . " = '" . mysqli_real_escape_string($mysqli, $_GET[$filtro]) . "'";
         }
     }
 
-    $queryRazao = "SELECT * FROM razao";
     $rowsRazao = array();
+    $queryRazao = "";
     if (!empty($conditions)) {
+        $queryRazao = "SELECT * FROM razao";
         $queryRazao .= " WHERE " . implode(" AND ", $conditions);
-    }
-    $queryRazao .= " ORDER BY data_emissao DESC LIMIT 75;";
-    $resultRazao = mysqli_query($mysqli, $queryRazao);
-    while($row = mysqli_fetch_array($resultRazao)){
-        array_push($rowsRazao, $row);
+        $queryRazao .= " ORDER BY data_emissao DESC LIMIT 75;";
+        $resultRazao = mysqli_query($mysqli, $queryRazao);
+        while($row = mysqli_fetch_array($resultRazao)){
+            array_push($rowsRazao, $row);
+        }
     }
 ?>
 
