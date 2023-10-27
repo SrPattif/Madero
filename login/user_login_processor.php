@@ -130,6 +130,10 @@
                     $_SESSION['USER_USERNAME'] = $userData['username'];
                     $_SESSION['USER_NAME'] = $userData['nome'];
                     $_SESSION['USER_ACCESS_LEVEL'] = $userData['nivel_acesso'];
+                    if(isset($userData['imagem_perfil'])) {
+                        $_SESSION['USER_PROFILE_PICTURE_PATH']  = "/uploads/pfp/" . $userData['imagem_perfil'];
+                        $_SESSION['USER_PROFILE_PICTURE_FILE'] = $userData['imagem_perfil'];
+                    }
     
                     $_SESSION['MESSAGES_LOGIN_ERROR'] = null;
     

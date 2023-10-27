@@ -5,7 +5,7 @@
     --text-color: #fff;
     --card-background-color: #ededed;
     --card-border-color: #cecece;
-    --card-border-radius: 12px; 
+    --card-border-radius: 12px;
 }
 
 * {
@@ -427,4 +427,21 @@ table {
     width: fit-content;
 
     border-radius: 23px;
+}
+
+
+.user-image {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.user-container {
+    display: flex;
+    gap: 1rem;
+
+    align-items: center;
 }

@@ -10,6 +10,11 @@ $idUsuario = $_SESSION['USER_ID'];
 $nomeUsuario = $_SESSION['USER_NAME'];
 $nomeUsuario = explode(" ", $nomeUsuario)[0];
 $nivelAcessoUsuario = $_SESSION['USER_ACCESS_LEVEL'];
+$imagemPerfil = "/assets/images/default-user.png";
+if(isset($_SESSION['USER_PROFILE_PICTURE_PATH'])) {
+    $imagemPerfil = $_SESSION['USER_PROFILE_PICTURE_PATH'];
+}
+
 
 if($nivelAcessoUsuario == 'TOTAL') {
     $queryModulos = "SELECT * FROM modulos WHERE ativo=1 ORDER BY `status`='ok' DESC;";
@@ -88,8 +93,15 @@ foreach($rowsModulos as $modulo) {
                 <h2>Olá, <?php echo($nomeUsuario); ?>! 👋</h2>
 
                 <div class="card card-modulo" onclick="window.location.href='/conta/'">
-                    <h4><i class='bx bxs-user'></i> Sua Conta</h4>
-                    <span class="module-description">Veja seus dados, sua atividade e altere sua senha.</span>
+                    <div class="user-container">
+                        <div class="user-image" style="background-image: url('<?php echo($imagemPerfil); ?>');">
+                        </div>
+
+                        <div class="user-header">
+                            <h4><i class='bx bxs-user'></i> Sua Conta</h4>
+                            <span class="module-description">Veja seus dados, sua atividade e altere sua senha.</span>
+                        </div>
+                    </div>
 
                     <i class='icon bx bx-chevron-right chevron'></i>
                 </div>
@@ -132,11 +144,11 @@ foreach($rowsModulos as $modulo) {
                 ?>
 
                 <div class="card card-modulo" onclick="window.location.href='<?php echo($modulosPath[$id]); ?>'">
-                <?php
+                    <?php
                     if($status != "ok") {
                 ?>
                     <div class="<?php echo($statusClass); ?>"><?php echo($statusText); ?></div>
-                <?php
+                    <?php
                     }
                 ?>
                     <h5><i class='bx <?php echo($modulosIcones[$id]); ?>'></i> <?php echo($modulosNomes[$id]); ?></h5>
